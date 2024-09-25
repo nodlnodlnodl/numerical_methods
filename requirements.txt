@@ -2,3 +2,4 @@ streamlit
 streamlit_ace
 numpy
 matplotlib
+scipy
