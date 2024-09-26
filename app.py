@@ -1,17 +1,5 @@
-import streamlit as st
-from streamlit_ace import st_ace
-
-from scipy.integrate import odeint
-from scipy.optimize import fsolve
-import time
-
-import time
-import io
-import sys
 from functions import *
 from code_editor import *
-
-
 
 # Основной заголовок приложения
 st.title("Численные методы")
@@ -105,4 +93,3 @@ elif selected_theme == "Метод Ньютона":
     code_editor()
 else:
     st.write(f"мяу {selected_theme}")
-
