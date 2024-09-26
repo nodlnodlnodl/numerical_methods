@@ -16,7 +16,7 @@ st.title("Численные методы")
 
 # Темы для каждого раздела
 section1_themes = ["Общие правила"]
-section2_themes = ["Погрешности", "Тема 2.2"]
+section2_themes = ["Погрешности"]
 section3_themes = ["Тема 3.1", "Тема 3.2"]
 section4_themes = ["Тема 4.1", "Тема 4.2"]
 section5_themes = ["Тема 5.1", "Тема 5.2"]
@@ -32,48 +32,47 @@ section13_themes = ["Тема 13.1", "Тема 13.2"]
 # Переменные для хранения текущего выбора раздела и темы
 selected_section = st.sidebar.radio("Выберите раздел:",
                                     ["Общие правила вычислительной работы", "Источники и классификации разделов",
-                                     "Раздел 3", "Раздел 4", "Раздел 5", "Раздел 6", "Раздел 7", "Раздел 8", "Раздел 9",
-                                     "Раздел 10", "Раздел 11", "Раздел 12", "Раздел 13"])
+                                     "Приближение функций", "4. Численное дифференцирование и нтегрирование", "5. Вычисление корней уравнений", "6. Решение задач линейной алгебры", "7. Алгебраическая проблема собственных значений", "8. Задача Коши для ОДУ. Методы решения", "9. Элементарные примеры разностных схем",
+                                     "10. Сходимость, аппроксимация, устойчивость разностных схем", "11. Употребительные численные методы решения ОДУ", "12. Некоторые методы решения жестких систем ОДУ", "13. Специальные методы"])
 selected_theme = None
 
 # В зависимости от выбранного раздела показываем соответствующий expander и выбираем первую тему
 if selected_section == "Общие правила вычислительной работы":
     selected_theme = "Общие правила"  # Автоматически выбрана первая тема
 elif selected_section == "Источники и классификации погрешностей":
-    with st.sidebar.expander("Источники и классификации погрешностей", expanded=True):
-        selected_theme = st.radio("Выберите тему:", section2_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 3":
-    with st.sidebar.expander("Раздел 3", expanded=True):
+    selected_theme = "Погрешности"  # Автоматически выбрана первая тема
+elif selected_section == "Приближение функций":
+    with st.sidebar.expander("Приближение функций", expanded=True):
         selected_theme = st.radio("Выберите тему:", section3_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 4":
-    with st.sidebar.expander("Раздел 4", expanded=True):
+elif selected_section == "4. Численное дифференцирование и нтегрирование":
+    with st.sidebar.expander("4. Численное дифференцирование и нтегрирование", expanded=True):
         selected_theme = st.radio("Выберите тему:", section4_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 5":
-    with st.sidebar.expander("Раздел 5", expanded=True):
+elif selected_section == "5. Вычисление корней уравнений":
+    with st.sidebar.expander("5. Вычисление корней уравнений", expanded=True):
         selected_theme = st.radio("Выберите тему:", section5_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 6":
-    with st.sidebar.expander("Раздел 6", expanded=True):
+elif selected_section == "6. Решение задач линейной алгебры":
+    with st.sidebar.expander("6. Решение задач линейной алгебры", expanded=True):
         selected_theme = st.radio("Выберите тему:", section6_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 7":
-    with st.sidebar.expander("Раздел 7", expanded=True):
+elif selected_section == "7. Алгебраическая проблема собственных значений":
+    with st.sidebar.expander("7. Алгебраическая проблема собственных значений", expanded=True):
         selected_theme = st.radio("Выберите тему:", section7_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 8":
-    with st.sidebar.expander("Раздел 8", expanded=True):
+elif selected_section == "8. Задача Коши для ОДУ. Методы решения":
+    with st.sidebar.expander("8. Задача Коши для ОДУ. Методы решения", expanded=True):
         selected_theme = st.radio("Выберите тему:", section8_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 9":
-    with st.sidebar.expander("Раздел 9", expanded=True):
+elif selected_section == "9. Элементарные примеры разностных схем":
+    with st.sidebar.expander("9. Элементарные примеры разностных схем", expanded=True):
         selected_theme = st.radio("Выберите тему:", section9_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 10":
-    with st.sidebar.expander("Раздел 10", expanded=True):
+elif selected_section == "10. Сходимость, аппроксимация, устойчивость разностных схем":
+    with st.sidebar.expander("10. Сходимость, аппроксимация, устойчивость разностных схем", expanded=True):
         selected_theme = st.radio("Выберите тему:", section10_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 11":
-    with st.sidebar.expander("Раздел 11", expanded=True):
+elif selected_section == "11. Употребительные численные методы решения ОДУ":
+    with st.sidebar.expander("11. Употребительные численные методы решения ОДУ", expanded=True):
         selected_theme = st.radio("Выберите тему:", section11_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Раздел 12":
-    with st.sidebar.expander("Раздел 12", expanded=True):
+elif selected_section == "12. Некоторые методы решения жестких систем ОДУ":
+    with st.sidebar.expander("12. Некоторые методы решения жестких систем ОДУ", expanded=True):
         selected_theme = st.radio("Выберите тему:", section12_themes, index=0)  # Автоматически выбрана первая тема4
-elif selected_section == "Раздел 13":
-    with st.sidebar.expander("Раздел 13", expanded=True):
+elif selected_section == "13. Специальные методы":
+    with st.sidebar.expander("13. Специальные методы", expanded=True):
         selected_theme = st.radio("Выберите тему:", section13_themes, index=0)  # Автоматически выбрана первая тема
 
 # Общие правила вычислительной работы
