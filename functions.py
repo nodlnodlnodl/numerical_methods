@@ -77,7 +77,7 @@ def general_rules():
     """)
 
     st.latex(r'''
-    \tau_э = \frac{M}{m} = 10^{92} \, лет
+    \tau_э = \frac{M}{m} = 10^{92} \, лет 
     ''')
 
     st.markdown("""
