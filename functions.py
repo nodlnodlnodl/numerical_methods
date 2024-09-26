@@ -13,7 +13,6 @@ import sys
 
 
 def general_rules():
-    import streamlit as st
 
     st.header("1. Общие правила вычислительной работы")
 
@@ -77,7 +76,7 @@ def general_rules():
     """)
 
     st.latex(r'''
-    \tau_э = \frac{M}{m} = 10^{92} \, лет 
+    \tau_э = \frac{M}{m} = 10^{92} \, лет
     ''')
 
     st.markdown("""
