@@ -10,16 +10,13 @@ import io
 import sys
 from functions import *
 
-import streamlit as st
-
-import streamlit as st
 
 # Основной заголовок приложения
 st.title("Численные методы")
 
 # Темы для каждого раздела
-section1_themes = ["Общие правила", "Погрешности"]
-section2_themes = ["Тема 2.1", "Тема 2.2"]
+section1_themes = ["Общие правила"]
+section2_themes = ["Погрешности", "Тема 2.2"]
 section3_themes = ["Тема 3.1", "Тема 3.2"]
 section4_themes = ["Тема 4.1", "Тема 4.2"]
 section5_themes = ["Тема 5.1", "Тема 5.2"]
@@ -41,10 +38,9 @@ selected_theme = None
 
 # В зависимости от выбранного раздела показываем соответствующий expander и выбираем первую тему
 if selected_section == "Общие правила вычислительной работы":
-    with st.sidebar.expander("Общие правила вычислительной работы", expanded=True):
-        selected_theme = st.radio("Выберите тему:", section1_themes, index=0)  # Автоматически выбрана первая тема
-elif selected_section == "Источники и классификации разделов":
-    with st.sidebar.expander("Источники и классификации разделов", expanded=True):
+    selected_theme = "Общие правила"  # Автоматически выбрана первая тема
+elif selected_section == "Источники и классификации погрешностей":
+    with st.sidebar.expander("Источники и классификации погрешностей", expanded=True):
         selected_theme = st.radio("Выберите тему:", section2_themes, index=0)  # Автоматически выбрана первая тема
 elif selected_section == "Раздел 3":
     with st.sidebar.expander("Раздел 3", expanded=True):
@@ -80,11 +76,25 @@ elif selected_section == "Раздел 13":
     with st.sidebar.expander("Раздел 13", expanded=True):
         selected_theme = st.radio("Выберите тему:", section13_themes, index=0)  # Автоматически выбрана первая тема
 
-# Основной контент приложения в зависи5ости от выбранной темы
+# Общие правила вычислительной работы
 if selected_theme == "Общие правила":
     general_rules()
+
+# Источники и классификация погрешности
 elif selected_theme == "Погрешности":
     inaccuracy()
+
+# Общие правила приближения функций
+elif selected_theme == "Общие правила приближения":
+    general_rules_for_approximating_functions()
+
+# Метод Лагранжа для интерполяции
+elif selected_theme == "Метод Лагранжа":
+    lagrange_for_interpolation()
+
+# Метод Ньютона для интерполяции
+elif selected_theme == "Метод Ньютона":
+    newton_for_interpolation()
 else:
     st.write(f"мяу {selected_theme}")
 
