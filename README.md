@@ -28,4 +28,3 @@ elif task == "Метод Лагранжа":
 
 # ЗАПУСК
 `streamlit run app.py`
-=)
