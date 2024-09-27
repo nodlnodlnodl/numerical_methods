@@ -28,3 +28,6 @@ elif task == "Метод Лагранжа":
 
 # ЗАПУСК
 `streamlit run app.py`
+
+установа зависимостей 
+`pip install -r requirements.txt`
