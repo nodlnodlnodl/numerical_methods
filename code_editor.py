@@ -12,7 +12,7 @@ def code_editor():
     st.header("Интерактивный ввод кода")
     # Настройка st_ace для автоматического обновления с начальным комментарием
     user_code = st_ace(language='python', theme='monokai', height=300, auto_update=True,
-                       value="print('Вашкод работает хорошо')")
+                       value="print('Ваш код работает хорошо')")
 
     # Контейнер для вывода результатов
     result_container = st.empty()
