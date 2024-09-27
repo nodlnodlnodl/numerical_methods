@@ -660,4 +660,3 @@ def chebyshev_polynomials():
     st.markdown("""
         - Сложность вычислений при большом числе узлов.
         """)
-
