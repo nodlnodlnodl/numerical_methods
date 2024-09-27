@@ -317,24 +317,21 @@ def newton_for_interpolation():
 
     # Демонстрация работы метода Ньютона для интерполяции с возможностью добавления новых точек
 
+    # Функция для вычисления таблицы разделённых разностей
     def compute_divided_differences(x_data, y_data):
-        """ Вычисление таблицы разделённых разностей. """
         n = len(x_data)
         dd_table = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n):
             dd_table[i][0] = y_data[i]
-
         for j in range(1, n):
             for i in range(n - j):
                 dd_table[i][j] = (dd_table[i + 1][j - 1] - dd_table[i][j - 1]) / (x_data[i + j] - x_data[i])
-
         return dd_table
 
+    # Функция для вычисления значения полинома Ньютона
     def newton_polynomial(x_data, y_data, x, dd_table):
-        """ Вычисление значения полинома Ньютона в точке x. """
-        n = len(x_data)
         result = dd_table[0][0]
-        for i in range(1, n):
+        for i in range(1, len(x_data)):
             product = 1
             for j in range(i):
                 product *= (x - x_data[j])
@@ -350,7 +347,6 @@ def newton_for_interpolation():
         dd_table = compute_divided_differences(x_points, y_points)
         x_range = [min(x_points) + i * (max(x_points) - min(x_points)) / 100 for i in range(101)]
         y_approx = [newton_polynomial(x_points, y_points, x, dd_table) for x in x_range]
-
         st.write("Таблица разделённых разностей:")
         st.dataframe(dd_table)
 
@@ -360,17 +356,122 @@ def newton_for_interpolation():
         ax.legend()
         st.pyplot(fig)
 
-    # Интерфейс для добавления новых точек
-    st.header("Добавление новых точек для интерполяции")
-    col1, col2 = st.columns(2)
-    with col1:
-        new_x = st.number_input("Введите значение x:", format="%f", key="x_input")
-    with col2:
-        new_y = st.number_input("Введите значение y:", format="%f", key="y_input")
 
-    if st.button("Добавить точку"):
-        x_points.append(new_x)
-        y_points.append(new_y)
-        print("x=", x_points, "; y=", y_points)
+    # Интерфейс для добавления новых точек
+    st.subheader("Добавление новых точек для интерполяции")
+    new_x = st.number_input("Введите значение x:", format="%f", step=1.0, key="x_input")
+    new_y = st.number_input("Введите значение y:", format="%f", step=1.0, key="y_input")
+    add_point_button = st.button("Добавить точку")
+
+    # Обработка добавления новой точки
+    if add_point_button:
+        if new_x in x_points:
+            st.error("Точка с таким x уже существует. Введите уникальное значение x.")
+        else:
+            x_points.append(new_x)
+            y_points.append(new_y)
 
     update_plot_and_table(x_points, y_points)
+
+# 3.2.3. Погрешность многочленной аппроксимации
+def error_of_polynomial_interpolation():
+    st.header("3.2.3. Погрешность многочленной аппроксимации")
+
+    st.markdown("""
+    При заданной функции y(x) в n+1 точке, можно провести через эти точки многочлен P(x), который в узлах x совпадает с y(x) с машинной точностью. Важно понимать, как сильно отличается y(x) от P(x) в точках x не совпадающих с узлами.
+    """)
+
+    # Отдельное использование st.latex для формул
+    st.latex(r"""
+    y(x) - P_n(x) = (x - x_1)(x - x_2) \cdots (x - x_{n+1}) \cdot K(x)
+    """)
+
+    st.markdown("""
+    где K(x) — некоторая соответствующим образом определённая функция.
+    """)
+
+    st.latex(r"""
+    \Phi(x) = y(x) - P_n(x) - (x - x_1) \cdots (x - x_{n+1}) \cdot K(x^*)
+    """)
+
+    st.markdown("""
+    где x* — некоторое произвольное, но фиксированное значение, не совпадающее с узлами x.
+    """)
+
+    st.latex(r"""
+    \Phi^{(n+1)}(x) = y^{(n+1)}(x) - (n+1)! \cdot K(x^*)
+    """)
+
+    st.latex(r"""
+    \Phi^{(n+1)}(x) = 0, \quad \text{следовательно, существует такое} \, \tilde{x}, \, \text{что}
+    """)
+
+    st.latex(r"""
+    y^{(n+1)}(\tilde{x}) = (n+1)! \cdot K(x^*)
+    """)
+
+    st.latex(r"""
+    y(x) = P_n(x) + (x - x_1) \cdots (x - x_{n+1}) \cdot \frac{y^{(n+1)}(\tilde{x})}{(n+1)!}
+    """)
+
+    st.markdown("""
+    **Пример:** Рассмотрим функцию y = log(x) по значениям в точках x = 1, 2, 3, 4. Ошибка аппроксимации будет зависеть от выбора точки x.
+    """)
+
+    # Функция логарифма и её производные
+    def log_function(x):
+        return np.log(x)
+
+    # Функция для вычисления разделённых разностей
+    def divided_differences(x, y):
+        n = len(x)
+        coef = np.zeros((n, n))
+        coef[:, 0] = y
+        for j in range(1, n):
+            for i in range(n - j):
+                coef[i, j] = (coef[i + 1, j - 1] - coef[i, j - 1]) / (x[i + j] - x[i])
+        return coef[0, :]
+
+    # Функция для вычисления значения полинома Ньютона
+    def newton_polynomial(x_data, y_data, x):
+        coef = divided_differences(x_data, y_data)
+        n = len(coef)
+        result = coef[0]
+        for i in range(1, n):
+            product = 1
+            for j in range(i):
+                product *= (x - x_data[j])
+            result += coef[i] * product
+        return result
+
+    # Заданные точки для интерполяции
+    x_data = np.array([1, 2, 3, 4])
+    y_data = log_function(x_data)
+
+    # Генерация точек для построения графика
+    x_vals = np.linspace(1, 4, 100)
+    y_vals = log_function(x_vals)
+    poly_vals = [newton_polynomial(x_data, y_data, x) for x in x_vals]
+
+    # Построение графика
+    fig, ax = plt.subplots()
+    ax.plot(x_vals, y_vals, label='Исходная функция log(x)')
+    ax.plot(x_vals, poly_vals, label='Многочлен Ньютона')
+    ax.scatter(x_data, y_data, color='red', label='Узлы интерполяции')
+    ax.legend()
+    st.pyplot(fig)
+
+    st.markdown("""
+    **Анализ погрешности:** В зависимости от выбора точки x, погрешность аппроксимации может значительно варьироваться. Например, в точке x = 2.5, погрешность может быть минимальной или максимальной, в зависимости от распределения узлов интерполяции и характера функции.
+    """)
+
+    # Вывод дополнительных сведений о погрешности
+    def calculate_error(x, actual, predicted):
+        return np.abs(actual - predicted)
+
+    error_example_x = 2.5
+    actual_log = np.log(error_example_x)
+    predicted_log = newton_polynomial(x_data, y_data, error_example_x)
+    error_at_x = calculate_error(error_example_x, actual_log, predicted_log)
+
+    st.write(f"Погрешность аппроксимации в точке x = {error_example_x}: {error_at_x:.6f}")
