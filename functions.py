@@ -187,7 +187,7 @@ def general_rules_for_approximating_functions():
 
         Для иллюстрации точности рассмотрим систему линейных алгебраических уравнений""")
     st.latex(r'''
-     A \overline {x} = \overline {b} 
+     A \overline {x} = \overline{b} 
      ''')
 
     st.markdown(""" где можно применить следующие критерии точности:""")
