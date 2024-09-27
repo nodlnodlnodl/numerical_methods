@@ -3,3 +3,4 @@ streamlit_ace
 numpy
 matplotlib
 scipy
+streamlit_code_editor
