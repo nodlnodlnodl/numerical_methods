@@ -56,7 +56,7 @@ def general_rules():
     ''')
 
     st.markdown("""
-        Для больших \(N(>10)\) можно использовать приближённую формулу Стирлинга:
+        Для больших N>10 можно использовать приближённую формулу Стирлинга:
     """)
 
     st.latex(r'''
@@ -148,7 +148,7 @@ def general_rules_for_approximating_functions():
         - **Устойчивость метода:** Важно анализировать, насколько метод устойчив к ошибкам округления и входным погрешностям.
         """)
 
-
+# 3.2.1. Метод Лагранжа
 def lagrange_for_interpolation():
     st.header("4. Метод Лагранжа для интерполяции")
 
@@ -240,7 +240,7 @@ def lagrange_for_interpolation():
     ax.legend()
     st.pyplot(fig)
 
-
+# 3.2.2. Метод Ньютона
 def newton_for_interpolation():
     st.header("5. Метод Ньютона для интерполяции")
 
@@ -475,3 +475,5 @@ def error_of_polynomial_interpolation():
     error_at_x = calculate_error(error_example_x, actual_log, predicted_log)
 
     st.write(f"Погрешность аппроксимации в точке x = {error_example_x}: {error_at_x:.6f}")
+
+

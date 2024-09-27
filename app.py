@@ -37,7 +37,7 @@ selected_section = st.sidebar.radio("Выберите раздел:",
 selected_theme = None
 
 # В зависимости от выбранного раздела показываем соответствующий expander и выбираем первую тему
-if selected_section == "1. Общие правила вычислительной работы вычислительной работы":
+if selected_section == "1. Общие правила вычислительной работы":
     selected_theme = "1. Общие правила вычислительной работы"  # Автоматически выбрана первая тема
 elif selected_section == "2. Источники и классификация погрешностей":
     selected_theme = "2. Источники и классификация погрешностей"  # Автоматически выбрана первая тема
@@ -100,5 +100,6 @@ elif selected_theme == "Погрешность многочленной аппр
     error_of_polynomial_interpolation()
     code_editor()
 
+
 else:
-    st.write(f"мяу {selected_theme}")
+    st.write(f"Тут в дальнейшем будет {selected_theme}...")
