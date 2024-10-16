@@ -190,7 +190,3 @@ def interpolation_by_splines():
     ax.legend()
 
     st.pyplot(fig)
-
-
-
-

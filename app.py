@@ -3,7 +3,6 @@ from code_editor import *
 from derkin_functions import *
 from volkov_functions import *
 
-
 # Основной заголовок приложения
 st.title("Численные методы")
 
@@ -50,7 +49,7 @@ elif selected_section == "3. Приближение функций":
     with st.sidebar.expander("3. Приближение функций", expanded=True):
         selected_theme = st.radio("Выберите тему:", section3_themes, index=0)  # Автоматически выбрана первая тема
 elif selected_section == "4. Численное дифференцирование и интегрирование":
-    with st.sidebar.expander("4. Численное дифференцирование и нтегрирование", expanded=True):
+    with st.sidebar.expander("4. Численное дифференцирование и интегрирование", expanded=True):
         selected_theme = st.radio("Выберите тему:", section4_themes, index=0)  # Автоматически выбрана первая тема
 elif selected_section == "5. Вычисление корней уравнений":
     with st.sidebar.expander("5. Вычисление корней уравнений", expanded=True):
@@ -116,6 +115,7 @@ elif selected_theme == "3.2.5. Многочлены Чебышева":
     chebyshev_polynomials()
     code_editor()
 
+# 3.3 Интерполяция сплайнами
 elif selected_theme == "3.3 Интерполяция сплайнами":
     interpolation_by_splines()
     code_editor()
