@@ -1,7 +1,7 @@
 from functions import *
 from code_editor import *
-from alexey_functions import *
-from sanya_functions import *
+from derkin_functions import *
+from volkov_functions import *
 
 
 # Основной заголовок приложения
