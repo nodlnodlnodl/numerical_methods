@@ -539,7 +539,7 @@ def numerical_differentiation_newton_polynomial():
     plt.axvline(x_central, color='purple', linestyle=':', label='Точка повышенной точности')
 
     # Настройки графика
-    plt.title("Иллюстрация Теоремы 1: Симметричные узлы и точка повышенной точности (Сложная функция)")
+    plt.title("Иллюстрация Теоремы 1: Симметричные узлы и точка повышенной точности")
     plt.xlabel("x")
     plt.ylabel("y")
     plt.legend()
