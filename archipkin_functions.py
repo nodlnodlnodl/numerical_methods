@@ -1,6 +1,7 @@
 import streamlit as st
 
 
+
 def primer():
     # Заголовок
     st.title("10.3 Устойчивость разностной схемы")
