@@ -120,6 +120,11 @@ elif selected_theme == "3.3 Интерполяция сплайнами":
     interpolation_by_splines()
     code_editor()
 
+# 3.3 Интерполяция сплайнами
+elif selected_theme == "Тема 5.1":
+    interpolation_by_splines()
+    code_editor()
+
 elif selected_theme == "6.1.1. Треугольные матрицы":
     linear_algebra_triangular_matrix()
     code_editor()
