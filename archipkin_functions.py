@@ -190,6 +190,7 @@ def ustoichivost_raznostnoi_scheme():
     а не только ОДУ. Оно используется лишь для конструирования разностной задачи $$L_h$$ $$y^{(h)}$$ = $$f^{(h)}$$.
     """)
 
+
 def about_norm_choose():
 
     st.title("10.4 О выборе норм")
