@@ -12,7 +12,7 @@ import io
 import sys
 
 
-def linear_algebra_topics():
+def linear_algebra_triangular_matrix():
     st.markdown(r"""
         # 6. Решение задач линейной алгебры
 
