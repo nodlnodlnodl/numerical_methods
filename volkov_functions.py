@@ -5,9 +5,7 @@ from streamlit_ace import st_ace
 
 from scipy.integrate import odeint
 from scipy.optimize import fsolve
-import time
 
-import time
 import io
 import sys
 
