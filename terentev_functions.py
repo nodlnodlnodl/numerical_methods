@@ -11,5 +11,5 @@ import time
 import io
 import sys
 
-def hui():
+def ggg():
     pass
