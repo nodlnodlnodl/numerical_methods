@@ -207,11 +207,11 @@ elif selected_theme == "6.2. Нормы векторов и матриц":
 
 # 6.4.1 Метод исключения Гаусса
 elif selected_theme == "6.4.1. Метод исключения Гаусса":
-    metod_gausa()
+    gauss_elimination_method()
 
 # 6.4.2 Метод отражений
 elif selected_theme == "6.4.2. Метод отражений":
-    metod_otrajeniy()
+    reflection_method()
 
 # 10.3 Устойчивость разностной схемы
 elif selected_theme == "10.3. Устойчивость разностной схемы":
