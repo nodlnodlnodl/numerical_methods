@@ -7,6 +7,8 @@ from roshu_functions import *
 from archipkin_functions import *
 from zinkin_functions import *
 
+st.set_page_config(page_title="Методическое пособие по численным методам", page_icon=None)
+
 # Основной заголовок приложения
 st.title("Численные методы")
 
