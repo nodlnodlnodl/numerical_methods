@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from streamlit_ace import st_ace
+from code_editor import code_editor
 
 from scipy.integrate import odeint
 from scipy.optimize import fsolve
@@ -754,6 +755,7 @@ def runge_romberg_method_of_increasing_accuracy():
     print(f"Производная методом конечных разностей при h = 2: {y_prime_h2:.5f}")
     print(f"Уточнённая производная по методу Рунге: {y_prime_refined:.5f}")
     """)
+    code_editor()
 
     st.markdown("""
 
