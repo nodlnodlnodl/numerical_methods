@@ -236,7 +236,7 @@ def numerical_differentiation_newton_polynomial():
     """)
 
     st.latex(r"""
-            P_n(x) = y_1 + (x - x_1) [x_2, x_1] + (x - x_1)(x - x_2) [x_3, x_2, x_1] + \dots
+            P_n(x) = y_1 + (x - x_1)\: ([x_2, x_1] + (x - x_2)\: [x_3, x_2, x_1] + \dots)\tag 1
         """)
 
     st.markdown("""
@@ -248,7 +248,8 @@ def numerical_differentiation_newton_polynomial():
     """)
 
     st.latex(r"""
-        [x_3, x_2, x_1] = \frac{[x_3, x_2] - [x_2, x_1]}{x_3 - x_1};
+        [x_3, x_2, x_1] = \frac{[x_3, x_2] - [x_2, x_1]}{x_3 - x_1}=\frac1{x_3 - x_1}\left[\frac{y_3 - y_2}{x_3 - x_2} 
+        - \frac{y_2 - y_1}{x_2 - x_1}\right];
     """)
 
     st.latex(r"""
@@ -259,29 +260,18 @@ def numerical_differentiation_newton_polynomial():
     Из формулы (1) получаем (введем обозначение $$ t_i = x - x_i $$):
     """)
 
-    st.markdown("""
-    ### Первая производная:
+    st.latex(r"""
+        P_n'(x) = [x_1, x_2] + (t_1 + t_2) [x_1, x_2, x_3] + t_1 t_2 [x_1, x_2, x_3, x_4] + \dots,
     """)
 
     st.latex(r"""
-        P_n'(x) = [x_1, x_2] + (t_1 + t_2) [x_1, x_2, x_3] + t_1 t_2 [x_1, x_2, x_3, x_4] + \dots
+        P_n''(x) = 2[x_1, x_2, x_3] + 2(t_1 + t_2 + t_3) [x_1, x_2, x_3, x_4] + \dots,\tag 2
     """)
 
-    st.markdown("""
-    ### Вторая производная:
-    """)
-
-    st.latex(r"""
-        P_n''(x) = 2[x_1, x_2, x_3] + 2(t_1 + t_2 + t_3) [x_1, x_2, x_3, x_4] + \dots
-    """)
-
-    st.markdown("""
-    ### Производная порядка $$ k $$:
-    """)
 
     st.latex(r"""
         P_n^{(k)}(x) = k! \left( [x_1, \dots, x_{k+1}] +  \left( \sum_{i=1}^{k+1} t_j \right) [x_1, \dots, x_{i+1}]+ 
-        \dots \right)
+        \dots \right).
     """)
 
     st.markdown("""
@@ -293,20 +283,17 @@ def numerical_differentiation_newton_polynomial():
     ### Простейшие одночленные формулы:
     """)
 
-    st.markdown("""
-    1. **Первая производная**:
+    st.latex(r"""
+        y'(x) = \frac{y_2 - y_1}{x_2 - x_1};
     """)
 
     st.latex(r"""
-        y'(x) = \frac{y_2 - y_1}{x_2 - x_1}
-    """)
-
-    st.markdown("""
-    2. **Вторая производная**:
+        \frac{1}{2} y''(x) = \frac1{x_3 - x_1}\left[\frac{y_3 - y_2}{x_3 - x_2} - \frac{y_2 - y_1}{x_2 - x_1}\right];
+        \tag 3
     """)
 
     st.latex(r"""
-        \frac{1}{2} y''(x) = \frac1{x_3 - x_1}\left[\frac{y_3 - y_2}{x_3 - x_2} - \frac{y_2 - y_1}{x_2 - x_1}\right]
+    \frac{1}{k!}y^{(k)}(x)=[x_1,\dots,x_{k+1}].
     """)
 
     st.markdown("""
@@ -314,7 +301,7 @@ def numerical_differentiation_newton_polynomial():
     """)
 
     st.latex(r"""
-        y'(x) = P_n'(x) + R_n'(x),
+        y(x) = P_n(x) + R_n(x),
     """)
 
     st.markdown("""
@@ -427,8 +414,12 @@ def numerical_differentiation_newton_polynomial():
     """)
 
     st.latex(r"""
-        y'_2 = \frac{y_3 - y_1}{2h} + O(h^2),
+        y'_2 = \frac{y_3 - y_1}{2h} + O(h^2);
     """)
+
+    st.latex(r"""
+            y'_2 = \frac{y_3 - 2y_2 + y_1}{h^2} + O(h^2). \tag 4
+        """)
 
     st.markdown("""
     Очевидно, что:
@@ -564,7 +555,7 @@ def numerical_differentiation_newton_polynomial():
 
     st.latex(r"""
         y_{2\pm1} = y(x_2 \pm h) = y_2 \pm h y_2' + \frac{h^2}{2} y''(x_2)\pm \frac{h^3}{6} y''' + 
-        \frac{h^4}{24} y^{(4)}(\overline x_\pm) \ \ \ \ \ (5)
+        \frac{h^4}{24} y^{(4)}(\overline x_\pm)\tag{5}
     """)
 
     st.latex(r"""
@@ -590,7 +581,7 @@ def numerical_differentiation_newton_polynomial():
     """)
 
     st.latex(r"""
-    y_2'=a_1 y_1 + a_2 y_2 + a_3 y_3 \ \ \ \ \ \ \ \ \ (6)
+    y_2'=a_1 y_1 + a_2 y_2 + a_3 y_3\tag{6}
     """)
 
     st.markdown("""где, $$a_1, a_2, a_3$$ - неопределенные коэффициенты. Подставляя вместо $$y_1,y_3$$ их выражения 
@@ -659,7 +650,7 @@ def runge_romberg_method_of_increasing_accuracy():
     """)
 
     st.latex(r"""
-        y^{(k)}(x) = \varphi(x, h) + \psi(x) h^p + O(h^{p+1})\qquad \qquad(7)
+        y^{(k)}(x) = \varphi(x, h) + \psi(x) h^p + O(h^{p+1})\tag 7
     """)
 
     st.markdown("""
@@ -669,7 +660,7 @@ def runge_romberg_method_of_increasing_accuracy():
     """)
 
     st.latex(r"""
-        y^{(k)}(x) = \varphi(x, rh) + \psi(x)\cdot(rh)^p + O\left[(rh)^{p+1}\right]\qquad \qquad(8)
+        y^{(k)}(x) = \varphi(x, rh) + \psi(x)\cdot(rh)^p + O\left[(rh)^{p+1}\right]\tag{8}
     """)
 
     st.markdown("""
@@ -677,7 +668,7 @@ def runge_romberg_method_of_increasing_accuracy():
     """)
 
     st.latex(r"""
-        R \equiv \psi(x) h^p = \frac{\varphi(x, h) - \varphi(x, rh)}{r^p - 1} + O(h^{p+1})\qquad \qquad (9)
+        R \equiv \psi(x) h^p = \frac{\varphi(x, h) - \varphi(x, rh)}{r^p - 1} + O(h^{p+1})\tag {9}
     """)
 
     st.markdown("""
@@ -685,7 +676,7 @@ def runge_romberg_method_of_increasing_accuracy():
     """)
 
     st.latex(r"""
-        y^{(k)}(x) = \varphi(x, h) + \frac{\varphi(x, h) - \varphi(x, rh)}{r^p - 1} + O(h^{p+1})\qquad \qquad (10)
+        y^{(k)}(x) = \varphi(x, h) + \frac{\varphi(x, h) - \varphi(x, rh)}{r^p - 1} + O(h^{p+1})\tag {10}
     """)
 
     st.markdown("""
@@ -793,7 +784,7 @@ def runge_romberg_method_of_increasing_accuracy():
     """)
 
     st.latex(r"""
-        Z(x) = \varphi(x, h) + \sum_{m \geq p} \psi_m(x) h^m \qquad \qquad \qquad \qquad (11)
+        Z(x) = \varphi(x, h) + \sum_{m \geq p} \psi_m(x) h^m \tag{11}
     """)
 
     st.markdown("""
@@ -810,10 +801,15 @@ def runge_romberg_method_of_increasing_accuracy():
 
     st.markdown("""
     ### Замечание 1.
-    Метод Рунге-Ромберга можно применять только в том случае, если $$ \psi_m(x) $$ одинаковы для всех сеток. Обычно так бывает, если расположение узлов относительно $$ x $$ подобно для всех сеток. Если этого нет, то метод неприменим. Обычно при его использовании прибегают к изменению шага для узлов вдвое.
+    Метод Рунге-Ромберга можно применять только в том случае, если $$ \psi_m(x) $$ одинаковы для всех сеток. Обычно 
+    так бывает, если расположение узлов относительно $$ x $$ подобно для всех сеток. Если этого нет, то метод 
+    неприменим. Обычно при его использовании прибегают к изменению шага для узлов вдвое.
     """)
 
     st.markdown("""
     ### Замечание 2.
-    Очевидно, что погрешность формул численного дифференцирования тем меньше, чем меньше шаг $$ h $$; с другой стороны, при малых шагах $$ h $$ мы вынуждены вычитать близкие числа, т.е. происходит потеря точности. Поэтому, если значения функции имеют невысокую точность (зашумлены), то для вычисления производных лучше не использовать конечные разности, а предварительно получить аппроксимирующую функцию с помощью МНК.
+    Очевидно, что погрешность формул численного дифференцирования тем меньше, чем меньше шаг $$ h $$; с другой стороны, 
+    при малых шагах $$ h $$ мы вынуждены вычитать близкие числа, т.е. происходит потеря точности. Поэтому, если значения
+    функции имеют невысокую точность (зашумлены), то для вычисления производных лучше не использовать конечные
+    разности, а предварительно получить аппроксимирующую функцию с помощью МНК.
     """)
