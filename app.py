@@ -5,6 +5,7 @@ from volkov_functions import *
 from terentev_functions import *
 from roshu_functions import *
 from archipkin_functions import *
+from zinkin_functions import *
 
 # Основной заголовок приложения
 st.title("Численные методы")
@@ -197,6 +198,10 @@ elif selected_theme == "6.1.1. Треугольные матрицы":
 elif selected_theme == "6.1.2. Унитарные матрицы":
     linear_algebra_unitary_matrix()
     code_editor()
+
+# 6.2. Нормы векторов и матриц
+elif selected_theme == "6.2. Нормы векторов и матриц":
+    vector_matrix_norm()
 
 # 6.4.1 Метод исключения Гаусса
 elif selected_theme == "6.4.1. Метод исключения Гаусса":
