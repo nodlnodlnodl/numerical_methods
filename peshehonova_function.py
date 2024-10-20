@@ -11,8 +11,9 @@ import time
 import io
 import sys
 
+
 def order_of_accuracy_and_approximation():
-    st.title("9.1 Понятие о порядке точности и об аппроксимации")
+    st.title("9.1. Понятие о порядке точности и об аппроксимации")
 
     st.markdown("""Рассмотрим задачу Коши для ОДУ вида""")
 
@@ -61,9 +62,10 @@ def order_of_accuracy_and_approximation():
     в (5) представим в виде (полагая, что $$|a|h<<1, \quad a(ah)<<1$$):
     """)
 
-    st.latex(r"(1-ah)^{\frac{x_n}{h}} = e^{ \frac{x_n}{h} \ln (1-ah)} = \exp \{ \frac{x_n}{h} [-ah - \frac{a^2h^2}{2} + O(h^3) ] \} = "
-             r"= e^{-ax_n}e^{-a^2 \frac{h}{2} x_n} e^{O (h^2)} = e^{-ax_n} [1- \frac{a^2 x_n h}{2} + O(h^2)] [1+O(h^2)] ="
-             r"= e^{-ax_n} - h \frac{a^2 x_n}{2} e^{-ax_n} + O(h^2).")
+    st.latex(
+        r"(1-ah)^{\frac{x_n}{h}} = e^{ \frac{x_n}{h} \ln (1-ah)} = \exp \{ \frac{x_n}{h} [-ah - \frac{a^2h^2}{2} + O(h^3) ] \} = "
+        r"= e^{-ax_n}e^{-a^2 \frac{h}{2} x_n} e^{O (h^2)} = e^{-ax_n} [1- \frac{a^2 x_n h}{2} + O(h^2)] [1+O(h^2)] ="
+        r"= e^{-ax_n} - h \frac{a^2 x_n}{2} e^{-ax_n} + O(h^2).")
 
     st.markdown("""Следовательно,""")
 
@@ -97,9 +99,9 @@ def order_of_accuracy_and_approximation():
          соответствующий порядок точности при замене производных. К схеме надо предъявить еще одно требование - устойчивость.
     """)
 
-def unstable_difference_scheme():
 
-    st.title("9.2 Пример неустойчивой разностной схемы")
+def unstable_difference_scheme():
+    st.title("9.2. Пример неустойчивой разностной схемы")
 
     st.markdown("""Рассмотрим теперь следующую замену производной при $$x=x_n$$:""")
 
@@ -110,7 +112,8 @@ def unstable_difference_scheme():
         не хуже $$O(h)$$. Таким образом, мы получаем целое семейство схем вида
     """)
 
-    st.latex(r"\mu \frac{1}{2h} (y_{n+1} - y_{n-1}) + (1 - \mu) \frac{1}{h} (y_{n+1} - y_n) + ay_n = 0, \quad n=2,3,...")
+    st.latex(
+        r"\mu \frac{1}{2h} (y_{n+1} - y_{n-1}) + (1 - \mu) \frac{1}{h} (y_{n+1} - y_n) + ay_n = 0, \quad n=2,3,...")
 
     st.markdown("""
         параметрически зависящих от $$\mu$$. При $$\mu=0$$ имеем схему (2).
@@ -147,8 +150,9 @@ def unstable_difference_scheme():
 
     st.markdown("""найдем""")
 
-    st.latex(r"y_n = \frac{q_2y_0 - y_1}{q_2 - q_1} q^n_1 - \frac{q_1y_0 - y_1}{q_2 - q_1}q^n_2 = y_0 [\frac{q_2}{q_2 - q_1} q^n_1 - \frac{q_1}{q_2 - q_1} q^n_2] + "
-             r"+ y_1 [- \frac{1}{q_2 - q_1} q^n_1 + \frac{1}{q_2 - q_1} q^n_2] \tag{7}")
+    st.latex(
+        r"y_n = \frac{q_2y_0 - y_1}{q_2 - q_1} q^n_1 - \frac{q_1y_0 - y_1}{q_2 - q_1}q^n_2 = y_0 [\frac{q_2}{q_2 - q_1} q^n_1 - \frac{q_1}{q_2 - q_1} q^n_2] + "
+        r"+ y_1 [- \frac{1}{q_2 - q_1} q^n_1 + \frac{1}{q_2 - q_1} q^n_2] \tag{7}")
 
     st.markdown("""Для $$q^n_1, q^n_2$$, используя приближенные выражения, получим""")
 
@@ -158,7 +162,8 @@ def unstable_difference_scheme():
 
     st.markdown("""Подставляя эти выражения в формулу для $$ y_n $$, находим""")
 
-    st.latex(r"y_n = \frac{q_2y_0 - y_1}{q_2 - q_1}[e^{-ax_n} + O(h)] + \frac{q_1y_0 - y_1}{q_1 - q_2} 2^{x_n/h}[e^{ax_n} + O(h)].")
+    st.latex(
+        r"y_n = \frac{q_2y_0 - y_1}{q_2 - q_1}[e^{-ax_n} + O(h)] + \frac{q_1y_0 - y_1}{q_1 - q_2} 2^{x_n/h}[e^{ax_n} + O(h)].")
 
     st.markdown("""
         Положим $$y_1 = be^{-ax_1} = be^{-ah}$$ (т.е. зададим $$y_1$$ точно!).
