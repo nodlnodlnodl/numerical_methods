@@ -17,10 +17,10 @@ def linear_algebra_triangular_matrix():
         # 6. Решение задач линейной алгебры
 
         Линейная алгебра включает в себя четыре основные задачи:
-        1. Решение систем линейных уравнений вида $$ A \bar{x} = \bar{b} $$,
+        1. Решение систем линейных уравнений вида $$ A \overline{x} = \overline{b} $$,
             где:
             - $$ A $$ — квадратная матрица размерности $$ n \times n $$,
-            - $$ \bar{x} $$ и $$ \bar{b} $$ — векторы размерности $$ n $$.
+            - $$ \overline{x} $$ и $$ \overline{b} $$ — векторы размерности $$ n $$.
         2. Вычисление определителя матрицы $$ A $$,
         3. Нахождение обратной матрицы $$ A^{-1} $$,
         4. Определение собственных значений и собственных векторов матрицы $$ A $$.
@@ -189,12 +189,12 @@ def linear_algebra_unitary_matrix():
 
     st.markdown(r"""
         То есть строки унитарной матрицы ортогональны, если их рассматривать как компоненты векторов 
-        $$ \bar{a}_i = (a_{i1}, \dots, a_{in})' $$ и 
-        $$ \bar{a}_k = (a_{k1}, \dots, a_{kn})' $$ 
+        $$ \overline{a}_i = (a_{i1}, \dots, a_{in})' $$ и 
+        $$ \overline{a}_k = (a_{k1}, \dots, a_{kn})' $$ 
         и ввести скалярное произведение в виде:
     """)
 
-    st.latex(r"(\bar{a}_i, \bar{a}_k) = \sum_{j=1}^{n} a_{ij} a_{kj}^*.")
+    st.latex(r"(\overline{a}_i, \overline{a}_k) = \sum_{j=1}^{n} a_{ij} a_{kj}^*.")
 
     st.markdown(r"""
         Аналогично из равенства $$ A^H \cdot A = E $$ следует ортогональность столбцов унитарной матрицы:
@@ -287,46 +287,46 @@ def linear_algebra_unitary_matrix():
 
         Вместо элементарных матриц при преобразованиях употребляются некоторые другие унитарные матрицы.
 
-        Рассмотрим преобразование векторного пространства, осуществляемое отражением векторов от заданной плоскости $$ Q $$. Пусть $$ \bar{W} $$ — ортогональный к плоскости $$ Q $$ вектор единичной длины. Тогда произвольный вектор $$ \bar{Z} $$ можно представить в виде:
+        Рассмотрим преобразование векторного пространства, осуществляемое отражением векторов от заданной плоскости $$ Q $$. Пусть $$ \overline{W} $$ — ортогональный к плоскости $$ Q $$ вектор единичной длины. Тогда произвольный вектор $$ \overline{Z} $$ можно представить в виде:
     """)
 
     st.latex(r"""
-    \bar{Z} = \bar{x} + \alpha \bar{W},
+    \overline{Z} = \overline{x} + \alpha \overline{W},
     """)
 
     st.markdown(r"""
-        где $$ (\bar{x}, \bar{W}) = \sum_{j=1}^{n} x_j W_{j}^* = 0 $$; $$ \alpha $$ — число. Отраженный от плоскости $$ Q $$ вектор по определению равен:
+        где $$ (\overline{x}, \overline{W}) = \sum_{j=1}^{n} x_j W_{j}^* = 0 $$; $$ \alpha $$ — число. Отраженный от плоскости $$ Q $$ вектор по определению равен:
     """)
 
     st.latex(r"""
-    \tilde{Z}' = \bar{x} - \alpha \bar{W}.
+    \tilde{Z}' = \overline{x} - \alpha \overline{W}.
     """)
 
     st.markdown(r"""
-        Матрица преобразования (**отражения**) от $$ \bar{Z} $$ к $$ \tilde{Z} $$ имеет вид:
+        Матрица преобразования (**отражения**) от $$ \overline{Z} $$ к $$ \tilde{Z} $$ имеет вид:
     """)
 
     st.latex(r"""
-    U = E - 2 \bar{W} \bar{W}^H, \tag{5}
+    U = E - 2 \overline{W} \overline{W}^H, \tag{5}
     """)
 
     st.markdown(r"""
-        где $$ (\bar{W}\bar{W}^H)_{ij} = \bar{W}_i \bar{W}_j^* $$, т.е. $$ \bar{W} \bar{W}^H $$ — произведение матрицы-столбца $$ W $$ на матрицу-строку $$ W^H $$.
+        где $$ (\overline{W}\overline{W}^H)_{ij} = \overline{W}_i \overline{W}_j^* $$, т.е. $$ \overline{W} \overline{W}^H $$ — произведение матрицы-столбца $$ W $$ на матрицу-строку $$ W^H $$.
 
         В самом деле:
     """)
 
     st.latex(r"""
-    U \bar{Z} = (E - 2 \bar{W} \bar{W}^H)(\bar{x} + \alpha \bar{W}) = \bar{Z} - 2 (\bar{W} \bar{W}^H)\bar{x} - 2\alpha ( \bar{W} \bar{W}^H)\bar{W} = \\
-    = \bar{Z} - 2\bar{W}(\bar{x}, \bar{W}) - 2\alpha \bar{W}(\bar{W}, \bar{W}),
+    U \overline{Z} = (E - 2 \overline{W} \overline{W}^H)(\overline{x} + \alpha \overline{W}) = \overline{Z} - 2 (\overline{W} \overline{W}^H)\overline{x} - 2\alpha ( \overline{W} \overline{W}^H)\overline{W} = \\
+    = \overline{Z} - 2\overline{W}(\overline{x}, \overline{W}) - 2\alpha \overline{W}(\overline{W}, \overline{W}),
     """)
 
     st.markdown(r"""
-        где $$ (\bar{x}, \bar{W}), $$ $$ (\bar{W}, \bar{W}) $$ — скалярное произведение. Учитывая ортогональность $$ \bar{x} $$ и $$ \bar{W} $$, имеем:
+        где $$ (\overline{x}, \overline{W}), $$ $$ (\overline{W}, \overline{W}) $$ — скалярное произведение. Учитывая ортогональность $$ \overline{x} $$ и $$ \overline{W} $$, имеем:
     """)
 
     st.latex(r"""
-    U \bar{Z} = \bar{Z} - 2 \alpha \bar{W}(\bar{W}, \bar{W}) = \bar{Z} - 2 \alpha \bar{W} = \bar{x} - \alpha \bar{W} = \tilde{Z}.
+    U \overline{Z} = \overline{Z} - 2 \alpha \overline{W}(\overline{W}, \overline{W}) = \overline{Z} - 2 \alpha \overline{W} = \overline{x} - \alpha \overline{W} = \tilde{Z}.
     """)
 
     st.markdown(r"""
@@ -334,20 +334,20 @@ def linear_algebra_unitary_matrix():
     """)
 
     st.latex(r"""
-    UU^H = (E - 2 \bar{W} \bar{W}^H)(E - 2 (\bar{W}^H)^H \bar{W}^H) = \\
-    = E - 4 \bar{W} \bar{W}^H + 4 \bar{W} ( \bar{W}^H \bar{W} ) \bar{W}^H = \\ 
-    = E - 4 \bar{W} \bar{W}^H + 4 ( \bar{W}, \bar{W}) \bar{W} \bar{W}^H = E.
+    UU^H = (E - 2 \overline{W} \overline{W}^H)(E - 2 (\overline{W}^H)^H \overline{W}^H) = \\
+    = E - 4 \overline{W} \overline{W}^H + 4 \overline{W} ( \overline{W}^H \overline{W} ) \overline{W}^H = \\ 
+    = E - 4 \overline{W} \overline{W}^H + 4 ( \overline{W}, \overline{W}) \overline{W} \overline{W}^H = E.
     """)
 
     st.markdown(r"""
-        Пусть $$ \bar{S}, \bar{e} $$ — два произвольных вектора-столбца, причем $$ \bar{e} $$ — единичной длины: $$ (\bar{e}, \bar{e}) = 1 $$.
-        Вектор $$ \bar{W} $$ всегда можно выбрать так, чтобы построенная по нему матрица $$ U $$ переводила $$ \bar{S} $$ в вектор, параллельный $$ \bar{e} $$.
+        Пусть $$ \overline{S}, \overline{e} $$ — два произвольных вектора-столбца, причем $$ \overline{e} $$ — единичной длины: $$ (\overline{e}, \overline{e}) = 1 $$.
+        Вектор $$ \overline{W} $$ всегда можно выбрать так, чтобы построенная по нему матрица $$ U $$ переводила $$ \overline{S} $$ в вектор, параллельный $$ \overline{e} $$.
 
         Положим:
     """)
 
     st.latex(r"""
-    \bar{W} = \frac{1}{\rho} (\bar{S} - \alpha \bar{e}),
+    \overline{W} = \frac{1}{\rho} (\overline{S} - \alpha \overline{e}),
     """)
 
     st.markdown(r"""
@@ -355,8 +355,8 @@ def linear_algebra_unitary_matrix():
     """)
 
     st.latex(r"""
-    |\alpha| = \sqrt{(\bar{S}, \bar{S})}; \quad \arg \alpha = \arg (\bar{S}, \bar{e}) - \pi; \quad \rho = \sqrt{(\bar{S} - \alpha \bar{e}, \bar{S} - \alpha \bar{e})} = \\
-     = \sqrt{2|\alpha|^2 + 2|\alpha| |(\bar{S}, \bar{e})|}.
+    |\alpha| = \sqrt{(\overline{S}, \overline{S})}; \quad \arg \alpha = \arg (\overline{S}, \overline{e}) - \pi; \quad \rho = \sqrt{(\overline{S} - \alpha \overline{e}, \overline{S} - \alpha \overline{e})} = \\
+     = \sqrt{2|\alpha|^2 + 2|\alpha| |(\overline{S}, \overline{e})|}.
     """)
 
     st.markdown(r"""
@@ -364,22 +364,22 @@ def linear_algebra_unitary_matrix():
         """)
 
     st.latex(r"""
-        U \bar{S} = \bar{S} - 2 (\bar{S}, \bar{W}) \bar{W} = \bar{S} - \frac{2} {\rho} (\bar{S}, \bar{S} - \alpha \bar{e}) \bar{W} = \bar{S} - \frac{2} {\rho} [\bar{S}, \bar{S}) - (\bar{S}, \alpha \bar{e}]\bar{W} =\\
-        = \bar{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 - 2\alpha^* (\bar{S}, \bar{e})\right] \bar{W} = \\
-        = \bar{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 - 2|\alpha| e^{i[\pi - \arg (\bar{S}, \bar{e})]} |(\bar{S}, \bar{e})| e^{i \arg (\bar{S}, \bar{e})} \right] \bar{W} = \\
-        = \bar{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 + 2|\alpha| |(\bar{S}, \bar{e})| \right] \bar{W} = \bar{S} - \rho \bar{W} = \alpha \bar{e}.
+        U \overline{S} = \overline{S} - 2 (\overline{S}, \overline{W}) \overline{W} = \overline{S} - \frac{2} {\rho} (\overline{S}, \overline{S} - \alpha \overline{e}) \overline{W} = \overline{S} - \frac{2} {\rho} [\overline{S}, \overline{S}) - (\overline{S}, \alpha \overline{e}]\overline{W} =\\
+        = \overline{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 - 2\alpha^* (\overline{S}, \overline{e})\right] \overline{W} = \\
+        = \overline{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 - 2|\alpha| e^{i[\pi - \arg (\overline{S}, \overline{e})]} |(\overline{S}, \overline{e})| e^{i \arg (\overline{S}, \overline{e})} \right] \overline{W} = \\
+        = \overline{S} - \frac{1}{\rho} \left[ 2|\alpha|^2 + 2|\alpha| |(\overline{S}, \overline{e})| \right] \overline{W} = \overline{S} - \rho \overline{W} = \alpha \overline{e}.
         """)
 
     st.markdown(r"""
-            Свойства матрицы отражения используются при преобразованиях матриц. Пусть $$ A $$ — некоторая комплексная матрица, умножим ее слева на матрицу $$ U_1 $$, выбрав в качестве $$ \bar{S} $$ и $$ \bar{e} $$ векторы:
+            Свойства матрицы отражения используются при преобразованиях матриц. Пусть $$ A $$ — некоторая комплексная матрица, умножим ее слева на матрицу $$ U_1 $$, выбрав в качестве $$ \overline{S} $$ и $$ \overline{e} $$ векторы:
         """)
 
     st.latex(r"""
-        \bar{S} = \begin{pmatrix}
+        \overline{S} = \begin{pmatrix}
         a_{11} \\
         \vdots \\
         a_{n1}
-        \end{pmatrix}; \quad \bar{e} = \begin{pmatrix}
+        \end{pmatrix}; \quad \overline{e} = \begin{pmatrix}
         1 \\
         0 \\
         \vdots \\
@@ -406,12 +406,12 @@ def linear_algebra_unitary_matrix():
         """)
 
     st.latex(r"""
-        \bar{S} = \begin{pmatrix}
+        \overline{S} = \begin{pmatrix}
         0 \\
         a_{22}^{(1)} \\
         \vdots \\
         a_{n2}^{(1)}
-        \end{pmatrix}, \quad \bar{e} = \begin{pmatrix}
+        \end{pmatrix}, \quad \overline{e} = \begin{pmatrix}
         0 \\
         1 \\
         0 \\
@@ -440,3 +440,198 @@ def linear_algebra_unitary_matrix():
     st.markdown(r"""
         Отметим, что если для матрицы $$ A $$ выполнено условие $$ A A^H = A^H A $$, то $$ A $$ называется **нормальной** матрицей. Унитарные матрицы дают примеры нормальных матриц.
     """)
+
+#4.2. Численное интегрирование
+def numerical_integration():
+    st.markdown(r"""
+        ## 4.2. Численное интегрирование
+
+        Численное интегрирование применяется в тех случаях, когда вычислить аналитически интегралы либо сложно, либо вообще невозможно (например, если подынтегральная функция задана таблично). 
+
+        Идея для численного интегрирования такая же, как и для численного дифференцирования: подынтегральную функцию заменяют подходящей аппроксимирующей функцией, для которой и производят вычисления. Наиболее широко применяется многочленная аппроксимация.
+
+        Введем некоторые определения. Пусть требуется вычислить определённый интеграл:
+    """)
+
+    st.latex(r"F = \int_a^b \rho(x) y(x) dx,")
+
+    st.markdown(r"""
+        где $$ \rho(x) > 0 $$ — весовая функция. Будем считать, что $$ y(x) $$ непрерывна на $$ [a, b] $$, а $$ \rho(x) $$ непрерывна на $$ (a, b) $$. В разделе 3 мы видели, что заменять $$ y(x) $$ многочленом сразу на всём отрезке $$ [a, b] $$ вообще говоря, нецелесообразно. Поэтому обычно исходный отрезок $$ [a, b] $$ разбивают на несколько отрезков, на каждом из которых и производится замена $$ y(x) $$ на некоторый многочлен $$ P_n^{(m)}(x) $$:
+    """)
+
+    st.latex(r"""
+        F = \sum_{m=1}^{M} \int_{a_m}^{a_{m+1}} \rho(x) y(x) dx 
+        \overset{\sim}{=} \sum_{m=1}^{M} \int_{a_m}^{a_{m+1}} \rho(x) P_n^{(m)}(x) dx, \tag{13}
+    """)
+
+    st.markdown(r"""
+        где $$ a_1 = a $$, $$ a_{M+1} = b $$.
+
+        Рассмотрим интеграл:
+    """)
+
+    st.latex(r"f_m = \int_{a_m}^{a_{m+1}} \rho(x) y(x) dx, \tag{14}")
+
+    st.markdown(r"""
+        обозначая для краткости $$ a_m = \alpha $$, $$ a_{m+1} = \beta $$ и опуская индекс $$ m $$ у $$ f $$.
+
+        Пусть на отрезке $$ [\alpha, \beta] $$ введены некоторые узлы $$ x_1, \dots, x_n $$, и $$ y(x) $$ заменена на многочлен (в форме Лагранжа):
+    """)
+
+    st.latex(r"y(x) = \sum_{i=1}^{n} y_i L_i(x) + r(x), \tag{15}")
+
+    st.markdown(r"""
+        где $$ r(x) $$ — погрешность интерполяции, а $$ L_i(x) $$ — многочлены Лагранжа степени $$ (n-1) $$ системы. Если теперь выражение (15) подставить в (14), то получим:
+    """)
+
+    st.latex(r"f = \sum_{i=1}^{n} W_i y_i + R. \tag{16}")
+
+    st.markdown(r"""
+        Эта формула называется **квадратурной**, $$ W_i $$ — веса, $$ x_i $$ — узлы, $$ R $$ — остаточный член квадратурной формулы:
+    """)
+
+    st.latex(r"""
+        W_i = \int_{\alpha}^{\beta} L_i(x) \rho(x) dx, \quad R = \int_{\alpha}^{\beta} r \rho(x) dx. \tag{17}
+    """)
+
+    st.markdown(r"""
+        Многочлены $$ L_i(x) $$ не зависят от $$ y(x) $$, поэтому веса от неё также не зависят. Эти веса можно определять (при заданных узлах $$ x_i $$), построя интерполирующий многочлен. В самом деле, если $$ y(x) $$ есть многочлен степени $$ (n-1) $$, то в формуле (15) $$\, r(x) = 0 $$, следовательно, в (16) $$ R = 0 $$, т.е. квадратурная формула даёт точный ответ для $$ y(x) = P_{n-1}(x) $$.
+        Теперь очевидно, что если веса и узлы квадратурной формулы подобраны так, чтобы она давала точные ответы для $$ y(x) = 1, x, \dots, x^{n-1}, $$ то она даст точный ответ и для
+    """)
+
+    st.latex(r"y(x) = P_{n-1}(x) = a_{n-1} x^{n-1} + \dots + a_0,")
+
+    st.markdown(r"""
+        в силу линейности операции интегрирования. Это свойство можно положить в основу получения квадратурных формул.
+    """)
+
+#4.2.1. Фиксированные узлы
+def fixed_nodes():
+    st.markdown(r"""
+        ### 4.2.1. Фиксированные узлы
+
+        Пусть узлы $$ x_1, \dots, x_n $$ на отрезке $$ [\alpha, \beta] $$ известны. Обозначим через $$ m_k $$ интегралы вида:
+    """)
+
+    st.latex(r"m_k = \int_\alpha^\beta  \rho x^k dx.")
+
+    st.markdown(r"""
+        Они называются **моментами оператора интегрирования**. Определим веса $$ W_i $$ квадратурной формулы так, чтобы она была точной для $$ y(x) = 1, x, \dots, x^{n-1} $$. Отсюда получаем систему уравнений для {$$ W_i $$}:
+    """)
+
+    st.latex(r"""
+        \begin{aligned}
+        m_0 &= W_1 + \dots + W_n, \\
+        m_1 &= W_1 x_1 + \dots + W_n x_n, \\
+        &\cdots\,\cdots\,\cdots\,\cdots\,\cdots\,\cdots \\
+        m_{n-1} &= W_1 x_1^{n-1} + \dots + W_n x_n^{n-1}. \tag{18}
+        \end{aligned}
+    """)
+
+    st.markdown(r"""
+        При $$ x_i \neq x_j $$ определитель этой системы (он называется **определителем Вандермонда**) не равен нулю, следовательно, она имеет решение.
+
+        Запишем эту систему в виде:
+    """)
+
+    st.latex(r"X \overline{W} = \overline{m}. \tag{19}")
+
+    st.markdown(r"""
+            Тошда решение ее можно представить как
+        """)
+
+    st.latex(r"\overline{W} = X^{-1} \overline{m},")
+
+    st.markdown(r"""
+        и вся трудность заключается в вычислении обратной матрицы $$ X^{-1} $$. Чтобы её вычислить, введем в рассмотрение многочлены:
+    """)
+
+    st.latex(r"""
+    \pi_i(x) = (x - x_1) \dots (x - x_{i-1})(x - x_{i+1}) \dots (x - x_n) \equiv \\
+    \equiv \sum_{k=0}^{n-1} c_{ik} x^k \quad (i = 1, 2, \dots, n).
+    """)
+
+    st.markdown(r"""
+        Очевидно, что $$ \pi_i(x_j) = 0, \quad$$ $$ j \neq i, \quad $$, и $$ \pi_i(x_i) \neq 0 $$.
+
+        Покажем теперь, что каждый элемент матрицы $$ X^{-1} $$ имеет вид:
+    """)
+
+    st.latex(r"(X^{-1})_{mk} = \frac{c_{mk}}{\pi_m(x_m)}, \quad \text{(20)}")
+
+    st.markdown(r"""
+        В самом деле, из условия $$ X^{-1} X = E $$ (единичная матрица) имеем:
+    """)
+
+    st.latex(r"\sum_{j=0}^{n-1} (X^{-1})_{ij} (X)_{jk} = \delta_{ik} = \begin{cases} 1, & i = k, \\ 0, & i \neq k. \end{cases}")
+
+    st.markdown(r"""
+            С другой стороны,
+        """)
+
+    st.latex(r"""
+            \sum_{j=0}^{n-1} \frac{c_{ij}}{\pi_i(x_i)} x_{k}^j = \sum_{j=0}^{n-1} (X^{-1})_{ij} (X)_{jk} = \frac{\pi_i(x_k)}{\pi_i(x_i)} = \delta_{ik}.
+        """)
+
+    st.markdown(r"""
+            Таким образом, формула (20) действительно даёт элементы обратной матрицы.
+            Получим с помощью этого подхода некоторые употребительные квадратурные формулы для интеграла (14), полагая в нём $$ \rho(x) = 1 $$.
+            Будем предполагать для простоты записи, что узлы на этом отрезке располагаются равномерно:
+        """)
+
+    st.latex(r"x_1 = \alpha, \quad x_2 = \alpha + \tilde{h}, \dots, x_n = \beta = \alpha + (n-1)\tilde{h},")
+
+    st.markdown(r"""
+            т.е. шаг между узлами
+        """)
+
+    st.latex(r"\tilde{h} = \frac{\beta - \alpha}{n - 1}.")
+
+    st.markdown(r"""
+            Рассмотрим случай $$ n = 2 $$, когда $$ x_1 = \alpha $$, $$ x_2 = \beta $$.
+            Для него имеем
+        """)
+
+    st.latex(r"""
+            \pi_1 = x - \beta, \quad \pi_2 = x - \alpha, \quad \pi_1(x_1) = -\tilde{h}, \quad \pi_2(x_2) = \tilde{h}.
+        """)
+
+    st.markdown(r"""
+            Следовательно,
+        """)
+
+    st.latex(r"""
+            c_{10} = -\beta, \quad c_{11} = 1, \quad c_{20} = -\alpha, \quad c_{21} = 1
+        """)
+
+    st.markdown(r"""
+            и
+        """)
+
+    st.latex(r"""
+            X^{-1} = \frac{1}{\tilde{h}} \begin{pmatrix} \beta & -1 \\ -\alpha & 1 \end{pmatrix}.
+        """)
+
+    st.markdown(r"""
+            Вычислим моменты:
+        """)
+
+    st.latex(
+        r"m_0 = \int_\alpha^\beta 1 \cdot dx = \tilde{h}; \quad m_1 = \int_\alpha^\beta x dx = \frac{1}{2} (\alpha + \beta)\tilde{h}.")
+
+    st.markdown(r"""
+            Таким образом,
+        """)
+
+    st.latex(r"""
+            \begin{pmatrix} W_1 \\ W_2 \end{pmatrix} = \frac{1}{\tilde{h}} \begin{pmatrix} \beta & -1 \\ -\alpha & 1 \end{pmatrix} \begin{pmatrix} \tilde{h} \\ \frac{(\alpha + \beta)}{2} \tilde{h} \end{pmatrix} = \begin{pmatrix} \tilde{h}/2 \\ \tilde{h}/2 \end{pmatrix},
+        """)
+
+    st.latex(r"\tilde{h} = \beta - \alpha,")
+
+    st.markdown(r"""
+            и квадратурная формула принимает вид (формула трапеций):
+        """)
+
+    st.latex(
+        r"\int_\alpha^\beta y(x) = \frac{\beta - \alpha}{2} \left[ y(\alpha) + y(\beta) \right] + R. \quad \text{(21)}")
