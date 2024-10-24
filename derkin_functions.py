@@ -635,3 +635,181 @@ def fixed_nodes():
 
     st.latex(
         r"\int_\alpha^\beta y(x) = \frac{\beta - \alpha}{2} \left[ y(\alpha) + y(\beta) \right] + R. \quad \text{(21)}")
+
+    st.markdown(r"""
+            Пусть теперь $$ n = 3 $$, т.е.
+        """)
+
+    st.latex(r"\tilde{h} = (\beta - \alpha)/2,")
+
+    st.markdown(r"""
+            $$ x_1 = \alpha, \quad x_2 = (\alpha + \beta)/2, \quad x_3 = \beta. $$
+
+            Для этого случая:
+        """)
+
+    st.latex(r"""
+            \pi_1(x) = (x - x_2)(x - x_3) = x^2 - (x_2 + x_3)x + x_2 x_3, \quad \pi_1(x_1) = 2\tilde{h}^2;
+        """)
+
+    st.latex(r"""
+            \pi_2(x) = x^2 - (x_1 + x_3)x + x_1 x_3, \quad \pi_2(x_2) = -\tilde{h}^2;
+        """)
+
+    st.latex(r"""
+            \pi_3(x) = x^2 - (x_1 + x_2)x + x_1 x_2, \quad \pi_3(x_3) = 2\tilde{h}^2.
+        """)
+
+    st.markdown(r"""
+            Таким образом,
+        """)
+
+    st.latex(r"""
+            X^{-1} = \frac{1}{\tilde{h}^2} \begin{pmatrix} \frac{x_2 x_3}{2} & -\frac{x_2 + x_3}{2} & \frac{1}{2} \\ -x_1 x_3 & x_1 + x_3 & -1 \\ \frac{x_1 x_2}{2} & -\frac{x_1 + x_2}{2} & \frac{1}{2} \end{pmatrix}.
+        """)
+
+    st.markdown(r"""
+            Для моментов находим:
+        """)
+
+    st.latex(r"m_0 = \int_\alpha^\beta dx = 2\tilde{h}; \quad m_1 = \int_\alpha^\beta x dx = (\alpha + \beta)\tilde{h};")
+
+    st.latex(r"m_2 = \int_\alpha^\beta x^2 dx = \frac{2}{3} \tilde{h} (\alpha^2 + \alpha\beta + \beta^2).")
+
+    st.markdown(r"""
+            Таким образом, для весов имеем:
+        """)
+
+    st.latex(r"""
+            \begin{pmatrix} W_1 \\ W_2 \\ W_3 \end{pmatrix} = \frac{1}{\tilde{h}} \begin{pmatrix} x_2 x_3 -\frac{(x_1 + x_3)(x_2 + x_3)}{2} + \frac{1}{3} (x_{1}^2 + x_1 x_3 + x_{3}^2 ) \\ 
+            -2x_1 x_3 + (x_1 + x_3)^2 - \frac{2}{3} (x_{1}^2 + x_1 x_3 + x_{3}^2 ) \\ 
+            x_1 x_2 - \frac{1}{2} (x_1 + x_2)(x_1 + x_3) + \frac{1}{3} (x_{1}^2 + x_1 x_3 + x_{3}^2)  \end{pmatrix}  =\frac{\tilde{h}}{3} \begin{pmatrix} 1 \\ 4 \\ 1 \end{pmatrix}.
+        """)
+
+    st.markdown(r"""
+            И квадратурная формула принимает вид (формула Симпсона):
+        """)
+
+    st.latex(
+        r"\int_\alpha^\beta y dx = \frac{\tilde{h}}{3} \left[ y(\alpha) + 4y\left( \frac{\alpha + \beta}{2} \right) + y(\beta) \right] + R. \quad \text{(22)}")
+
+    st.markdown(r"""
+            Квадратурные формулы, в которых весь интервал $$ [\alpha, \beta] $$ разбит на равные промежутки и концы интервала входят в число узлов, называются **формулами Ньютона — Котеса**. Формулы трапеций и Симпсона дают примеры этих формул.
+        """)
+
+    st.markdown(r"""
+            Пусть теперь на интервале $$ [\alpha, \beta] $$ выбраны узлы вида:
+        """)
+
+    st.latex(r"x_1 = \alpha + \frac{\tilde{h}}{2}, \dots, x_n = \alpha + \frac{2n - 1}{2} \tilde{h},")
+
+    st.markdown(r"""
+            где
+        """)
+
+    st.latex(r"\tilde{h} = \frac{\beta - \alpha}{n}.")
+
+    st.markdown(r"""
+            Квадратурные формулы с узлами такого типа называются **формулами Маклорена**. Рассмотрим простейший случай $$ n = 1 $$, когда:
+        """)
+
+    st.latex(r"x_1 = (\alpha + \beta)/2.")
+
+    st.markdown(r"""
+            Для него:
+        """)
+
+    st.latex(r"\int_\alpha^\beta y dx = W_1 y \left( \frac{\alpha + \beta}{2} \right) + R,")
+
+    st.markdown(r"""
+            где $$ W_1 $$ надо определить из условия, что при $$ y(x) \equiv 1 $$ формула будет точной. Очевидно, что:
+        """)
+
+    st.latex(r"W_1 = (\beta - \alpha), \quad \text{т.е.}")
+
+    st.latex(r"\int_\alpha^\beta y(x) dx = (\beta - \alpha) y \left( \frac{\alpha + \beta}{2} \right) + R.")
+
+    st.markdown(r"""
+            Это — **формула средних** (или формула центральных прямоугольников).
+
+            Рассмотрим теперь, к каким квадратурным формулам приводит интерполяция по Эрмиту, когда в узлах известны не только значения функции, но и производной.
+
+            Пусть на $$ [\alpha, \beta] $$ заданы два узла: $$ x_1 = \alpha $$, $$ x_2 = \beta $$, и квадратурная формула отыскивается в виде:
+        """)
+
+    st.latex(r"""
+            \int_\alpha^\beta y(x) dx = W_1 y_1 + W_2 y_2 + W_3 y_1' + W_4 y_2' + R,
+        """)
+
+    st.markdown(r"""
+            где $$ y_i = y(x_i) $$, $$ y_i' = y'(x_i) $$. Для упрощения выкладок преобразуем интервал $$ [\alpha, \beta] $$ в $$ [0, 1] $$, сделав замену переменной:
+        """)
+
+    st.latex(r"t = \frac{x - \alpha}{\beta - \alpha}.")
+
+    st.markdown(r"""
+            Очевидно, при этом:
+        """)
+
+    st.latex(r"\int_\alpha^\beta y(x) dx = (\beta - \alpha) \int_0^1 \tilde{y}(t) dt.")
+
+    st.markdown(r"""
+            Пусть интеграл по отрезку $$ [0, 1] $$ вычисляется по квадратурной формуле
+        """)
+
+    st.latex(r"\int_0^1 \tilde{y} dt = \tilde{W}_1 \tilde{y}_1 + \tilde{W}_2 \tilde{y}_2 + \tilde{W}_3 \tilde{y}_1' + \tilde{W}_4 \tilde{y}_2' + \tilde{R},")
+
+    st.markdown(r"""
+        где $$ t_1 = 0 $$, $$ t_2 = 1 $$.
+
+        Поскольку:
+    """)
+
+    st.latex(r"""
+        \tilde{y}_1 = \tilde{y}(0) = y(\alpha) = y_1; \quad \tilde{y}_2 = y_2;
+    """)
+
+    st.latex(r"""
+        \tilde{y}_1' = \frac{d \tilde{y}(0)}{dt} = (\beta - \alpha) \frac{dy(\alpha)}{dx} = (\beta - \alpha) y_1'; \quad \tilde{y}_2' = (\beta - \alpha) y_2',
+    """)
+
+    st.latex(r"""
+        \tilde{y}_2' = \frac{d \tilde{y}(1)}{dt} = (\beta - \alpha) y_2',
+    """)
+
+    st.markdown(r"""
+        то, очевидно:
+    """)
+
+    st.latex(r"""
+        W_{1,2} = (\beta - \alpha) \tilde{W}_{1,2}; \quad W_{3,4} = (\beta - \alpha)^2 \tilde{W}_{3,4}.
+    """)
+
+    st.markdown(r"""
+        Сделаем эту формулу точной для $$ \tilde{y}(t) = 1, t, t^2, t^3 $$. Вычисляя моменты, получим систему уравнений:
+    """)
+
+    st.latex(r"""
+    \left\{
+    \begin{array}{l}
+    \tilde{W}_1 + \tilde{W}_2 = 1, \\
+    \tilde{W}_2 + \tilde{W}_3 + \tilde{W}_4 = 1/2, \\
+    \tilde{W}_2 + 2\tilde{W}_4 = 1/3, \\
+    \tilde{W}_2 + 3\tilde{W}_4 = 1/4.
+    \end{array}
+    \right.
+    """)
+
+    st.markdown(r"""
+        Из которой находим $$ \tilde{W}_1 = \tilde{W}_2 = 1/2 $$, $$ \tilde{W}_3 = -\tilde{W}_4 = 1/12 $$.
+
+        Следовательно:
+    """)
+
+    st.latex(r"""
+        \int_\alpha^\beta y dx = \frac{\beta - \alpha}{2} \left[ y(\alpha) + y(\beta) \right] + \frac{(\beta - \alpha)^2}{12} \left[ y'(\alpha) - y'(\beta) \right] + R. \quad \text{(23)}
+    """)
+
+    st.markdown(r"""
+        Эта квадратурная формула называется **формулой Эйлера**. Существуют и другие квадратурные формулы с заданными узлами, но мы на них не будем останавливаться.
+    """)
