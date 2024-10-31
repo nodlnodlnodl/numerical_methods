@@ -268,7 +268,6 @@ def numerical_differentiation_newton_polynomial():
         P_n''(x) = 2[x_1, x_2, x_3] + 2(t_1 + t_2 + t_3) [x_1, x_2, x_3, x_4] + \dots,\tag 2
     """)
 
-
     st.latex(r"""
         P_n^{(k)}(x) = k! \left( [x_1, \dots, x_{k+1}] +  \left( \sum_{i=1}^{k+1} t_j \right) [x_1, \dots, x_{i+1}]+ 
         \dots \right).
@@ -1069,3 +1068,223 @@ def free_nodes_gaussian_quadratures():
     st.markdown("""
     Эта формула будет точной для $$y(x) = 1, x, x^2, x^3$$, как и формула Эйлера $$(23)$$   .
     """)
+
+
+# 4.2.3. Оценка остаточного члена
+def evaluation_of_the_residual_member():
+    st.header("""
+    4.2.3. Оценка остаточного члена
+    """)
+
+    st.markdown("""
+    Оценку остаточного члена квадратурной формулы, чаще всего, получают, исходя из разложения функции на отрезке 
+    $$[a, b]$$ в ряд Тейлора. Пусть для вычисления интеграла использована некоторая квадратурная формула
+    """)
+
+    st.latex(r"""
+    \int_\alpha^\beta \rho y(x) dx = \sum_{i=1}^n W_i y_i + R, \quad y_i = y(x_i), \quad x_i, 
+    \dots, x_n \in [\alpha, \beta],
+    """)
+    st.markdown("""
+        которая является точной для многочленов степени $$\leq m$$.
+        
+        Раскладывая функцию $$y(x)$$ в ряд Тейлора на отрезке $$[\\alpha, \\beta]$$ относительно некоторой точки $$x_0$$
+        (обычно $$x_0=(\\alpha-\\beta)/2$$), находим
+        """)
+
+    st.latex(r"""
+    y(x) = y_0 + (x - x_0) y_0' + \frac{(x - x_0)^2}{2} y_0'' + \dots + \frac{(x - x_0)^m}{m!} y_0^{(m)} + \frac{(x - x_0)^{m+1}}{(m+1)!} y_0^{(m+1)} + \dots,
+    """)
+
+    st.markdown("""
+    где
+    """)
+
+    st.latex(r"""
+    y_0 = y(x_0); \quad y_0' = \left. \frac{dy}{dx} \right| \scriptsize{x=x_0}\normalsize; \quad y_0'' = \left. 
+    \frac{d^2 y}{dx^2} \right| \scriptsize{x=x_0}
+    """)
+
+    st.markdown("""
+    и т. д. Аналогичные разложения выполняются для каждого $$y_i$$, входящего в правую часть $$(24)$$,
+    """)
+
+    st.latex(r"""
+    y_i = y_0 + (x_i - x_0) y_0' + \dots
+    """)
+
+    st.markdown("""
+    Тогда остаточный член $$R$$ будет иметь вид
+    """)
+
+    st.latex(r"""
+    R = \int_\alpha^\beta \rho y \, dx - \sum_{i=1}^n W_i y_i = \int_\alpha^\beta \rho \left[  y_0 + \sum_{j=1}^\infty 
+    \frac{(x - x_0)^j}{j!} y_0^{(j)} \right] dx - \sum_{i=1}^n W_i \left[ y_0 + \sum_{j=1}^\infty 
+    \frac{(x_i - x_0)^j}{j!} y_0^{(j)} \right].
+    """)
+
+    st.markdown("""
+    Обычно в качестве остаточного члена берут первое не исчезающее слагаемое в правой части.
+    """)
+
+    st.markdown("""
+    Рассмотрим некоторые частные формулы для интегрирования.
+    """)
+
+    st.markdown("""
+    Пусть $$\\rho(x) = 1$$ и
+    """)
+
+    st.latex(r"""
+    \int_\alpha^\beta y \, dx \approx \frac{\beta - \alpha}{2} \left[ y(\alpha) + y(\beta) \right]
+    """)
+
+    st.markdown("""
+    (формула трапеции). Положим
+    """)
+
+    st.latex(r"""
+    x_0 = \frac{\alpha + \beta}{2};
+    """)
+
+    st.latex(r"""
+    y(x) = y_0 + (x - x_0) y_0' + \frac{(x - x_0)^2}{2} y_0'' + \dots
+    """)
+
+    st.markdown("Для $$R$$ находим")
+
+    st.latex(r"""
+    R = \int_\alpha^\beta \left[ y_0 + (x - x_0) y_0' + \frac{(x - x_0)^2}{2} y_0'' + \dots \right] dx -
+    
+    """)
+
+    st.latex(r"""
+    - \frac{\beta - \alpha}{2} \left[ y_0 + (\alpha - x_0) y_0' + \frac{(\alpha - x_0)^2}{2}y_0'' +
+    \dots y_0 + (\beta - x_0) y_0' + \frac{(\beta - x_0)^2}{2}y_0'' +\dots\right]
+    """)
+    st.latex(r"""
+    = y_0'' (\beta - \alpha)^2 \left[ \frac{1}{6} (\beta - x_0)^2 + \frac{1}{6} (\beta - x_0)(\alpha - x_0)  +\right.
+    
+    """)
+
+    st.latex(r"""
+    \left. + \frac{1}{6} (\alpha - x_0)^2 - \frac{1}{4} (\alpha - x_0)^2 - \frac{1}{4} (\beta - x_0)^2+ \dots \right].
+    """)
+    st.markdown("В силу выбора $$x_0$$")
+
+    st.latex(r"""
+    \alpha - x_0 = -\frac{\beta - \alpha}{2}; \quad \beta - x_0 = \frac{\beta - \alpha}{2}
+    """)
+
+    st.markdown("Поэтому")
+
+    st.latex(r"""
+    R = y_0'' (\beta - \alpha)^3 \left[ \frac{1}{24} - \frac{1}{24} + \frac{1}{24} - \frac{1}{16} - \frac{1}{16} 
+    \right] = -\frac{(\beta - \alpha)^3}{12} y_0''
+    """)
+
+    st.markdown("Аналогично можно получить остаточные члены для других квадратурных формул.")
+    st.markdown("**Формула центральных прямоугольников:**")
+
+    st.latex(r"""
+    R = -\frac{1}{24} (\beta - \alpha)^3 y_0''
+    """)
+
+    st.markdown("""
+    Отметим, что, комбинируя формулы трапеции и прямоугольников, мы получим погашение остаточных членов и придем
+    к формуле Симпсона.
+    """)
+    st.markdown("**Формула Симпсона:**")
+
+    st.latex(r"""
+    R = -\frac{1}{90} \left( \frac{\beta - \alpha}{2} \right)^5 y_0^{(4)}
+    """)
+
+    st.markdown("""
+    Напомним, что эта формула строилась как точная для $$y(x) = 1, x, x^2$$; из оценки $$R$$ видно, что она 
+    будет точной и для $$y = x^3$$.
+    """)
+    st.markdown("**Формула Эйлера:**")
+
+    st.latex(r"""
+    R = \frac{1}{720} (\beta - \alpha)^5 y_0^{(4)}
+    """)
+
+    st.markdown("""
+    Из полученных оценок следует, что если отрезок $$[\\alpha, \\beta]$$ не мал, то остаточный член квадратурной
+    формулы может оказаться большим.
+    """)
+
+    st.markdown("""
+    Поэтому для повышения точности отрезок $$[\\alpha, \\beta]$$ надо по возможности выбирать таким образом, 
+    чтобы остаточный член $$R$$ был меньше наперед заданной погрешности. Напомним, что в начале раздела (формула 
+    $$(13)$$) исходный интеграл был заменен на сумму
+    """)
+
+    st.latex(r"""
+    F = \int_a^b \rho y \, dx = \sum_{m=1}^M \int_{a_m}^{a_{m+1}} \rho y \, dx,\tag {25}
+    """)
+
+    st.markdown("""
+    где $$a = a_1 < a_2 < \dots < a_{M+1} = b$$, и найдены квадратурные формулы и погрешность для каждого отрезка
+    $$[a_m, a_{m+1}]$$. Поэтому, если в формуле (25) каждый интеграл в сумме заменить на квадратурную формулу, 
+    то получим **обобщенную квадратурную формулу** (трапеций, Симпсона и т. д.). Часто всего отрезки 
+    $$[a_m, a_{m+1}]$$ выбирают равной длины $$h = (b - a) / M$$.
+    """)
+
+    st.markdown("Напишем для этого случая соответствующие частные обобщенные формулы ($$\\rho(x) = 1$$).")
+
+    st.markdown("**Формула трапеций:**")
+
+    st.latex(r"""
+    \int_a^b y \, dx = \frac{1}{2} h \sum_{m=1}^M (y_m + y_{m+1})- \frac{h^3}{12} \sum_{m=1}^M y_{m+1/2}'' \approx
+    """)
+
+    st.latex(r"""
+    \approx h \left[ \frac{1}{2} y_1 + y_2 + \dots + y_M + \frac{1}{2} y_{M+1} \right] - 
+    \frac{h^2}{12} \int_a^b y'' \, dx.\tag{26}
+    """)
+
+    st.markdown("Здесь")
+
+    st.latex(r"""
+    y''_{m+1/2} = y'' \left( \frac{a_m + a_{m+1}}{2} \right); \quad h \sum_{m=1}^M y''_{m+1/2} \approx \int_a^b y'' \, dx.
+    """)
+
+    st.markdown("Главный член погрешности есть")
+
+    st.latex(r"""
+    \frac{h^2}{12} \int_a^b y'' \, dx,
+    """)
+
+    st.markdown("т. е. формула трапеций имеет 2-й порядок точности.")
+
+    st.markdown("**Формула центральных прямоугольников:**")
+
+    st.latex(r"""
+    \int_a^b y \, dx = h \sum_{m=1}^M y_{m+1/2} + \frac{h^3}{24} \sum_{m=1}^M y''_{m+1/2} \approx 
+    """)
+
+    st.latex(r"""
+    \approx h \left[ y_{3/2} + \dots + y_{M+1/2} \right] + \frac{h^2}{24} \int_a^b y'' \, dx.\tag{27}
+    """)
+
+    st.markdown("**Формула Симпсона ($$M$$ — четное):**")
+
+    st.latex(r"""
+    \int_a^b y \, dx = \frac{h}{3} \sum_{m=1}^{M/2} \left( y_{2m-1} + 4 y_{2m} + y_{2m+1} \right) - \frac{1}{90} h^5 
+    \sum_{m=1}^{M/2} y_{2m}^{(4)} \approx
+    """)
+
+    st.latex(r"""
+    \approx \frac{h}{3} \left[ y_1 + 4 y_2 + 2 y_3 + 4 y_4 + \dots + 4 y_{M} + y_{M+1} \right] - \frac{h^4}{180} 
+    \int_a^b y^{(4)} \, dx \tag {27}
+    """)
+
+    st.markdown("поскольку")
+
+    st.latex(r"""
+    \frac{1}{90} h^5 \sum_{m=1}^{M/2} y_{2m}^{(4)} = \frac{1}{180} h^42h \sum_{m=1}^{M/2} y_{2m}^{(4)} \approx
+    \frac{h^4}{180} \int_a^b y^{(4)} \, dx.
+    """)
+
