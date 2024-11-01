@@ -176,26 +176,32 @@ elif selected_theme == "5.1. Уравнения с одним неизвестн
 # 5.1.1. Метод дихотомии (половинного деления)
 elif selected_theme == "5.1.1. Метод дихотомии (половинного деления)":
     metod_dihotomii()
+    code_editor()
 
 # 5.1.2. Метод хорд
 elif selected_theme == "5.1.2. Метод хорд":
     metod_hord()
+    code_editor()
 
 # 5.1.3. Метод простой итерации
 elif selected_theme == "5.1.3. Метод простой итерации":
     simple_iterecia()
+    code_editor()
 
 # 5.1.4. Метод Ньютона
 elif selected_theme == "5.1.4. Метод Ньютона":
     newton_method()
+    code_editor()
 
 # 5.1.5. Метод секущих
 elif selected_theme == "5.1.5. Метод секущих":
     metod_sekushchih()
+    code_editor()
 
 # 5.1.6. Метод Рыбакова Л.М.
 elif selected_theme == "5.1.6. Метод Рыбакова Л.М.":
     metod_rybakova()
+    code_editor()
 
 # 5.1.7. Вычисление корней многочленов
 elif selected_theme == "5.1.7. Вычисление корней многочленов":
