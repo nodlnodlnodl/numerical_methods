@@ -310,9 +310,9 @@ def approximation_of_difference_scheme():
         \frac{1}{h^2}(y_{n+1} - 2y_n + y_{n-1}) + y_n = 1 + x_n^2, \quad n = 1, 2, \dots, N.
     """)
 
-    st.markdown("""
-        Здесь \( y_0 = b \), \( y_N = b \), и сетка на отрезке \( D = [0,1] \) введена сеткой \( D_h \), 
-        где \( x_0 = 0 \), \( x_1 = h \), \( x_2 = 2h, \dots, x_N = Mh = 1 \).
+    st.markdown(r"""
+        Здесь $$ y_0 = b $$, $$ y_N = b $$, и сетка на отрезке $$ D = [0,1] $$ введена сеткой $$ D_h $$, 
+        где $$ x_0 = 0 $$, $$ x_1 = h $$, $$ x_2 = 2h, \dots, x_N = Mh = 1 $$.
     """)
 
     st.markdown(r"""
