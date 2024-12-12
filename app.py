@@ -235,7 +235,7 @@ elif selected_theme == "6.2. Нормы векторов и матриц":
 
 # 6.3. Обусловленность линейной системы
 elif selected_theme == "6.3. Обусловленность линейной системы":
-    vector_matrix_norm()
+    conditionality_liner_system()
 
 # 6.4.1 Метод исключения Гаусса
 elif selected_theme == "6.4.1. Метод исключения Гаусса":
