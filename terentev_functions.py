@@ -770,6 +770,7 @@ def simple_iteracia_method():
     """)
     st.latex(r"||\bar{x}_k - \bar{x}_{k-1}|| \leq \varepsilon (1-q)/q.")
 
+
 def metod_newtona():
     st.markdown("""
     ### 5.2.2. Метод Ньютона
