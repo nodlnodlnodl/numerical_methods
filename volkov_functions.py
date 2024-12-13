@@ -1292,7 +1292,7 @@ def evaluation_of_the_residual_member():
 
 
 # 4.2.4. Повышение точности квадратурных формул
-def improving_the_accuracy_of_quadrature_formulas():
+def numerical_integration_improving_the_accuracy_of_quadrature_formulas():
     st.header("4.2.4. Повышение точности квадратурных формул")
 
     st.markdown("""
@@ -1518,7 +1518,7 @@ def improving_the_accuracy_of_quadrature_formulas():
 
 
 # 4.2.5. Нестандартные формулы
-def irregular_functions():
+def numerical_integration_irregular_functions():
     st.header("""4.2.5. Нестандартные формулы""")
 
     st.markdown("""
@@ -1528,7 +1528,7 @@ def irregular_functions():
 
 
 # 4.2.5.1. Разрывные функции
-def discontinuous_functions_integration():
+def numerical_integration_discontinuous_functions_integration():
     st.header("4.2.5.1. Разрывные функции")
 
     st.markdown("""
@@ -1549,7 +1549,7 @@ def discontinuous_functions_integration():
 
 
 # 4.2.5.2. Нелинейные формулы
-def nonlinear_formulas():
+def numerical_integration_nonlinear_formulas():
     st.header("4.2.5.2. Нелинейные формулы")
 
     st.markdown("""
@@ -1600,7 +1600,7 @@ def nonlinear_formulas():
 
 
 # 4.2.5.3. Метод Филона
-def philon_method():
+def numerical_integration_philon_method():
     st.header("4.2.5.3. Метод Филона")
 
     st.markdown("""
@@ -1672,3 +1672,106 @@ def philon_method():
     Для получения большей точности прибегают к более точной аппроксимации $$ f(x) $$ на отрезках $$ [a_m, a_{m+1}] $$.
     Получающиеся формулы будут настолько точны, насколько хорошо выбрана эта аппроксимация.
     """)
+
+
+# 4.2.5.4. Несобственные интегралы
+def numerical_integration_improper_integrals():
+    st.header("4.2.5.4. Несобственные интегралы")
+
+    st.markdown("""
+    Рассмотрим сначала случай интегралов с бесконечными пределами. Здесь могут быть использованы различные приёмы для 
+    вычисления.
+
+    **Приём 1** – замена переменных, приводящая к конечным пределам.
+
+    **Пример.** Пусть имеется интеграл:
+    """)
+
+    st.latex(r"""
+        F = \int_a^\infty y(x) \, dx, \quad a > 0.
+    """)
+
+    st.markdown("""
+    Положим:
+    """)
+
+    st.latex(r"""
+        x = \frac{a}{1 - t}, \quad dx = \frac{a}{(1 - t)^2} \, dt,
+    """)
+
+    st.markdown("тогда:")
+
+    st.latex(r"""
+        F = \int_0^1 \bar{y}(t) \frac{a}{(1 - t)^2} \, dt,
+    """)
+
+    st.markdown("""
+    и мы получили интеграл с конечными пределами. Если у подынтегральной функции не будет особенностей, 
+    то можно использовать стандартные формулы.
+    """)
+
+    st.markdown("""
+    **Приём 2** – обрезание бесконечного предела таким образом, чтобы интеграл по отбрасываемому интервалу 
+    был меньше заданной ошибки вычисления.
+    """)
+
+    st.markdown("""
+    **Приём 3** – использование формул Гаусса–Кристоффеля для бесконечного интеграла.
+    """)
+
+    st.markdown("""
+    **Приём 4** – построение нелинейных квадратурных формул. Пусть теперь пределы интегрирования конечны, 
+    но подынтегральная функция имеет особенность.
+
+    **Приём 1** – аддитивное выделение особенности:
+    """)
+
+    st.latex(r"""
+        F = \int_a^b y(x) \, dx = \int_a^b \varphi(x) \, dx + \int_a^b \psi(x) \, dx.
+    """)
+
+    st.markdown("""
+    Здесь $$ φ(x), \\, \\psi(x) $$ выбраны так, что $$ φ(x) $$ — ограниченная функция, а $$ \\psi(x) $$ содержит 
+    особенность и имеет простой вид, так что второй интеграл вычисляется аналитически.
+
+    **Пример.** Рассмотрим интеграл по отрезку $$ [0, a] $$ от функции $$ y(x) $$:
+    """)
+
+    st.latex(r"""
+        y(x) = \frac{1}{\sqrt{x (1 + x^2)}} = \left( \frac{1}{\sqrt{x (1 + x^2)}} - \frac{1}{\sqrt{x}} \right) 
+        + \frac{1}{\sqrt{x}}.
+    """)
+
+    st.markdown("Здесь:")
+
+    st.latex(r"""
+            \varphi(x) = \frac{1}{\sqrt{x}} \left(\frac{1}{\sqrt{1 + x^2}} - 1\right) = 
+            \frac{1 - \sqrt{1 + x^2}}{\sqrt{x} \sqrt{1 + x^2}} = 
+            \frac{-x^{3/2}}{\sqrt{1 + x^2} \left(1 + \sqrt{1 + x^2}\right)}.
+        """)
+
+    st.markdown("""
+    Имеет при $$ x \\to 0 $$ ограниченную производную, и интеграл от неё можно вычислить по стандартной программе.
+    """)
+
+    st.markdown("""
+    **Приём 2** – мультипликативное выделение особенности. В этом случае:  
+    $$y(x) = φ(x)\\psi(x)$$,$$φ(x) $$
+    не имеет особенностей, $$\\psi(x) $$— интегрируемая функция.  
+    С $$ \\psi(x) $$ как с весовой функцией можно построить
+     квадратурную формулу стандартными методами.
+    """)
+
+    st.markdown("""
+    **Приём 3** – построение нестандартных квадратурных формул с явным учётом особенности.
+
+    **Пример.**
+    """)
+
+    st.latex(r"""
+            F = \int_{-1}^1 \frac{e^x}{\sqrt{1 - x^2}}dx =\int_{x_m}^{x_{m+1}} \frac{e^x}{\sqrt{1 - x^2}} \, 
+            dx = \sum_{m=1}^M e^{x_{m+1/2}} \int_{x_m}^{x_{m+1}} \frac{dx}{\sqrt{1 - x^2}} =
+        """)
+    st.latex(r"""
+            = \sum_{m=1}^M e^{x_{m+1/2}} \left( \arcsin x_{m+1} - \arcsin x_m \right)  (x_1 = -1, \, x_{m+1} = 1).
+        """)
