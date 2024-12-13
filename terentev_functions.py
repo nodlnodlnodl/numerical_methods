@@ -670,104 +670,104 @@ def systemi_nonliniar_uravn():
     """)
 
 def simple_iteracia_method():
-    st.markdown("""
-    ### 5.2.1. Метод простой итерации
+    st.markdown("### 5.2.1. Метод простой итерации")
 
+    st.markdown(r"""
     Пусть имеется система \( \bar{f}(\bar{x}) = 0 \) и нам удалось переписать её в эквивалентной форме:
-
-    $$ \bar{x} = \bar{\varphi}(\bar{x}), \tag{17} $$
-
+    """)
+    st.latex(r"\bar{x} = \bar{\varphi}(\bar{x}), \tag{17}")
+    st.markdown(r"""
     где функции \( \varphi_i \), образующие вектор \( \varphi \), действительно определены и непрерывны в некоторой окрестности изолированного решения \( \bar{x}^* \) системы (16). Например, таким преобразованием может быть (при подходящих \( f_1, \dots, f_n \)) линейное преобразование
+    """)
+    st.latex(r"\bar{x} = \bar{x} + A \bar{f}(x), \tag{18}")
 
-    $$ \bar{x} = \bar{x} + A \bar{f}(x), \tag{18} $$
-
+    st.markdown(r"""
     с несингулярной матрицей \( A \).
 
     Выбирая для системы (17) некоторое приближение \( \bar{x}_0 \), проводим итерации по формуле
+    """)
+    st.latex(r"\bar{x}_k = \bar{\varphi}(\bar{x}_{k-1}), \quad k = 1, 2, \dots. \tag{19}")
 
-    $$ \bar{x}_k = \bar{\varphi}(\bar{x}_{k-1}), \quad k = 1, 2, \dots. \tag{19} $$
-
+    st.markdown(r"""
     Если итерации сходятся, то они приводят к решению системы (17).
     """)
 
-    st.markdown("""
+    st.markdown(r"""
     Для того чтобы установить условия сходимости этого процесса, дадим некоторые определения. Рассмотрим вектор-функцию
-
-    $$ \bar{y} = \varphi(\bar{x}), \tag{20} $$
-
+    """)
+    st.latex(r"\bar{y} = \varphi(\bar{x}), \tag{20}")
+    st.markdown(r"""
     для которой все компоненты вектора \( \varphi = (\varphi_1, \dots, \varphi_n) \) определены и непрерывны в известной области \( G \) действительного \( n \)-мерного пространства \( E_n \). Пусть значения \( \bar{y} = \varphi(\bar{x}) \) при \( \bar{x} \in G \) заполняют некоторую область \( G' \subset E_n \). В этом случае говорят, что уравнение (20) устанавливает отображение в области \( G \). Введем в пространстве \( E_n \) норму \( ||\bar{x}|| \) для вектора \( \bar{x} \). Например, можно выбрать такие нормы:
-
-    $$ ||\bar{x}|| = \max |x_i|, \quad ||\bar{x}|| = \sqrt{\sum x_i^2}. $$
-
+    """)
+    st.latex(r"||\bar{x}|| = \max |x_i|, \quad ||\bar{x}|| = \sqrt{\sum x_i^2}.")
+    st.markdown(r"""
     Отображение (20) называется сжимающим в области \( G \), если существует \( 0 \leq q < 1 \), такое, что для любых \( x_1, x_2 \in G \) их образы \( \bar{y}_1 = \varphi(x_1), \bar{y}_2 = \varphi(x_2) \) удовлетворяют условию:
+    """)
+    st.latex(r"||\bar{y}_1 - \bar{y}_2|| = ||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||. \tag{21}")
 
-    $$ ||\bar{y}_1 - \bar{y}_2|| = ||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||. \tag{21} $$
-
+    st.markdown(r"""
     Вернемся теперь к итерационному процессу (19).
 
     #### Теорема 3.
     Пусть область \( G \) замкнута, \( \varphi(\bar{x}) \in G \) для \( \bar{x} \in G \) и отображение (17) является сжимающим в \( G \), т.е.
-
-    $$ ||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||. $$
-
-    Тогда, независимо от выбора \( \bar{x}_0 \in G \), процесс (19) сходится, т.е. существует
-
-    $$ \bar{x}^* = \lim_{k \to \infty} \bar{x}_k, $$
-
-    вектор \( \bar{x}^* \) — единственное решение (17) в \( G \) и справедлива оценка нормы
-
-    $$ ||\bar{x}^* - \bar{x}_k|| \leq \frac{q^k}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{22} $$
     """)
+    st.latex(r"||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||.")
+    st.markdown(r"""
+    Тогда, независимо от выбора \( \bar{x}_0 \in G \), процесс (19) сходится, т.е. существует
+    """)
+    st.latex(r"\bar{x}^* = \lim_{k \to \infty} \bar{x}_k,")
+    st.markdown(r"""
+    вектор \( \bar{x}^* \) — единственное решение (17) в \( G \) и справедлива оценка нормы
+    """)
+    st.latex(r"||\bar{x}^* - \bar{x}_k|| \leq \frac{q^k}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{22}")
 
-    st.markdown("""
+    st.markdown(r"""
     #### Доказательство.
     Рассмотрим цепочку неравенств:
-
-    $$ ||\bar{x}_{k+p} - \bar{x}^*|| = ||\bar{x}_{k+p} - \bar{x}_{k+p-1} + \dots + \bar{x}_k - \bar{x}^*|| $$
-
-    $$ \leq ||\bar{x}_{k+p} - \bar{x}_{k+p-1}|| + \dots + ||\bar{x}_k - \bar{x}^*||. \tag{23} $$
-
+    """)
+    st.latex(r"||\bar{x}_{k+p} - \bar{x}^*|| = ||\bar{x}_{k+p} - \bar{x}_{k+p-1} + \dots + \bar{x}_k - \bar{x}^*||")
+    st.latex(r"\leq ||\bar{x}_{k+p} - \bar{x}_{k+p-1}|| + \dots + ||\bar{x}_k - \bar{x}^*||. \tag{23}")
+    st.markdown(r"""
     Для каждого слагаемого в правой части имеем
-
-    $$ ||\bar{x}_{s+1} - \bar{x}_s|| = ||\varphi(\bar{x}_s) - \varphi(\bar{x}_{s-1})|| \leq q ||\bar{x}_s - \bar{x}_{s-1}||. $$
-
+    """)
+    st.latex(r"||\bar{x}_{s+1} - \bar{x}_s|| = ||\varphi(\bar{x}_s) - \varphi(\bar{x}_{s-1})|| \leq q ||\bar{x}_s - \bar{x}_{s-1}||.")
+    st.markdown(r"""
     Поэтому
-
-    $$ ||\bar{x}_{k+p} - \bar{x}^*|| \leq ||\bar{x}_1 - \bar{x}_0|| \cdot \left( q^k + q^{k+1} + \dots + q^{k+p-1} \right) = \frac{q^k(1 - q^p)}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{24} $$
-
+    """)
+    st.latex(r"||\bar{x}_{k+p} - \bar{x}^*|| \leq ||\bar{x}_1 - \bar{x}_0|| \cdot \left( q^k + q^{k+1} + \dots + q^{k+p-1} \right) = \frac{q^k(1 - q^p)}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{24}")
+    st.markdown(r"""
     Так как \( q < 1 \), то для любого \( \varepsilon > 0 \) существует \( N(\varepsilon) > 0 \), что при \( k > N \) и любом \( p > 0 \) будет
-
-    $$ ||\bar{x}_{k+p} - \bar{x}_k|| \leq \varepsilon. $$
-
+    """)
+    st.latex(r"||\bar{x}_{k+p} - \bar{x}_k|| \leq \varepsilon.")
+    st.markdown(r"""
     Таким образом, для последовательности \( \{x_k\} \) выполнен критерий Коши, поэтому существует
-
-    $$ \bar{x}^* = \lim_{k \to \infty} \bar{x}_k, $$
-
+    """)
+    st.latex(r"\bar{x}^* = \lim_{k \to \infty} \bar{x}_k,")
+    st.markdown(r"""
     и \( \bar{x}^* \in G \) в силу замкнутости \( G \). Вектор \( \bar{x}^* \) — решение уравнения (17), что следует из непрерывности \( \varphi \) после перехода к пределу в (19).
 
     Покажем, что \( \bar{x}^* \) — единственное решение уравнения (17) в \( G \). Пусть имеется другое решение \( \bar{x}_1^* \) и \( \bar{x}_2^* = \varphi(\bar{x}_2^*) \). Тогда
-
-    $$ ||\bar{x}_1^* - \bar{x}_2^*|| \leq q ||\bar{x}_1^* - \bar{x}_2^*||. $$
-
+    """)
+    st.latex(r"||\bar{x}_1^* - \bar{x}_2^*|| \leq q ||\bar{x}_1^* - \bar{x}_2^*||.")
+    st.markdown(r"""
     Откуда, поскольку \( -q + 1 > 0 \), \( \bar{x}_1^* = \bar{x}_2^* \) или \( \bar{x}_1^* = \bar{x}_2^* \). Из (24) при \( p \to \infty \) получим
-
-    $$ ||\bar{x}^* - \bar{x}_k|| \leq \frac{q^k}{1 - q} ||\bar{x}_1 - \bar{x}_0||, $$
-
+    """)
+    st.latex(r"||\bar{x}^* - \bar{x}_k|| \leq \frac{q^k}{1 - q} ||\bar{x}_1 - \bar{x}_0||,")
+    st.markdown(r"""
     что и требовалось доказать.
 
     #### Замечание.
     Из (23) имеем:
-
-    $$ ||\bar{x}_{k+p} - \bar{x}_k|| \leq (q + q^2 + \dots + q^p) ||\bar{x}_k - \bar{x}_{k-1}|| \leq \frac{q}{1-q} ||\bar{x}_k - \bar{x}_{k-1}||. $$
-
-    При \( p \to \infty \) получим
-
-    $$ ||\bar{x}^* - \bar{x}_k|| \leq \frac{q}{1 - q} ||\bar{x}_k - \bar{x}_{k-1}||. $$
-
-    Этим условием надо пользоваться для окончания итераций:
-
-    $$ ||\bar{x}_k - \bar{x}_{k-1}|| \leq \varepsilon (1-q)/q. $$
     """)
+    st.latex(r"||\bar{x}_{k+p} - \bar{x}_k|| \leq (q + q^2 + \dots + q^p) ||\bar{x}_k - \bar{x}_{k-1}|| \leq \frac{q}{1-q} ||\bar{x}_k - \bar{x}_{k-1}||.")
+    st.markdown(r"""
+    При \( p \to \infty \) получим
+    """)
+    st.latex(r"||\bar{x}^* - \bar{x}_k|| \leq \frac{q}{1 - q} ||\bar{x}_k - \bar{x}_{k-1}||.")
+    st.markdown(r"""
+    Этим условием надо пользоваться для окончания итераций:
+    """)
+    st.latex(r"||\bar{x}_k - \bar{x}_{k-1}|| \leq \varepsilon (1-q)/q.")
 
 def metod_newtona():
     st.markdown("""
