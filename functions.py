@@ -191,18 +191,17 @@ def general_rules_for_approximating_functions():
      ''')
 
     st.markdown(""" где можно применить следующие критерии точности:""")
+
+    st.markdown(""" 
+    - Значения $${x_i}$$ должны точно удовлетворять системе;
+    - Остатки уравнений при подстановке значений $${x}$$ должны быть малы;
+    - Данные уравнения должны быть близки к исходным уравнениям, для которых $${x_i}\ - $$ точные решения.
+    """)
+
+
     st.latex(r'''
-        - Значения \quad \{x_i\} \quad должны \quad точно \quad удовлетворять \quad системе;
-        \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad
-    ''')
+        ''')
     st.latex(r'''
-        - Остатки \quad уравнений \quad при \quad подстановке \quad значений \quad \{x\} \quad должны 
-        \quad быть \quad малы;''')
-    st.latex(r'''
-        - Данные \quad уравнения \quad должны \quad быть \quad  близки \quad к \quad исходным \quad уравнениям,\quad 
-        для''')
-    st.latex(r'''которых\quad \{x_i\}\quad - \quad точные\quad решения\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad
-    \quad\quad\quad\quad\quad\quad\quad
     ''')
 
 
