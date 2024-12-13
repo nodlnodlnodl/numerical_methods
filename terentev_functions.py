@@ -756,6 +756,7 @@ def simple_iteracia_method():
     st.latex(r"||\bar{x}^* - \bar{x}_k|| \leq \frac{q^k}{1 - q} ||\bar{x}_1 - \bar{x}_0||,")
     st.markdown(r"""
     что и требовалось доказать.
+    
 
     #### Замечание.
     Из (23) имеем:
