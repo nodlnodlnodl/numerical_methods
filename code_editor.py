@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_ace import st_ace
-
+import math
 import time
 import io
 import sys
@@ -23,9 +23,11 @@ def code_editor():
         sys.stdout = buffer  # Перенаправляем stdout на буфе13
 
         with result_container.container():
+            global_context = {"math": math}  # Явно передаем глобальные библиотеки
+            local_context = {}
             try:
                 exec_start_time = time.time()
-                exec(user_code)
+                exec(user_code, global_context)
                 exec_end_time = time.time()
 
                 # Получаем содержимое буфера
@@ -39,3 +41,5 @@ def code_editor():
                 st.error(f"Ошибка выполнения кода: {e}")
             finally:
                 sys.stdout = sys.__stdout__  # Восстанавливаем стандартный stdout
+
+
