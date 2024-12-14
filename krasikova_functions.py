@@ -6,4 +6,4 @@ from code_editor import code_editor
 
 # 4.2.6.1. Кратные интегралы Метод ячеек
 def multiple_integrals_cell_method():
-    pass
+    st.header("4.2.6. Кратные интегралы")
