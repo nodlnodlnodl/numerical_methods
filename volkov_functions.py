@@ -1612,7 +1612,7 @@ def numerical_integration_philon_method():
     """)
 
     st.markdown("""
-    где $$ \omega (b - a) \gg 1 $$, а $$ f(x) $$ — медленно меняющаяся функция.
+    где $$ \\omega (b - a) \\gg 1 $$, а $$ f(x) $$ — медленно меняющаяся функция.
 
     Очевидно:
     """)
