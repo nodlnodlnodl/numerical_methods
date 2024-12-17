@@ -1779,3 +1779,160 @@ def numerical_integration_improper_integrals():
     st.latex(r"""
             = \sum_{m=1}^M e^{x_{m+1/2}} \left( \arcsin x_{m+1} - \arcsin x_m \right)  (x_1 = -1, \, x_{m+1} = 1).
         """)
+
+
+# 11.2. Практические способы оценки погрешности приближенного решения в методах Рунге–Кутты
+def runge_kutta_error_estimation():
+    st.markdown("""
+    ### 11.2. Практические способы оценки погрешности приближенного решения в методах Рунге–Кутты
+
+    Пусть для решения ОДУ:
+    """)
+    st.latex(r"""
+    y' = f(x, y), \quad y(x_0) = y_0 \tag{14}
+    """)
+    st.markdown("""
+    используется некоторый метод Рунге–Кутты, имеющий порядок точности $$s$$. Это означает, что локальная погрешность 
+    метода (погрешность на шаге) имеет вид:
+    """)
+    st.latex(r"""
+    y(x_0 + h) - y_1 \equiv \psi(x_0, y_0) h^{s+1} \tag{15}
+    """)
+    st.markdown("""
+    где $$y_1$$ – приближённое решение при $$x = x_0 + h$$.
+
+    Обычно при создании программ интегрирования ОДУ для контроля точности применяют различные методы оценки именно 
+    локальной погрешности метода. Рассмотрим два способа оценки.
+    """)
+
+
+# 11.2.1. Оценка погрешности по правилу Рунге
+def runge_error_estimation_extended():
+    st.markdown("""
+    ### 11.2.1. Оценка погрешности по правилу Рунге
+
+    Пусть по значению решения $$y_0$$ в точке $$x = x_0$$ получено решение $$\\overline{y}_1$$ в точке $$x = x_0 + h$$. 
+    Погрешность этого приближённого значения имеет вид $$(15)$$. Вернемся в точку $$x_0$$ и сделаем подряд два шага 
+    величины $$h / 2$$. 
+    Пусть $$\\hat{y}$$ – приближение к решению $$y(x)$$ при $$x = x_0 + h / 2$$. Тогда:
+    """)
+    st.latex(r"""
+    y(x_0 + h / 2) - \hat{y} = \psi(x_0, y_0) (h / 2)^{s+1}. \tag{16}
+    """)
+
+    st.markdown("""
+    На втором шаге $$h / 2$$ из точки $$x = x_0 + h / 2$$ мы получим приближённое решение 
+    $$\\overline{\\overline{y}}_1$$ в точке $$x = x_0 + h$$, его погрешность равна:
+    """)
+    st.latex(r"""
+    \hat{y}(x_0 + h) - \overline{\overline{y}}_1 = \psi(x_0 + h / 2, \hat{y}) (h / 2)^{s+1}. \tag{17}
+    """)
+
+    st.markdown("""
+    Здесь $$\\hat{y}(x)$$ – точное решение ОДУ, удовлетворяющее условию:
+    """)
+    st.latex(r"""
+    \hat{y}(x = x_0 + h / 2) = \hat{y}.
+    """)
+
+    st.markdown("""
+    Будем предполагать, что производные $$\\psi_x', \\psi_y'$$ ограничены. Тогда для достаточно малых шагов $$h$$:
+    """)
+    st.latex(r"""
+    \psi(x_0 + h / 2, \hat{y}) \equiv \psi(x_0, y_0) + O(h),
+    """)
+    st.markdown("""
+    и, следовательно, из $$(17)$$ имеем:
+    """)
+    st.latex(r"""
+    \hat{y}(x_0 + h) - \overline{\overline{y}}_1 = \psi(x_0, y_0) (h / 2)^{s+1}.
+    """)
+
+    st.markdown("""
+    С другой стороны:
+    """)
+    st.latex(r"""
+    y(x_0 + h) - \hat{y}(x_0 + h) = \left[ y(x_0 + h / 2) + h / 2 f(x_0 + h / 2, \  y(x_0 + h / 2)) + \dots \right] - 
+    """)
+    st.latex(r"""
+    - \left[ \hat{y}(x_0 + h / 2) + h / 2 f(x_0 + h / 2,\  \hat{y}(x_0 + h / 2)) + \dots \right] =
+    """)
+    st.latex(r"""
+    = \left( y(x_0 + h / 2) - \hat{y}(x_0 + h / 2) \right) \times 
+    """)
+    st.latex(r"""
+    \times \left[ 1 + h / 2 f'_y(x_0 + h / 2,\  \hat{y}(x_0 + h / 2)) + \dots \right]=
+    """)
+    st.latex(r"""
+    = y(x_0 + h / 2) - \hat{y}(x_0 + h / 2) + O(h^{s+2}).
+    """)
+
+    st.markdown("""
+        Следовательно:
+        """)
+
+    st.latex(r"""
+        y(x_0 + h) - \overline{\overline{y}}_1 = \left[ y(x_0 + h) - \hat{y}(x_0 + h ) \right] + 
+        \left[ \hat{y}(x_0 + h) - \overline{\overline{y}}_1 \right]\simeq
+        """)
+    st.latex(r"""
+        \simeq \left[ y(x_0 + h / 2) - \hat{y}(x_0 + h / 2) \right] + \left[ \hat{y}(x_0 + h) - 
+        \overline{\overline{y}}_1 \right] = 2 \psi(x_0, y_0) (h / 2)^{s+1}. \tag{18}
+        """)
+
+    st.markdown("""
+        Из $$(15)$$ и $$(18)$$ следует, что:
+        """)
+    st.latex(r"""
+        \psi(x_0, y_0) h^{s+1} = (\overline{\overline{y}}_1 - \overline{y}_1) / (1 - 1 / 2^s). \tag{19}
+        """)
+    st.markdown("""
+        и
+        """)
+    st.latex(r"""
+        2 \psi(x_0, y_0) (h / 2)^{s+1} = \frac{\overline{\overline{y}}_1 - \overline{y}_1}{2^s - 1}. \tag{20}
+        """)
+
+    st.markdown("""
+        Очевидно, что оценка $$(20)$$ меньше по величине, чем $$(19)$$, т.е. значение $$y_1$$, полученное за два шага 
+        $$h / 2$$, точнее, чем полученное за один шаг $$h$$. Приближённое значение $$\\overline{y}_1$$ или 
+        $$\\overline{\\overline{y}}_1$$ можно уточнить, полагая:
+        """)
+    st.latex(r"""
+        y_1 = \overline{y}_1 + (\overline{\overline{y}}_1 - \overline{y}_1) / (1 - 2^{-s}), \tag{21}
+        """)
+    st.markdown("""
+        или
+        """)
+    st.latex(r"""
+        y_1 = \overline{\overline{y}}_1 + (\overline{\overline{y}}_1 - \overline{y}_1) / (2^s - 1). \tag{22}
+        """)
+
+    st.markdown("""
+        Тогда:
+        """)
+    st.latex(r"""
+        y(x_1) - y_1 = O(h^{s+2}).
+        """)
+
+    st.markdown("""
+        Для систем ОДУ записи $$(19)–(22)$$ используются покоординатно:
+        """)
+    st.latex(r"""
+        y_1^{(i)}(x_0 + h) - \overline{y}_1^{(i)} \equiv \left( \overline{\overline{y}}_1^{(i)} - \overline{y}_1^{(i)} 
+        \right) \big/ \Big(1 - 2^{-s}\Big).
+        """)
+
+    st.markdown("""
+        или:
+        """)
+
+    st.latex(r"""
+        y^{(i)}(x_0 + h) - \overline{\overline{y}}_1^{i} = \left( \overline{\overline{y}}_1^{(i)} - \overline{y}_1^{(i)}
+         \right) \big/ \Big(2^s - 1\Big)\Big(i = 1, 2, \dots, M\Big).
+        """)
+
+    st.markdown("""
+        При таком способе оценки локальной погрешности метод Рунге–Кутты на шаге используется три раза и требует $$3q - 1$$ вычислений правой части ОДУ. 
+        Поэтому при сложных правых частях он не применяется.
+        """)
