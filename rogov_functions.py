@@ -34,14 +34,15 @@ def mnogochlen_approksimashion():
         $ y_1, y_2, \dots, y_N $. Предположим, что ошибки измерений
         """
     )
-    st.markdown(r"$\varepsilon_i = y - y_i$")
+    st.latex(r"\varepsilon_i = y - y_i")
 
     st.markdown(
         """
         имеют случайный характер, независимы и:
         """
     )
-    st.markdown(r"$\sum_{i=1}^N \varepsilon_i = 0.$")
+    st.latex(r"\sum_{i=1}^N \varepsilon_i = 0.")
+
 
     st.markdown(
         """
@@ -49,17 +50,18 @@ def mnogochlen_approksimashion():
         минимизирует сумму квадратов ошибок:
         """
     )
-    st.markdown(r"$f(\overline{y}) = \sum_{i=1}^N \varepsilon_i^2 = \sum_{i=1}^N (\overline{y} - y_i)^2 = \min.$")
+    st.latex(r"f(\overline{y}) = \sum_{i=1}^N \varepsilon_i^2 = \sum_{i=1}^N (\overline{y} - y_i)^2 = \min.")
+
 
     st.markdown(
         """
         Определим это значение $ \overline{y} $. Из условия минимума $ f(y) $ имеем:
         """
     )
-    st.markdown(r"$\frac{df}{dy} \Big|_{y = \overline{y}} = 2 \sum_{i=1}^N (\overline{y} - y_i) = 0.$")
+    st.latex(r"\frac{df}{dy} \Big|_{y = \overline{y}} = 2 \sum_{i=1}^N (\overline{y} - y_i) = 0.")
 
     st.markdown("Следовательно:")
-    st.markdown(r"$\overline{y} = \frac{1}{N} \sum_{i=1}^N y_i.$")
+    st.latex(r"\overline{y} = \frac{1}{N} \sum_{i=1}^N y_i.")
 
     st.markdown(
         """
@@ -74,7 +76,8 @@ def mnogochlen_approksimashion():
         при этом
         """
     )
-    st.markdown(r"$y(x) = a_0 + a_1 x + \dots + a_M x^M$")
+    st.latex(r"y(x) = a_0 + a_1 x + \dots + a_M x^M")
+
 
     st.markdown(
         """
@@ -82,7 +85,8 @@ def mnogochlen_approksimashion():
         следуя МНК, выбираются таким образом, чтобы доставить минимум функции:
         """
     )
-    st.markdown(r"$f(a_0, a_1, \dots, a_M) = \sum_{i=1}^N \rho_i \left[ y_i - y(x_i) \right]^2. \quad (17)$")
+    st.latex(r"f(a_0, a_1, \dots, a_M) = \sum_{i=1}^N \rho_i \left[ y_i - y(x_i) \right]^2. \quad (17)")
+
 
     st.markdown(
         """
@@ -91,13 +95,13 @@ def mnogochlen_approksimashion():
         при таких значениях $ a_0, a_1, \dots, a_M $, которые удовлетворяют системе уравнений:
         """
     )
-    st.markdown(
-        r"$\frac{\partial f}{\partial a_k} = -2 \sum_{i=1}^N \rho_i \left[ y_i - y(x_i) \right] x_i^k = 0, \quad k = 0, 1, \dots, M.$"
+    st.latex(
+        r"\frac{\partial f}{\partial a_k} = -2 \sum_{i=1}^N \rho_i \left[ y_i - y(x_i) \right] x_i^k = 0, \quad k = 0, 1, \dots, M."
     )
 
     st.markdown("Эту систему можно представить в виде:")
-    st.markdown(
-        r"$\sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = \sum_{i=1}^N \rho_i y_i x_i^k. \quad (18)$"
+    st.latex(
+        r"\sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = \sum_{i=1}^N \rho_i y_i x_i^k. \quad (18)"
     )
 
     st.markdown(
@@ -108,15 +112,17 @@ def mnogochlen_approksimashion():
         Пусть $ \Delta = 0 $. Тогда однородная система
         """
     )
-    st.markdown(r"$\sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = 0, \quad k = 0, 1, \dots, M$")
+    st.latex(
+        r"\sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = 0, \quad k = 0, 1, \dots, M"
+    )
 
     st.markdown(
         """
         имеет ненулевое решение. Умножая $ k $-е уравнение на $ a_k $ и суммируя по всем $ k $, получим:
         """
     )
-    st.markdown(
-        r"$0 = \sum_{k=0}^M a_k \sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = \sum_{i=1}^N \rho_i \left( \sum_{j=0}^M a_j x_i^j \right)^2.$"
+    st.latex(
+        r"0 = \sum_{k=0}^M a_k \sum_{j=0}^M a_j \left( \sum_{i=1}^N \rho_i x_i^{k+j} \right) = \sum_{i=1}^N \rho_i \left( \sum_{j=0}^M a_j x_i^j \right)^2."
     )
 
     st.markdown(
@@ -127,7 +133,8 @@ def mnogochlen_approksimashion():
         На практике систему (18) при $ M \geq 5 $ решают, как правило, неявно, вычисляя непосредственно суммы вида:
         """
     )
-    st.markdown(r"$\sum_{i=1}^N \rho_i x_i^{k+j},$")
+    st.latex(r"\sum_{i=1}^N \rho_i x_i^{k+j},")
+
 
     st.markdown(
         """
@@ -147,7 +154,8 @@ def mnogochlen_approksimashion():
         Требуется приблизить $ y(x) $ прямой:
         """
     )
-    st.markdown(r"$y = a_0 + a_1 x.$")
+    st.latex(r"y = a_0 + a_1 x.")
+
 
     st.markdown("Сосчитаем суммы:")
     st.latex(r"S_0 = \sum_{i=1}^5 x_i^0 = 5; \quad S_1 = \sum_{i=1}^5 x_i = 10;")
