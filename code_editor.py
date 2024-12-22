@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_ace import st_ace
 import math
+import numpy
 import time
 import io
 import sys
@@ -23,7 +24,7 @@ def code_editor():
         sys.stdout = buffer  # Перенаправляем stdout на буфе13
 
         with result_container.container():
-            global_context = {"math": math}  # Явно передаем глобальные библиотеки
+            global_context = {"math": math, "np": numpy}  # Явно передаем глобальные библиотеки
             local_context = {}
             try:
                 exec_start_time = time.time()

@@ -1677,6 +1677,70 @@ def numerical_integration_philon_method():
     Получающиеся формулы будут настолько точны, насколько хорошо выбрана эта аппроксимация.
     """)
 
+    def filon_method(a, b, omega, M, y_function):
+        """Реализация метода Филона"""
+        h = (b - a) / M
+        x_midpoints = [a + h * (i + 0.5) for i in range(M)]
+        y_midpoints = [y_function(x) for x in x_midpoints]
+        integral = (2 / omega) * sum(y * np.sin(omega * h / 2) for y in y_midpoints)
+        return integral, x_midpoints, y_midpoints
+
+    # Streamlit UI
+    st.markdown("#### Визуализируем метод Филона для численного интегрирования")
+    st.code("""
+    def filon_method(a, b, omega, M, y_function):
+        '''Реализация метода Филона'''
+        h = (b - a) / M
+        x_midpoints = [a + h * (i + 0.5) for i in range(M)]
+        y_midpoints = [y_function(x) for x in x_midpoints]
+        integral = (2 / omega) * sum(y * np.sin(omega * h / 2) for y in y_midpoints)
+        return integral, x_midpoints, y_midpoints
+    """)
+    st.markdown("""
+    Параметры:
+    - $$ \\omega $$ — частота осцилляций (обычно $$ \\omega (b - a) \\gg 1 $$).
+    - $$ y(x) $$ — медленно меняющаяся функция.
+    """)
+
+    # Пользовательские параметры
+    a = st.number_input("Начальный предел интегрирования (a):", value=0.0)
+    b = st.number_input("Конечный предел интегрирования (b):", value=10.0)
+    omega = st.number_input("Частота осцилляций (ω):", value=20.0)
+    M = st.slider("Количество отрезков (M):", min_value=1, max_value=100, value=10)
+
+    # Функция y(x), которую можно задать
+    y_function_str = st.text_input("Введите функцию y(x):", value="np.sin(x) + 0.5")
+    try:
+        y_function = eval(f"lambda x: {y_function_str}")
+        valid_function = True
+    except:
+        st.error("Ошибка в задании функции y(x). Проверьте синтаксис.")
+        valid_function = False
+
+    # Вычисление и визуализация
+    if valid_function and st.button("Вычислить интеграл"):
+        integral, x_midpoints, y_midpoints = filon_method(a, b, omega, M, y_function)
+
+        st.markdown(f"**Результат численного интегрирования:** {integral:.6f}")
+
+        # График функции y(x)
+        x_values = np.linspace(a, b, 1000)
+        y_values = [y_function(x) for x in x_values]
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(x_values, y_values, label="y(x)", color="blue")
+        ax.scatter(x_midpoints, y_midpoints, color="red", label="Средние точки")
+        ax.set_title("График функции y(x) и средние точки")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y(x)")
+        ax.legend()
+        ax.grid(True)
+        st.pyplot(fig)
+
+        # Таблица результатов
+        st.markdown("**Средние точки и значения y(x):**")
+        st.table({"x (средняя точка)": x_midpoints, "y(x)": y_midpoints})
+
 
 # 4.2.5.4. Несобственные интегралы
 def numerical_integration_improper_integrals():
