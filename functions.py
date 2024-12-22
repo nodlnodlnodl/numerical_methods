@@ -2,6 +2,8 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from streamlit_ace import st_ace
+import code_editor
+import math
 
 from scipy.integrate import odeint
 from scipy.optimize import fsolve
@@ -562,158 +564,148 @@ def polynomial_approximation_difficulties():
         """    Важно отметить, что интерполяция многочленами на равномерно распределённых узлах может стать причиной роста ошибок,     особенно для функций с высокими производными на краях интервала. Это известно как **феномен Рунге**.    """)
 
 
-# 3.2.5 Многочлены Чебышеваimport streamlit as st
+# 3.2.5 Многочлены Чебышева
 def chebyshev_polynomials():
     st.header("3.2.5. Многочлены Чебышева")
 
-    st.markdown(
-        """    Многочлены Чебышёва играют важную роль в численном анализе, и их свойства широко используются в вычислительной математике.    Они определяются на отрезке [-1, 1]  и минимизируют максимальное отклонение на этом интервале, что делает их оптимальными для аппроксимации.    Многочлены Чебышёва Tn(x) определяются для |x| ≤ 1 с помощью следующего соотношения:    """)
+    st.markdown("""
+    Многочлены Чебышёва играют важную роль в численном анализе, поэтому приведем некоторые сведения о них.
 
-    # Формула для многочленов Чебышёва
-    st.latex(r"T_n(x) = \cos(n \cdot \arccos(x))")
-
-    st.markdown(
-        """    Это свойство позволяет выражать многочлены через косинус, что упрощает их вычисление. Многочлены Чебышёва также могут быть определены через рекуррентные соотношения.    Многочлены Tn(x) ортогональны на отрезке [-1, 1] и удовлетворяют следующему соотношению:    """)
-
-    # Формула ортогональности
-    st.latex(
-        r"""    \int_{-1}^{1} \frac{T_m(x) T_n(x)}{\sqrt{1 - x^2}} dx =     \begin{cases}     0, \, \text{если} \, m \neq n, \\     \frac{\pi}{2}, \, \text{если} \, n = 0, \\     \pi, \, \text{если} \, n \geq 1.    \end{cases}    """)
-
-    st.markdown(
-        """    Это ортогональное свойство делает их удобными для использования в разложениях функций и аппроксимации.    """)
-
-    st.markdown("""    Многочлены Чебышёва могут быть выражены с помощью следующего рекуррентного соотношения:    """)
-
-    # Рекуррентное соотношение
-    st.latex(r"T_{n+1}(x) = 2x T_n(x) - T_{n-1}(x), \quad n \geq 1")
-
-    st.markdown(
-        """    Таким образом, многочлены Чебышёва могут быть эффективно вычислены для любого n с помощью рекуррентного соотношения.     Эти многочлены минимизируют максимальное отклонение между аппроксимируемой функцией и многочленом на отрезке [-1, 1].    Это свойство делает их идеальными для задач приближения и интерполяции.    """)
-
-    st.markdown("**Реализация метода Чебышёва на Python:**")
-
-    st.code('''
-        class ChebyshevInterpolation:
-            def __init__(self, n, a=-1, b=1):
-                self.n = n
-                self.a = a
-                self.b = b
-                self.x_points = self.chebyshev_nodes()
-                self.y_points = [self.taylor_sin(x) for x in self.x_points]
-        
-            def factorial(self, n):
-                """Факториал числа"""
-                result = 1
-                for i in range(2, n + 1):
-                    result *= i
-                return result
-        
-            def taylor_cos(self, x, terms=10):
-                """Вычисление косинуса с использованием ряда Тейлора"""
-                result = 0
-                for n in range(terms):
-                    coef = (-1) ** n
-                    result += coef * (x ** (2 * n)) / self.factorial(2 * n)
-                return result
-        
-            def taylor_sin(self, x, terms=10):
-                """Вычисление синуса с использованием ряда Тейлора"""
-                result = 0
-                for n in range(terms):
-                    coef = (-1) ** n
-                    result += coef * (x ** (2 * n + 1)) / self.factorial(2 * n + 1)
-                return result
-        
-            def chebyshev_nodes(self):
-                """Функция для вычисления узлов Чебышёва на интервале [a, b]"""
-                x_chebyshev = []
-                for i in range(self.n):
-                    cos_value = self.taylor_cos((2 * i + 1) * 3.141592653589793 / (2 * self.n))  # pi = 3.14159...
-                    node = 0.5 * (self.b - self.a) * (cos_value + 1) + self.a
-                    x_chebyshev.append(node)
-                return x_chebyshev
-        
-            def chebyshev_interpolation(self, x):
-                """Интерполяция на узлах Чебышёва с использованием полиномов Лагранжа"""
-                total = 0
-                for i in range(self.n):
-                    term = self.y_points[i]
-                    for j in range(self.n):
-                        if i != j:
-                            term *= (x - self.x_points[j]) / (self.x_points[i] - self.x_points[j])
-                    total += term
-                return total
-        
-            def approximate_sin(self, x):
-                """Пример использования Taylor для вычисления синуса"""
-                return self.taylor_sin(x)
-        
-            def interpolate_value(self, x):
-                """Интерполировать значение в заданной точке"""
-                return self.chebyshev_interpolation(x)
-        
-        # Пример использования
-        n = 5
-        interpolator = ChebyshevInterpolation(n, a=-1, b=1)
-        
-        # Тестирование интерполяции в точке x = 0.5
-        interpolated_value = interpolator.interpolate_value(0.5)
-        print("Интерполированное значение в x = 0.5:", interpolated_value)
-
-        ''')
+    Многочлены Чебышёва $$T_n(x)$$ определяются при $$|x| \leq 1$$ с помощью соотношения:
+    """)
+    st.latex(r"""
+    T_n(x) = \cos(n \arccos x).
+    """)
+    st.markdown("""
+    Можно показать, что $$T_n(x)$$ являются коэффициентами разложения в ряд по $$s$$ функции:
+    """)
+    st.latex(r"""
+    F(s) = \frac{1 - sx}{1 - 2xs + s^2}
+    """)
+    st.markdown("""
+    (она называется производящей функцией для этих многочленов):
+    """)
+    st.latex(r"""
+    F(s) = \sum_{n=0}^\infty T_n(x)s^n \quad (|s| \leq 1).
+    """)
 
     st.markdown("""
-        Этот код демонстрирует реализацию метода Чебышёва для интерполяции на языке Python. 
-        Пользователь может изменить количество узлов и область интерполяции, чтобы исследовать, как метод справляется с различными наборами данных.
-        """)
-
-    # Настройки для интерполяции
-
-    def chebyshev_nodes(n, a=-1, b=1):
-        """Функция для вычисления узлов Чебышёва на интервале [a, b]"""
-        i = np.arange(n)
-        x_chebyshev = np.cos((2 * i + 1) * np.pi / (2 * n))
-        return 0.5 * (b - a) * (x_chebyshev + 1) + a
-
-    def chebyshev_interpolation(x, x_points, y_points):
-        """Интерполяция на узлах Чебышёва"""
-        n = len(x_points)
-        total = 0
-        for i in range(n):
-            term = y_points[i]
-            for j in range(n):
-                if i != j:
-                    term *= (x - x_points[j]) / (x_points[i] - x_points[j])
-            total += term
-        return total
-
-    num_points = st.slider("Выберите количество узлов Чебышёва", 1, 15, 5)
-    a = -1.0
-    b = 1.0
-
-    # Вычисление узлов Чебышёва и значений
-    x_points = chebyshev_nodes(num_points, a, b)
-    y_points = np.sin(x_points)
-
-    # Диапазон для графика
-    x_range = np.linspace(a, b, 500)
-    y_approx = [chebyshev_interpolation(x, x_points, y_points) for x in x_range]
-
-    # Построение графика
-    fig, ax = plt.subplots()
-    ax.plot(x_range, np.sin(x_range), label='Исходная функция sin(x)')
-    ax.plot(x_range, y_approx, label='Приближение методом Чебышёва')
-    ax.scatter(x_points, y_points, color='red', label='Узлы Чебышёва')
-    ax.legend()
-    st.pyplot(fig)
-
-    st.markdown("**Преимущества метода Чебышёва:**")
+    Многочлены $$T_n(x)$$ ортогональны на отрезке $$[-1, 1]$$:
+    """)
+    st.latex(r"""
+    \int_{-1}^1 \frac{dx}{\sqrt{1 - x^2}} {T_m(x)T_n(x)} = 
+    \begin{cases} 
+    0, & m \neq n, \\ 
+    \frac{\pi}{2}, & m = n \neq 0, \\ 
+    \pi, & m = n = 0.
+    \end{cases}
+    """)
     st.markdown("""
-        - Минимизация максимальной ошибки интерполяции.
-        - Устойчивость к ошибкам на краях интервала.
-        """)
+    и удовлетворяют рекуррентным соотношениям:
+    """)
+    st.latex(r"""
+    T_{n+1}(x) + T_{n-1}(x) = 2xT_n(x), \quad n \geq 1;
+    """)
+    st.latex(r"""
+    T_{m+n} + T_{m-n}(x) = 2T_m(x)T_n(x);
+    """)
+    st.latex(r"""
+    \frac{dT_n}{dx} = 2nT_{n-1}(x) + \frac{n}{n-2} \frac{d}{dx}T_{n-2} \quad (n \geq 3).
+    """)
 
-    st.markdown("**Недостатки метода Чебышёва:**")
     st.markdown("""
-        - Сложность вычислений при большом числе узлов.
-        """)
+    Приведем несколько многочленов $$T_n(x)$$:
+    """)
+    st.latex(r"""
+    T_0(x) = 1; \\
+    T_1(x) = x;\\
+    T_2(x) = 2x^2 - 1;\\
+    T_3(x) = 4x^3 - 3x.
+    """)
+
+    st.markdown("""
+    Отметим следующее свойство многочлена $$T_n(x)$$: при $$x^n$$ в нём стоит коэффициент $$2^{n-1}$$.
+
+    Широкое приложение многочлены $$T_n(x)$$ в численном анализе нашли благодаря своему следующему замечательному 
+    свойству.
+
+    **Теорема.** Из всех многочленов $$P_n(x)$$ степени $$n$$ со старшим коэффициентом $$a_n = 1$$ у многочлена 
+    $$T_n(x)/2^{n-1}$$ точная верхняя грань абсолютных значений на интервале $$[-1, 1]$$ наименьшая, 
+    равная $$1/2^{n-1}$$.
+
+    **Доказательство.** Рассмотрим разность:
+    """)
+    st.latex(r"""
+    \varphi(x) = \frac{1}{2^{n-1}}T_n(x) - P_n(x),
+    """)
+    st.markdown("""
+    где $$P_n(x)$$ – произвольный многочлен, удовлетворяющий условиям теоремы.
+
+    Очевидно, что $$\\varphi(x)$$ – многочлен степени не выше $$n-1$$. Так как $$T_n(x)$$ есть 
+    $$\\cos(n\\theta),$$ где $$\\theta = \\arccos x$$, то при $$-1 \\leq x \\leq 1$$ $$T_n(x)$$ принимает экстремальные 
+    значения $$(\\pm1)(n+1)$$ раз (по очереди положительное и отрицательное). 
+    Если у $$P_n(x)$$ верхняя граница экстремальных абсолютных значений меньше, чем у $$T_n/2^{n-1},$$ то 
+    $$\\varphi(x)$$ будет иметь в точках экстремумов $$T_n(x)$$ или положительные значения, или отрицательные 
+    (поочередно). Следовательно, многочлен $$\\varphi(x)$$ имеет при $$-1 \\leq x \\leq 1$$ $$\\ n$$ нулей, т.е. 
+    $$\\varphi(x) \\equiv 0$$ (согласно основной теореме алгебры).
+
+    Таким образом:
+    """)
+    st.latex(r"""
+    P_n(x) = \frac{T_n(x)}{2^{n-1}},
+    """)
+    st.markdown("что и требовалось.")
+
+    st.markdown("""
+    Таким образом, многочлены Чебышёва являются наименее отклоняющимися от нуля на отрезке $$[-1,1]$$ среди всех 
+    многочленов в указанном выше смысле. Это свойство многочленов Чебышёва широко используется при рассмотрении 
+    различных вопросов вычислительной математики.
+    """)
+
+    def chebyshev_polynomial(n, x):
+        """Вычисление многочлена Чебышева T_n(x)"""
+        return math.cos(n * math.acos(x))
+
+    def plot_chebyshev_polynomials(max_degree):
+        """Построение графиков многочленов Чебышева от T_0 до T_max_degree"""
+        x_values = [i / 100 for i in range(-100, 101)]  # x от -1 до 1
+        plt.figure(figsize=(10, 6))
+
+        for n in range(max_degree + 1):
+            y_values = [chebyshev_polynomial(n, x) for x in x_values]
+            plt.plot(x_values, y_values, label=f"T_{n}(x)")
+
+        plt.title(f"Многочлены Чебышева до T_{max_degree}(x)")
+        plt.xlabel("x")
+        plt.ylabel("T_n(x)")
+        plt.axhline(0, color="black", linewidth=0.8, linestyle="--")
+        plt.axvline(0, color="black", linewidth=0.8, linestyle="--")
+        plt.grid(True)
+        plt.legend()
+        return plt
+
+    # Streamlit UI
+    st.markdown("#### Визуальный пример:")
+
+    st.markdown("""
+    Многочлены Чебышева $$T_n(x)$$ , как уже было сказано, определяются формулой:
+    """)
+    st.latex(r"T_n(x) = \cos(n \arccos x)")
+    st.markdown("""
+    Они ортогональны на отрезке $$[-1, 1]$$.
+    """)
+    st.markdown("""
+    ##### Выберите максимальную степень многочлена (n):
+    """)
+    # Пользователь выбирает степень многочлена
+    max_degree = st.slider("", min_value=0, max_value=10, value=5, step=1)
+
+    # Построение графиков
+    st.markdown(f"**Графики многочленов Чебышева от T_0 до T_{max_degree}:**")
+    plot = plot_chebyshev_polynomials(max_degree)
+    st.pyplot(plot)
+
+    st.markdown("""
+    Многочлены Чебышева обладают замечательным свойством наименьшего отклонения от нуля среди всех многочленов 
+    одной и той же степени на отрезке $$[-1, 1]$$. Это делает их полезными в задачах приближения и интерполяции.
+    """)
