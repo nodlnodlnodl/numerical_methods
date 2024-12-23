@@ -232,6 +232,63 @@ def vector_matrix_norm():
     st.latex(r"""
             ||A||_m = \max_{1 \leq i \leq n} \sum_{j=1}^{n} |a_{ij}|.
         """)
+    
+    st.markdown("""
+        ### Вычисление норм вектора на Python:
+    """)
+
+    st.code("""
+            import math
+
+            import numpy as np
+
+            x = np.random.randint(0, 30, size=3)
+
+            # L1-норма = сумма абсолютных значений компонентов.
+            def l1_norm_vector(x):
+                return np.sum(np.abs(x))
+            
+            # L2-норма = квадратный корень из суммы квадратов компонентов.
+            def l2_norm_vector(x):
+                return math.sqrt(np.sum(x**2))
+
+            # Linf-норма = максимальное абсолютное значение компонента.
+            def linf_norm_vector(x):
+                return np.max(np.abs(x))
+            
+            print('L1-норма: ', l1_norm_vector(x))
+            print('L2-норма: ', l2_norm_vector(x))
+            print('Linf-норма: ', linf_norm_vector(x))
+    """)
+
+    st.markdown("""
+        ### Вычисление норм матриц на Python:
+    """)
+
+    st.code("""
+            import math
+            
+            import numpy as np
+
+            A = np.random.randint(0, 30, size=(4, 4))
+
+            # L1-норма = максимальная сумма абсолютных значений по столбцам.
+            def l1_norm_matrix(A):
+                return np.max(np.sum(np.abs(A), axis=0))
+            
+            # Spherical(L2)-норма = квадратный корень из суммы квадратов всех элементов.
+            def spherical_norm_marix(A):
+                return math.sqrt(np.sum(A**2))
+            
+            # Linf-норма = максимальная сумма абсолютных значений по строкам.
+            def linf_norm_matrix(A):
+                return np.max(np.sum(np.abs(A), axis=1))
+            
+            print('L1-норма: ', l1_norm_matrix(A))
+            print('L2-норма: ', spherical_norm_marix(A))
+            print('Linf-норма: ', linf_norm_matrix(A))
+
+    """)
 
 
 def conditionality_liner_system():
@@ -443,3 +500,7 @@ def conditionality_liner_system():
 
         т. е. мы нашли почти наихудший случай (так как $cond \ A$ также $\approx 4 \cdot 10^{4})$.
     """)
+
+
+
+
