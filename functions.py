@@ -200,7 +200,6 @@ def general_rules_for_approximating_functions():
     - Данные уравнения должны быть близки к исходным уравнениям, для которых $${x_i}\ - $$ точные решения.
     """)
 
-
     st.latex(r'''
         ''')
     st.latex(r'''
@@ -211,22 +210,11 @@ def general_rules_for_approximating_functions():
 def lagrange_for_interpolation():
     st.header("3.2.1. Метод Лагранжа для интерполяции")
 
-    st.markdown("""
-        Метод Лагранжа — это форма полиномиальной интерполяции, используемая для аппроксимации функций. Полином Лагранжа представляет собой линейную комбинацию базисных полиномов Лагранжа, что позволяет точно проходить через заданные точки.
-        """)
+    # Точная функция
+    def f(x):
+        return np.sin(x)
 
-    st.latex(r"""
-        \textbf{Теоретическая основа:} \\
-        Полином \, Лагранжа \, L(x) \, для \, n \, точек \, задаётся \, формулой: \\
-        L(x) = \sum_{i=0}^{n-1} y_i \ell_i(x)
-        """)
-    st.latex(r"""
-        где \, \ell_i(x) \, — базисные \, полиномы \, Лагранжа, \, определённые \, как: \\
-        \ell_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n-1} \frac{x - x_j}{x_i - x_j}
-        """)
-
-    st.markdown("**Реализация на чистом Python:**")
-    st.code("""
+    # Интерполяция методом Лагранжа
     def lagrange_interpolation(x, x_points, y_points):
         total = 0
         n = len(x_points)
@@ -238,66 +226,30 @@ def lagrange_for_interpolation():
             total += term
         return total
 
-    # Пример узлов и значений
-    x_points = [1, 2, 3, 4, 5]  # Узлы x
-    y_points = [1, 4, 9, 16, 25]  # Значения y в этих узлах (x^2)
-
-    # Тестирование интерполяции в точке x = 2.5
-    interpolated_value = lagrange_interpolation(2.5, x_points, y_points)
-    print("Интерполированное значение в x = 2.5:", interpolated_value)
-        """)
-
-    st.markdown("""
-        Этот код демонстрирует базовую реализацию метода Лагранжа для интерполяции на языке Python. 
-        Пользователь может изменить узлы интерполяции и точки, чтобы исследовать, как метод справляется с различными наборами данных.
-        """)
-
-    st.markdown("**Преимущества:**")
-    st.markdown("""
-        - Простота реализации.
-        - Точное совпадение с интерполируемыми данными.
-        """)
-
-    st.markdown("**Недостатки:**")
-    st.markdown("""
-        - Не устойчив при большом количестве узлов из-за феномена Рунге.
-        - Высокая вычислительная стоимость при увеличении числа узлов.
-        """)
-
-    st.markdown("**Алгоритм:**")
-    st.latex(r"""
-        1. \, Выбрать \, узлы \, интерполяции \, x_i \, и \, соответствующие \, значения \, y_i. \\
-        2. \, Для \, каждого \, x \, в \, области \, определения \, вычислить \, L(x) \, с \, помощью \, базисных \, полиномов. \\
-        3. \, Использовать \, L(x) \, для \, аппроксимации \, или \, интерполяции \, между \, узлами.
-        """)
-
-    # Демонстрация работы метода Лагранжа
-    def f(x):
-        return np.sin(x)
-
-    def lagrange_interpolation(x, x_points, y_points):
-        total = 0
-        n = len(x_points)
-        for i in range(n):
-            term = y_points[i]
-            for j in range(n):
-                if i != j:
-                    term = term * (x - x_points[j]) / (x_points[i] - x_points[j])
-            total += term
-        return total
-
-    num_points = st.slider("Выберите количество узлов интерполяции", 1, 20, 4)
+    # Выбор количества узлов
+    num_points = st.slider("Выберите количество узлов интерполяции", 2, 20, 4)
     x_points = np.linspace(0, 2 * np.pi, num_points)
     y_points = f(x_points)
-    x_range = np.linspace(0, 2 * np.pi, 100)
-    y_approx = [lagrange_interpolation(x, x_points, y_points) for x in x_range]
 
+    # Диапазон точек для оценки
+    x_range = np.linspace(0, 2 * np.pi, 100)
+    y_true = f(x_range)
+    y_approx = np.array([lagrange_interpolation(x, x_points, y_points) for x in x_range])
+
+    # Вычисление нормы L2
+    l2_norm = np.sqrt(np.sum((y_true - y_approx) ** 2) / len(x_range))
+
+    # Построение графиков
     fig, ax = plt.subplots()
-    ax.plot(x_range, f(x_range), label='Исходная функция')
-    ax.plot(x_range, y_approx, label='Приближение Лагранжа')
+    ax.plot(x_range, y_true, label='Точная функция', linestyle='--')
+    ax.plot(x_range, y_approx, label='Интерполяция Лагранжа')
     ax.scatter(x_points, y_points, color='red', label='Узлы интерполяции')
     ax.legend()
+    ax.set_title("Интерполяция методом Лагранжа")
     st.pyplot(fig)
+
+    # Отображение значения нормы L2
+    st.markdown(f"**Норма L2 отклонения:** {l2_norm:.6f}")
 
 
 # 3.2.2. Метод Ньютона
