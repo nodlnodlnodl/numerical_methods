@@ -3,6 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from streamlit_ace import st_ace
 
+import matplotlib.pyplot as plt
+
+import pandas as pd
+
+from code_editor import code_editor
 from scipy.integrate import odeint
 from scipy.optimize import fsolve
 import time
@@ -576,7 +581,11 @@ def runge_kutt():
             Большую часть материала мы будем давать применительно к решению задачи Коши для уравнения:
             """
         )
-        st.latex(r"y' = f(x, y), \quad y(x_0) = y_0")
+        st.latex(r"""
+        y' = f(x, y), \quad y(x_0) = y_0"\tag{1}
+        """)
+
+
         st.write(
             """
             оговаривая при необходимости особенности применения методов к системам уравнений. Пусть
@@ -584,7 +593,10 @@ def runge_kutt():
             методы можно представить формулой:
             """
         )
-        st.latex(r"y_{n+1} = F(x_n, y_n, x_{n+1}, y_{n+1})")
+        st.latex(r"""
+        y_{n+1} = F(x_n, y_n, x_{n+1}, y_{n+1}\tag{2}
+        """)
+
         st.write(
             """
             Такие общие одношаговые методы, используя информацию о решении в узле $x_n$, позволяют определить 
@@ -593,6 +605,7 @@ def runge_kutt():
             """
         )
         st.latex(r"h = x_{n+1} - x_n \quad \text{и полагать} \quad n = 0.")
+
         st.write(
             """
             В принципе, решение уравнения (1) при $x = x_1$, зная его значение $y_0$ при $x = x_0$, можно 
@@ -600,14 +613,22 @@ def runge_kutt():
             """
         )
         st.write(
-            "В самом деле, предположим, что \\(y(x)\\) имеет непрерывные производные до порядка \\(s+1\\) включительно. "
+            "В самом деле, предположим, что $y(x)$ имеет непрерывные производные до порядка $(s+1)$ включительно. "
             "Тогда можно написать, что:"
         )
-        st.latex(
-            r"y_1 = y_0 + hy_0' + \frac{h^2}{2} y_0'' + \dots + \frac{h^s}{s!} y_0^{(s)} + \frac{h^{s+1}}{(s+1)!} y_0^{(s+1)}(\xi),"
-            r"\quad x_0 < \xi < x_1"
-        )
+        st.latex(r"""
+            y_1 = y_0 + hy_0' + \frac{h^2}{2} y_0'' + \dots + \frac{h^s}{s!} y_0^{(s)} + \frac{h^{s+1}}{(s+1)!} y_0^{(s+1)}(\xi)\tag{3}
+        """)
         st.write("где:")
+
+        st.latex(r"y_0^{(k)} = y^{(k)}(x_0), \quad x_0 < \xi < x_1.")
+
+        st.markdown(
+            """
+            Входящие в (3) производные можно последовательно вычислить по формулам:
+            """
+        )
+
         st.latex(r"y_0' = f(x_0, y_0), \quad y_0'' = \left(f_x + f_y f\right)\big|_{x_0}, \quad \dots")
 
         # Ограничение метода Тейлора
@@ -621,7 +642,7 @@ def runge_kutt():
             """
         )
         st.latex(r"""
-            y_1 = y_0 + p_1 k_1(h) + p_2 k_2(h) + \dots + p_q k_q(h)
+            y_1 = y_0 + p_1 k_1(h) + p_2 k_2(h) + \dots + p_q k_q(h)\tag{4}
         """)
         st.markdown("**где:**")
         st.latex(r"""
@@ -639,7 +660,7 @@ def runge_kutt():
             """
         )
         st.latex(r"""
-            \varphi_q(h) = y(x_0 + h) - y_0 - \sum_{i=1}^q P_i k_i(h).
+            \varphi_q(h) = y(x_0 + h) - y_0 - \sum_{i=1}^q P_i k_i(h)\tag{5}
         """)
 
         st.markdown(
@@ -649,7 +670,7 @@ def runge_kutt():
             """
         )
         st.latex(r"""
-            \varphi_q(h) = \frac{h^{s+1}}{(s+1)!} a^{(s+1)}(0) + O(h^{s+2}).
+            \varphi_q(h) = \frac{h^{s+1}}{(s+1)!} a^{(s+1)}(0) + O(h^{s+2})\tag{6}
         """)
 
         st.subheader("Определение")
@@ -667,6 +688,35 @@ def runge_kutt():
             называется **главным членом погрешности метода на шаге $h$**.
             """
         )
+
+def euler_method(f, x0, y0, x_end, h):
+    """
+    Решение ОДУ методом Эйлера.
+
+    f: функция, задающая ОДУ dy/dx = f(x, y)
+    x0: начальное значение x
+    y0: начальное значение y
+    x_end: конечное значение x
+    h: шаг интегрирования
+
+    Возвращает:
+        x_vals: массив значений x
+        y_vals: массив значений y
+    """
+    x_vals = [x0]
+    y_vals = [y0]
+
+    while x_vals[-1] < x_end:
+        x, y = x_vals[-1], y_vals[-1]
+
+        x_new = x + h
+        y_new = y + h * f(x, y)
+
+        x_vals.append(x_new)
+        y_vals.append(y_new)
+
+    return np.array(x_vals), np.array(y_vals)
+
 
 def single_term_formulas():
 
@@ -717,6 +767,73 @@ def single_term_formulas():
             Это — известный метод Эйлера, он имеет первый порядок точности: $s = 1$.
             """
         )
+
+        st.markdown("""
+                **Пример использования метода Эйлера для решения ОДУ $y' = y - x^2 + 1$:**
+                """)
+
+        # Поля для ввода параметров
+        x0 = st.number_input("Начальное значение x (x0):", value=0.0)
+        y0 = st.number_input("Начальное значение y (y0):", value=1.0)
+        x_end = st.number_input("Конечное значение x (x_end):", value=5.0)
+        h = st.number_input("Шаг интегрирования (h):", value=0.1)
+
+        if st.button("Рассчитать решение"):
+            # Определение функции
+            f = lambda x, y: y - x ** 2 + 1
+
+            # Вычисление решения методом Эйлера
+            x_vals, y_vals = euler_method(f, x0, y0, x_end, h)
+
+            # Построение графика
+            fig, ax = plt.subplots()
+            ax.plot(x_vals, y_vals, label="Решение методом Эйлера", marker="o")
+            ax.set_title("Решение ОДУ методом Эйлера")
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.legend()
+            ax.grid()
+            st.pyplot(fig)
+
+     # Вывод таблицы с результатами
+            results = pd.DataFrame({"x": x_vals, "y": y_vals})
+            st.markdown("### Результаты интегрирования")
+            st.dataframe(results, use_container_width=True)
+
+if __name__ == "__main__":
+        single_term_formulas()
+
+def runge_kutta_2(f, x0, y0, x_end, h, alpha2):
+    """
+    Решение ОДУ методом Рунге-Кутты 2-го порядка.
+
+    f: функция, задающая ОДУ dy/dx = f(x, y)
+    x0: начальное значение x
+    y0: начальное значение y
+    x_end: конечное значение x
+    h: шаг интегрирования
+    alpha2: параметр схемы Рунге-Кутты второго порядка
+
+    Возвращает:
+        x_vals: массив значений x
+        y_vals: массив значений y
+    """
+    x_vals = [x0]
+    y_vals = [y0]
+
+    while x_vals[-1] < x_end:
+        x, y = x_vals[-1], y_vals[-1]
+
+        k1 = h * f(x, y)
+        k2 = h * f(x + alpha2 * h, y + alpha2 * k1)
+        y_new = y + (1 - 1 / (2 * alpha2)) * k1 + (1 / (2 * alpha2)) * k2
+
+        x_new = x + h
+
+        x_vals.append(x_new)
+        y_vals.append(y_new)
+
+    return np.array(x_vals), np.array(y_vals)
 
 def two_term_formulas():
         st.subheader("11.1.2. Двухчленные формулы")
@@ -835,7 +952,7 @@ def two_term_formulas():
             y_1 = y_0 + \frac{1}{2} \left(k_1 + k_2\right),
             """)
         st.latex(r"""
-            \quad k_1 = h f(x_0, y_0),
+            \quad k_1 = h f(x_0, y_0),\tag{7}
         """)
 
         st.latex(r"""
@@ -866,7 +983,7 @@ def two_term_formulas():
         """)
 
         st.latex(r"""
-            k_1 = h f(x_0, y_0), \quad
+            k_1 = h f(x_0, y_0), \quad\tag{8}
         """)
 
         st.latex(r"""
@@ -895,7 +1012,7 @@ def two_term_formulas():
         """)
 
         st.latex(r"""
-        k_1 = h f(x_0, y_0), \quad
+        k_1 = h f(x_0, y_0), \quad\tag{9}
         """)
 
         st.latex(r"""
@@ -914,6 +1031,80 @@ def two_term_formulas():
             """
         )
 
+        st.markdown("""
+            **Пример использования метода Рунге-Кутты второго порядка для решения ОДУ $y' = y - x^2 + 1$:**
+            """)
+
+        # Поля для ввода параметров
+        x0 = st.number_input("Начальное значение x (x0):", value=0.0)
+        y0 = st.number_input("Начальное значение y (y0):", value=0.5)
+        x_end = st.number_input("Конечное значение x (x_end):", value=2.0)
+        h = st.number_input("Шаг интегрирования (h):", value=0.1)
+        alpha2 = st.number_input("Параметр \( \alpha_2 \):", value=0.5)
+
+        if st.button("Рассчитать решение"):
+            # Определение функции
+            f = lambda x, y: y - x ** 2 + 1
+
+            # Вычисление решения методом Рунге-Кутты второго порядка
+            x_vals, y_vals = runge_kutta_2(f, x0, y0, x_end, h, alpha2)
+
+            # Отображение текста с ОДУ
+            st.markdown("### Решается ОДУ: $y' = y - x^2 + 1$")
+
+            # Построение графика
+            fig, ax = plt.subplots()
+            ax.plot(x_vals, y_vals, label="Решение методом Рунге-Кутты 2-го порядка", marker="o")
+            ax.set_title("Решение ОДУ методом Рунге-Кутты 2-го порядка")
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.legend()
+            ax.grid()
+
+            st.pyplot(fig)
+
+            # Вывод таблицы с результатами
+            results = pd.DataFrame({"x": x_vals, "y": y_vals})
+            st.markdown("### Результаты интегрирования")
+            st.dataframe(results, use_container_width=True)
+
+
+if __name__ == "__main__":
+    two_term_formulas()
+
+def runge_kutta_3(f, x0, y0, x_end, h):
+    """
+    Решение ОДУ методом Рунге-Кутты 3-го порядка.
+
+    f: функция, задающая ОДУ dy/dx = f(x, y)
+    x0: начальное значение x
+    y0: начальное значение y
+    x_end: конечное значение x
+    h: шаг интегрирования
+
+    Возвращает:
+        x_vals: массив значений x
+        y_vals: массив значений y
+    """
+    x_vals = [x0]
+    y_vals = [y0]
+
+    while x_vals[-1] < x_end:
+        x, y = x_vals[-1], y_vals[-1]
+
+        k1 = h * f(x, y)
+        k2 = h * f(x + h / 2, y + k1 / 2)
+        k3 = h * f(x + 2 * h / 3, y + k1 / 3 + k2 / 3)
+
+        y_new = y + (1 / 6) * k1 + (4 / 6) * k2 + (1 / 6) * k3
+        x_new = x + h
+
+        x_vals.append(x_new)
+        y_vals.append(y_new)
+
+    return np.array(x_vals), np.array(y_vals)
+
+
 def three_term_formulas():
         st.header("11.1.3. Трёхчленные формулы")
 
@@ -929,7 +1120,7 @@ def three_term_formulas():
         """)
 
         st.latex(r""" \quad
-        k_2 = h f\left(x_0 + \alpha_2 h, \, y_0 + \beta_{21} k_1\right);
+        k_2 = h f\left(x_0 + \alpha_2 h, \, y_0 + \beta_{21} k_1\right)\tag{10};
         """)
 
         st.latex(r""" \quad
@@ -955,7 +1146,7 @@ def three_term_formulas():
         """)
 
         st.latex(r""" \quad
-        2 \left(\alpha_2 P_{32} + \alpha_3 P_{33}\right) = 1;
+        2 \left(\alpha_2 P_{32} + \alpha_3 P_{33}\right) = 1\tag{11};
         """)
 
         st.latex(r"""
@@ -979,7 +1170,7 @@ def three_term_formulas():
         """)
 
         st.latex(r"""\quad
-        k_1 = h f(x_0, y_0);
+        k_1 = h f(x_0, y_0)\tag{12}; 
         """)
 
         st.latex(r""" \quad
@@ -994,60 +1185,174 @@ def three_term_formulas():
         При $f$, не зависящей от $y$, имеем формулу интегрирования Симпсона.
         """)
 
+        st.markdown("""
+                **Пример использования метода Рунге-Кутты третьего порядка для решения ОДУ $y' = y - x^2 + 1$:**
+                """)
+
+        # Поля для ввода параметров
+        x0 = st.number_input("Начальное значение x (x0):", value=0.0)
+        y0 = st.number_input("Начальное значение y (y0):", value=0.5)
+        x_end = st.number_input("Конечное значение x (x_end):", value=2.0)
+        h = st.number_input("Шаг интегрирования (h):", value=0.1)
+
+        if st.button("Рассчитать решение"):
+            # Определение функции
+            f = lambda x, y: y - x ** 2 + 1
+
+            # Вычисление решения методом Рунге-Кутты третьего порядка
+            x_vals, y_vals = runge_kutta_3(f, x0, y0, x_end, h)
+
+            # Отображение текста с ОДУ
+            st.markdown("### Решается ОДУ: $y' = y - x^2 + 1$")
+
+            # Построение графика
+            fig, ax = plt.subplots()
+            ax.plot(x_vals, y_vals, label="Решение методом Рунге-Кутты 3-го порядка", marker="o")
+            ax.set_title("Решение ОДУ методом Рунге-Кутты 3-го порядка")
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.legend()
+            ax.grid()
+
+            st.pyplot(fig)
+
+            # Вывод таблицы с результатами
+            results = pd.DataFrame({"x": x_vals, "y": y_vals})
+            st.markdown("### Результаты интегрирования")
+            st.dataframe(results, use_container_width=True)
+
+
+if __name__ == "__main__":
+    three_term_formulas()
+
+
+def runge_kutta_4(f, x0, y0, x_end, h):
+    """
+    Решение ОДУ методом Рунге-Кутты 4-го порядка.
+
+    f: функция, задающая ОДУ dy/dx = f(x, y)
+    x0: начальное значение x
+    y0: начальное значение y
+    x_end: конечное значение x
+    h: шаг интегрирования
+
+    Возвращает:
+        x_vals: массив значений x
+        y_vals: массив значений y
+    """
+    x_vals = [x0]
+    y_vals = [y0]
+
+    while x_vals[-1] < x_end:
+        x, y = x_vals[-1], y_vals[-1]
+
+        k1 = h * f(x, y)
+        k2 = h * f(x + h / 2, y + k1 / 2)
+        k3 = h * f(x + h / 2, y + k2 / 2)
+        k4 = h * f(x + h, y + k3)
+
+        y_new = y + (1 / 6) * k1 + (1 / 3) * k2 + (1 / 3) * k3 + (1 / 6) * k4
+        x_new = x + h
+
+        x_vals.append(x_new)
+        y_vals.append(y_new)
+
+    return np.array(x_vals), np.array(y_vals)
+
+
 def four_term_formulas():
-        st.header("11.1.4. Четырехчленные формулы. Перенос на системы ОДУ")
+    st.header("11.1.4. Четырехчленные формулы. Перенос на системы ОДУ")
 
-        st.markdown("""
-            **Положим в (4)** $$ q = 4 $$. Существует семейство формул типа Рунге-Кутты четвертого порядка точности, для которых главный член погрешности
-            имеет вид:
-            """)
-        st.latex(r"""
-            \rho_1 = \frac{h^5}{120} \varphi^{(5)}(0).
-            """)
-        st.markdown("**Классической является схема вида:**")
-        st.latex(r"""
-            y_1 = y_0 + \frac{h}{6} \left( k_1 + 2k_2 + 2k_3 + k_4 \right),
-            """)
-        st.latex(r"""
-            k_1 = h f(x_0, y_0);
-            """)
-        st.latex(r""" \quad
-            k_2 = h f\left(x_0 + \frac{1}{2}h, y_0 + \frac{1}{2}k_1\right);
-            """)
-        st.latex(r"""
-            k_3 = h f\left(x_0 + \frac{1}{2}h, y_0 + \frac{1}{2}k_2\right);
-            """)
-        st.latex(r""" \quad
-            k_4 = h f\left(x_0 + h, y_0 + k_3\right).
-            """)
-        st.markdown("""
-            **Все методы Рунге – Кутты легко переносятся на системы ОДУ вида:**
-            """)
-        st.latex(r"""
-            \frac{d\bar{y}}{dx} = \bar{f}(x, \bar{y}),
-            """)
-        st.markdown("где")
-        st.latex(r"""
-            \bar{y} = \begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_M \end{pmatrix}, \quad
-            \bar{f} = \begin{pmatrix} f_1(x, y_1, \dots, y_M) \\ f_2(x, y_1, \dots, y_M) \\ \vdots \\ f_M(x, y_1, \dots, y_M) \end{pmatrix}.
-            """)
-        st.markdown("""
-            **Схемы имеют вид:**
-            """)
-        st.latex(r"""
-            \bar{y}_{n+1} = \bar{y}_n + P_{q1} k_1(h) + \dots + P_{qq} \bar{k}_q(h),
-            """)
+    st.markdown("""
+        **Положим в (4)** $$ q = 4 $$. Существует семейство формул типа Рунге-Кутты четвертого порядка точности, для которых главный член погрешности
+        имеет вид:
+        """)
+    st.latex(r"""
+        \rho_1 = \frac{h^5}{120} \varphi^{(5)}(0).
+        """)
+    st.markdown("**Классической является схема вида:**")
+    st.latex(r"""
+        y_1 = y_0 + \frac{h}{6} \left( k_1 + 2k_2 + 2k_3 + k_4 \right),
+        """)
+    st.latex(r"""
+        k_1 = h f(x_0, y_0);
+        """)
+    st.latex(r""" \quad
+        k_2 = h f\left(x_0 + \frac{1}{2}h, y_0 + \frac{1}{2}k_1\right)\tag{13};
+        """)
+    st.latex(r"""
+        k_3 = h f\left(x_0 + \frac{1}{2}h, y_0 + \frac{1}{2}k_2\right);
+        """)
+    st.latex(r""" \quad
+        k_4 = h f\left(x_0 + h, y_0 + k_3\right).
+        """)
+    st.markdown("""
+        **Все методы Рунге – Кутты легко переносятся на системы ОДУ вида:**
+        """)
+    st.latex(r"""
+        \frac{d\bar{y}}{dx} = \bar{f}(x, \bar{y}),
+        """)
+    st.markdown("где")
+    st.latex(r"""
+        \bar{y} = \begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_M \end{pmatrix}, \quad
+        \bar{f} = \begin{pmatrix} f_1(x, y_1, \dots, y_M) \\ f_2(x, y_1, \dots, y_M) \\ \vdots \\ f_M(x, y_1, \dots, y_M) \end{pmatrix}.
+        """)
+    st.markdown("""
+        **Схемы имеют вид:**
+        """)
+    st.latex(r"""
+        \bar{y}_{n+1} = \bar{y}_n + P_{q1} k_1(h) + \dots + P_{qq} \bar{k}_q(h),
+        """)
 
-        st.markdown("где")
+    st.markdown("где")
 
-        st.latex(r"""
-            \bar{k}_1 = h \bar{f}(x_n, \bar{y}_n),
-            """)
+    st.latex(r"""
+        \bar{k}_1 = h \bar{f}(x_n, \bar{y}_n),
+        """)
 
-        st.latex(r""" \quad
-            \bar{k}_2 = h \bar{f}\left(x_n + \alpha_2 h, \bar{y}_n + \beta_{21} \bar{k}_1(h)\right),
-            """)
+    st.latex(r""" \quad
+        \bar{k}_2 = h \bar{f}\left(x_n + \alpha_2 h, \bar{y}_n + \beta_{21} \bar{k}_1(h)\right),
+        """)
 
-        st.latex(r"""
-            \bar{k}_q = h \bar{f}\left(x_n + \alpha_q h, \bar{y}_n + \beta_{q1}\bar{k}_1 + \dots + \beta_{q,q-1}\bar{k}_{q-1}\right).
-            """)
+    st.latex(r"""
+        \bar{k}_q = h \bar{f}\left(x_n + \alpha_q h, \bar{y}_n + \beta_{q1}\bar{k}_1 + \dots + \beta_{q,q-1}\bar{k}_{q-1}\right).
+        """)
+
+    st.markdown("""
+        **Пример использования метода Рунге-Кутты четвёртого порядка для решения ОДУ $y' = y - x^2 + 1$:**
+        """)
+
+    # Поля для ввода параметров
+    x0 = st.number_input("Начальное значение x (x0):", value=0.0)
+    y0 = st.number_input("Начальное значение y (y0):", value=0.5)
+    x_end = st.number_input("Конечное значение x (x_end):", value=2.0)
+    h = st.number_input("Шаг интегрирования (h):", value=0.1)
+
+    if st.button("Рассчитать решение"):
+        # Определение функции
+        f = lambda x, y: y - x**2 + 1
+
+        # Вычисление решения методом Рунге-Кутты четвёртого порядка
+        x_vals, y_vals = runge_kutta_4(f, x0, y0, x_end, h)
+
+        # Отображение текста с ОДУ
+        st.markdown("### Решается ОДУ: $y' = y - x^2 + 1$")
+
+        # Построение графика
+        fig, ax = plt.subplots()
+        ax.plot(x_vals, y_vals, label="Решение методом Рунге-Кутты 4-го порядка", marker="o")
+        ax.set_title("Решение ОДУ методом Рунге-Кутты 4-го порядка")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.legend()
+        ax.grid()
+
+        st.pyplot(fig)
+
+        # Вывод таблицы с результатами
+        results = pd.DataFrame({"x": x_vals, "y": y_vals})
+        st.markdown("### Результаты интегрирования")
+        st.dataframe(results, use_container_width=True)
+
+if __name__ == "__main__":
+    four_term_formulas()

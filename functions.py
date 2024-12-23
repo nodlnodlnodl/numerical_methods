@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from streamlit_ace import st_ace
-import code_editor
+from code_editor import code_editor
 import math
 
 from scipy.integrate import odeint
@@ -210,11 +210,22 @@ def general_rules_for_approximating_functions():
 def lagrange_for_interpolation():
     st.header("3.2.1. Метод Лагранжа для интерполяции")
 
-    # Точная функция
-    def f(x):
-        return np.sin(x)
+    st.markdown("""
+        Метод Лагранжа — это форма полиномиальной интерполяции, используемая для аппроксимации функций. Полином Лагранжа представляет собой линейную комбинацию базисных полиномов Лагранжа, что позволяет точно проходить через заданные точки.
+        """)
 
-    # Интерполяция методом Лагранжа
+    st.latex(r"""
+        \textbf{Теоретическая основа:} \\
+        Полином \, Лагранжа \, L(x) \, для \, n \, точек \, задаётся \, формулой: \\
+        L(x) = \sum_{i=0}^{n-1} y_i \ell_i(x)
+        """)
+    st.latex(r"""
+        где \, \ell_i(x) \, — базисные \, полиномы \, Лагранжа, \, определённые \, как: \\
+        \ell_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n-1} \frac{x - x_j}{x_i - x_j}
+        """)
+
+    st.markdown("**Реализация на чистом Python:**")
+    st.code("""
     def lagrange_interpolation(x, x_points, y_points):
         total = 0
         n = len(x_points)
@@ -226,30 +237,66 @@ def lagrange_for_interpolation():
             total += term
         return total
 
-    # Выбор количества узлов
-    num_points = st.slider("Выберите количество узлов интерполяции", 2, 20, 4)
+    # Пример узлов и значений
+    x_points = [1, 2, 3, 4, 5]  # Узлы x
+    y_points = [1, 4, 9, 16, 25]  # Значения y в этих узлах (x^2)
+
+    # Тестирование интерполяции в точке x = 2.5
+    interpolated_value = lagrange_interpolation(2.5, x_points, y_points)
+    print("Интерполированное значение в x = 2.5:", interpolated_value)
+        """)
+
+    st.markdown("""
+        Этот код демонстрирует базовую реализацию метода Лагранжа для интерполяции на языке Python. 
+        Пользователь может изменить узлы интерполяции и точки, чтобы исследовать, как метод справляется с различными наборами данных.
+        """)
+
+    st.markdown("**Преимущества:**")
+    st.markdown("""
+        - Простота реализации.
+        - Точное совпадение с интерполируемыми данными.
+        """)
+
+    st.markdown("**Недостатки:**")
+    st.markdown("""
+        - Не устойчив при большом количестве узлов из-за феномена Рунге.
+        - Высокая вычислительная стоимость при увеличении числа узлов.
+        """)
+
+    st.markdown("**Алгоритм:**")
+    st.latex(r"""
+        1. \, Выбрать \, узлы \, интерполяции \, x_i \, и \, соответствующие \, значения \, y_i. \\
+        2. \, Для \, каждого \, x \, в \, области \, определения \, вычислить \, L(x) \, с \, помощью \, базисных \, полиномов. \\
+        3. \, Использовать \, L(x) \, для \, аппроксимации \, или \, интерполяции \, между \, узлами.
+        """)
+
+    # Демонстрация работы метода Лагранжа
+    def f(x):
+        return np.sin(x)
+
+    def lagrange_interpolation(x, x_points, y_points):
+        total = 0
+        n = len(x_points)
+        for i in range(n):
+            term = y_points[i]
+            for j in range(n):
+                if i != j:
+                    term = term * (x - x_points[j]) / (x_points[i] - x_points[j])
+            total += term
+        return total
+
+    num_points = st.slider("Выберите количество узлов интерполяции", 1, 20, 4)
     x_points = np.linspace(0, 2 * np.pi, num_points)
     y_points = f(x_points)
-
-    # Диапазон точек для оценки
     x_range = np.linspace(0, 2 * np.pi, 100)
-    y_true = f(x_range)
-    y_approx = np.array([lagrange_interpolation(x, x_points, y_points) for x in x_range])
+    y_approx = [lagrange_interpolation(x, x_points, y_points) for x in x_range]
 
-    # Вычисление нормы L2
-    l2_norm = np.sqrt(np.sum((y_true - y_approx) ** 2) / len(x_range))
-
-    # Построение графиков
     fig, ax = plt.subplots()
-    ax.plot(x_range, y_true, label='Точная функция', linestyle='--')
-    ax.plot(x_range, y_approx, label='Интерполяция Лагранжа')
+    ax.plot(x_range, f(x_range), label='Исходная функция')
+    ax.plot(x_range, y_approx, label='Приближение Лагранжа')
     ax.scatter(x_points, y_points, color='red', label='Узлы интерполяции')
     ax.legend()
-    ax.set_title("Интерполяция методом Лагранжа")
     st.pyplot(fig)
-
-    # Отображение значения нормы L2
-    st.markdown(f"**Норма L2 отклонения:** {l2_norm:.6f}")
 
 
 # 3.2.2. Метод Ньютона
@@ -660,4 +707,353 @@ def chebyshev_polynomials():
     st.markdown("""
     Многочлены Чебышева обладают замечательным свойством наименьшего отклонения от нуля среди всех многочленов 
     одной и той же степени на отрезке $$[-1, 1]$$. Это делает их полезными в задачах приближения и интерполяции.
+    """)
+
+
+# 6.5. Итерационные методы решения линейных систем
+def iterative_methods_linear_systems():
+    st.header("6.5. Итерационные методы решения линейных систем")
+
+    st.markdown("""
+    При решении уравнений в частных производных конечно-разностными методами часто возникают алгебраические системы 
+    с тысячами неизвестных, но со слабо заполненной матрицей $$A$$, в которой большинство элементов – нули. 
+    Для таких систем прямые методы становятся невыгодными, так как они не позволяют, вообще говоря, воспользоваться. 
+    Такие системы удобно решать итерационными методами. Мы на них подробнее остановимся при рассмотрении 
+    конечно-разностных методов для уравнений в частных производных, а здесь лишь обсудим два метода, которые скорее 
+    важны в теоретическом плане, а в практических вычислениях используются редко.
+
+    Первый – метод простых итераций. При этом методе система приводится к виду:
+    """)
+    st.latex(r"""
+    \overline{x} = C \overline{x} + \overline{d} \tag{24}
+    """)
+    st.markdown("""
+    и итерационный процесс можно записать как
+    """)
+    st.latex(r"""
+    \overline{x}^{(S+1)} = C \overline{x}^{(S)} + \overline{d}. 
+    """)
+    st.markdown("""
+    Очевидно:
+    """)
+    st.latex(r"""
+    \overline{x}^{(S+1)} - \overline{x}^{(S)} = C \left( \overline{x}^{(S)} - \overline{x}^{(S-1)} \right),
+    """)
+    st.latex(r"""
+    \left\| \overline{x}^{(S+1)} - \overline{x}^{(S)} \right\| \leq \|C\| \left\| \overline{x}^{(S)} - 
+    \overline{x}^{(S-1)} \right\|.
+    """)
+    st.markdown("""
+    Поэтому итерации будут заведомо сходиться (и независимо от начального приближения), если $$\\|C\\| < 1$$.
+
+    Представление в виде $$(24)$$ можно осуществить по-разному, например, выделив диагональные элементы:
+    """)
+    st.latex(r"""
+    x_l = \frac{1}{a_{ll}} \left( b_l - \sum_{i \neq l} a_{li} x_i \right), \quad l = 1, 2, \dots, n. \tag{25}
+    """)
+    st.markdown("""
+    В этой записи легко учесть специальную структуру матрицы $$A$$, суммируя лишь ненулевые элементы. При использовании 
+    различных норм условия сходимости имеют вид:
+    """)
+    st.latex(r"""
+    \max_l \sum_{i \neq l} \left| \frac{a_{li}}{a_{ll}} \right| < 1; \quad \max_i \sum_{l \neq i} 
+    \frac{|a_{li}|}{|a_{ll}|} < 1; \quad \sum_{l}\sum_{i \neq l} \frac{|a_{li}|^2}{|a_{ll}|^2} < 1. \tag{26}
+    """)
+    st.markdown("""
+    Эти условия означают диагональное преобладание в матрице. Если метод сходится, то решение для $$(24)$$ существует, и 
+    единственное, поэтому диагональное преобладание, гарантирующее сходимость, означает, что $$det A \\neq 0$$.
+    """)
+
+    st.markdown("""
+    #### Рассмотрим пример реализации этого метода:
+    """)
+
+    st.code("""
+    def simple_iteration(A, b, x0, tol, max_iter):
+        '''Метод простых итераций для решения линейной системы Ax = b'''
+        n = len(b)
+        x = x0[:]
+        norm_diff = []
+    
+        for _ in range(max_iter):
+            x_new = [0] * n
+            for i in range(n):
+                x_new[i] = sum(A[i][j] * x[j] for j in range(n)) + b[i]
+    
+            # Вычисление нормы разности между итерациями
+            diff = sum((x_new[i] - x[i])**2 for i in range(n))**0.5
+            norm_diff.append(diff)
+    
+            if diff < tol:
+                break
+    
+            x = x_new[:]
+    
+        return x, norm_diff
+    
+    # Пример
+    A = [[0, 0.2], [0.3, 0]]
+    b = [0.8, 1.2]
+    x0 = [0, 0]
+    tol = 1e-5
+    max_iter = 100
+    
+    x_result, norm_diff = simple_iteration(A, b, x0, tol, max_iter)
+    
+    # График сходимости
+    print("Результат метода простых итераций:", x_result)
+    print("Сходимость (простые итерации):")
+    for i, diff in enumerate(norm_diff):
+        print(f"Итерация {i + 1}: Норма разности = {diff:.6f}")      
+    """)
+
+    st.markdown("""
+    Иногда в итерационном процессе, основанном на записи $$(25)$$, в правой части для неизвестных берётся уже с новой 
+    итерации. В этом случае имеем:
+    """)
+    st.latex(r"""
+    x_l^{(S+1)} = \frac{1}{a_{ll}} \left[ b_l - \sum_{i=1}^{l-1} a_{li} x_i^{(S+1)} - \sum_{i=l+1}^n a_{li} x_i^{(S)} 
+    \right].
+    """)
+    st.markdown("""
+    Такой метод называется методом Зейделя.
+    """)
+
+    st.markdown("#### Рассмотрим этот пример:")
+
+    st.code("""
+    def seidel_method(A, b, x0, tol, max_iter):
+        '''Метод Зейделя для решения линейной системы Ax = b'''
+        n = len(A)
+        x = x0[:]
+        norm_diff = []
+    
+        for _ in range(max_iter):
+            x_new = x[:]
+            for i in range(n):
+                sum1 = sum(A[i][j] * x_new[j] for j in range(i))  # Используем уже обновленные значения
+                sum2 = sum(A[i][j] * x[j] for j in range(i + 1, n))
+                x_new[i] = (b[i] - sum1 - sum2) / A[i][i]
+    
+            # Вычисление нормы разности между итерациями
+            diff = sum((x_new[i] - x[i])**2 for i in range(n))**0.5
+            norm_diff.append(diff)
+    
+            if diff < tol:
+                break
+    
+            x = x_new[:]
+    
+        return x, norm_diff
+    
+    # Пример
+    A = [[4, 1], [2, 3]]
+    b = [1, 2]
+    x0 = [0, 0]
+    tol = 1e-5
+    max_iter = 100
+    
+    x_result, norm_diff = seidel_method(A, b, x0, tol, max_iter)
+    
+    # График сходимости
+    print("Результат метода Зейделя:", x_result)
+    print("Сходимость (Зейдель):")
+    for i, diff in enumerate(norm_diff):
+        print(f"Итерация {i + 1}: Норма разности = {diff:.6f}")
+    """)
+
+    def simple_iteration(A, b, x0, max_iter):
+        """Метод простых итераций для решения линейной системы Ax = b"""
+        n = len(b)
+        x = x0[:]
+        tol = 1e-5  # Фиксированная точность
+        norm_diff = []
+
+        for _ in range(max_iter):
+            x_new = [0] * n
+            for i in range(n):
+                x_new[i] = sum(A[i][j] * x[j] for j in range(n)) + b[i]
+
+            # Вычисление нормы разности между итерациями
+            diff = sum((x_new[i] - x[i]) ** 2 for i in range(n)) ** 0.5
+            norm_diff.append(diff)
+
+            if diff < tol:
+                break
+
+            x = x_new[:]
+
+        return x, norm_diff
+
+    def seidel_method(A, b, x0, max_iter):
+        """Метод Зейделя для решения линейной системы Ax = b"""
+        n = len(A)
+        x = x0[:]
+        tol = 1e-5  # Фиксированная точность
+        norm_diff = []
+
+        for _ in range(max_iter):
+            x_new = x[:]
+            for i in range(n):
+                sum1 = sum(A[i][j] * x_new[j] for j in range(i))  # Используем уже обновленные значения
+                sum2 = sum(A[i][j] * x[j] for j in range(i + 1, n))
+                x_new[i] = (b[i] - sum1 - sum2) / A[i][i]
+
+            # Вычисление нормы разности между итерациями
+            diff = sum((x_new[i] - x[i]) ** 2 for i in range(n)) ** 0.5
+            norm_diff.append(diff)
+
+            if diff < tol:
+                break
+
+            x = x_new[:]
+
+        return x, norm_diff
+
+    st.markdown("""
+    Сравнение двух методов
+
+    Для сравнения вы можете ввести матрицу $$A$$, вектор $$b$$, начальное приближение $$x_0$$, а также задать 
+    максимальное число итераций.
+    """)
+
+    # Ввод данных
+    A_str = st.text_area("Введите матрицу A построчно, элементы через пробел (например, '4 1\\n2 3'):", "4 1\n2 3")
+    b_str = st.text_input("Введите вектор b через пробел (например, '1 2'):", "1 2")
+    x0_str = st.text_input("Введите начальное приближение x0 через пробел (например, '0 0'):", "0 0")
+    max_iter = st.number_input("Максимальное число итераций:", min_value=1, max_value=1000, value=100)
+
+    # Обработка данных
+    try:
+        A = [[float(num) for num in row.split()] for row in A_str.strip().split("\n")]
+        b = [float(num) for num in b_str.split()]
+        x0 = [float(num) for num in x0_str.split()]
+
+        if len(A) != len(b) or any(len(row) != len(A) for row in A):
+            raise ValueError("Размеры матрицы A и вектора b не соответствуют.")
+    except Exception as e:
+        st.error(f"Ошибка ввода: {e}")
+        st.stop()
+
+    try:
+        x_exact = np.linalg.solve(A, b)
+    except Exception as e:
+        st.error(f"Ошибка при вычислении правильного решения: {e}")
+        st.stop()
+
+    # Кнопка вычисления
+    if st.button("Вычислить"):
+        # Метод простых итераций
+        x_simple, norm_diff_simple = simple_iteration(A, b, x0, max_iter)
+        st.subheader("Метод простых итераций")
+        st.markdown(f"**Решение:** {x_simple}")
+        st.markdown(f"**Число итераций:** {len(norm_diff_simple)}")
+        st.line_chart(norm_diff_simple, height=300, use_container_width=True)
+
+        # Метод Зейделя
+        x_seidel, norm_diff_seidel = seidel_method(A, b, x0, max_iter)
+        st.subheader("Метод Зейделя")
+        st.markdown(f"**Решение:** {x_seidel}")
+        st.markdown(f"**Число итераций:** {len(norm_diff_seidel)}")
+        st.line_chart(norm_diff_seidel, height=300, use_container_width=True)
+
+        # Правильное решение
+        st.subheader("Правильное решение")
+        st.markdown(f"**Решение с использованием numpy.linalg.solve:** {x_exact}")
+
+    code_editor()
+
+    st.markdown("""
+    **Замечание 1.** Условия $$(26)$$ достаточно жесткие. Однако для любой системы $$A\\overline{x} = \\overline{b}$$ с 
+    $$\\det A \\neq 0$$ можно всегда (теоретически!) сделать преобразование её к виду:
+    """)
+    st.latex(r"""
+    \overline{x} = C\overline{x} + \overline{d}, \tag{27}
+    """)
+    st.markdown("""
+    где $$\\|C\\| < 1$$. В самом деле, составим матрицу $$D = A^{-1} - \\varepsilon,$$ где $$\\varepsilon = 
+    (\\varepsilon_{ij})$$ – 
+    матрица с малыми элементами, и умножим исходную систему на нее:
+    """)
+    st.latex(r"""
+    (A^{-1} - \varepsilon)A\overline{x} = (A^{-1} - \varepsilon)\overline{b}.
+    """)
+    st.markdown("""
+    Отсюда имеем $$(27)$$ c $$C = \\varepsilon A; \\, \\overline{d} = (A^{-1} - \\varepsilon)\\overline{b}.$$ 
+    
+    Очевидно, всегда можно выбрать $$\\varepsilon$$ так, чтобы выполнилось одно из условий сходимости итераций:
+    """)
+    st.latex(r"""
+    \max_i \sum_{j=1}^n |C_{ij}| < 1; \quad \max_j \sum_{i=1}^n |C_{ij}| < 1; \quad \left(\sum_{i,j} |C_{ij}|^2 
+    \right)^{1/2} < 1.
+    """)
+    st.markdown("""
+    На практике систему $$A\\overline{x} = \\overline{b}$$ преобразуют, комбинируя уравнения так, чтобы выполнялись 
+    условия диагонального преобладания $$(26)$$.
+
+    **Замечание 2.** Метод Зейделя обычно даёт более быструю сходимость, чем метод простых итераций. Однако можно 
+    привести примеры, когда метод простых итераций сходится, а метод Зейделя – нет, и наоборот, т. е. условия 
+    сходимости этих методов, вообще говоря, различны.
+
+    **Пример.** Пусть
+    """)
+    st.latex(r"""
+    C = \begin{pmatrix} -p & q \\ -q & p \end{pmatrix},
+    """)
+    st.markdown("""
+    обозначим разность между двумя итерациями через $$\\overline{\\delta}.$$ Тогда для простых итераций:
+    """)
+    st.latex(r"""
+    \delta_1^{(S)} = p \delta_1^{(S-1)} + q \delta_2^{(S-1)};
+    """)
+    st.latex(r"""
+    \delta_2^{(S)} = -q \delta_1^{(S-1)} + p \delta_2^{(S-1)}. \tag{28}
+    """)
+    st.markdown("""
+    Для итераций по Зейделю:
+    """)
+    st.latex(r"""
+    \delta_1^{(S)} = p \delta_1^{(S-1)} + q \delta_2^{(S-1)};
+    """)
+    st.latex(r"""
+    \delta_2^{(S)} = -q \delta_1^{(S)} + p \delta_2^{(S-1)}. \tag{29}
+    """)
+
+    st.markdown("""
+    Можно показать (см. [1], с. 400), что при $$p = -0,5, \\quad q = 0,6$$ $$(28)$$ сходится, $$(29)$$ – нет; при 
+    $$p = 0,5, \\quad q = 1 \\ (29)$$ сходится, $$(28)\\ $$ – нет. Доказательство этих фактов основано на изучении 
+    собственных чисел соответствующих матриц.
+
+    Для $$(28)$$ имеем:
+    """)
+    st.latex(r"""
+    \left| \begin{array}{cc} p - \lambda & q \\ -q & p - \lambda \end{array} \right| = 0 
+    \implies \lambda^2 - 2p\lambda + p^2 + q^2 = 0 \implies \lambda = p \pm qi \implies |\lambda| < 1
+    """)
+    st.markdown("""
+    при
+    """)
+    st.latex(r"""
+    p^2 + q^2 < 1.
+    """)
+    st.markdown("""
+    Первая пара $$(p, q)$$ этому условию удовлетворяет, вторая – нет.
+
+    Для $$(29)$$:
+    """)
+    st.latex(r"""
+    \left| \begin{array}{cc} p - \lambda & -q \\ -pq & p - \lambda - q^2 \end{array} \right| = 0 \implies 
+    \lambda^2 - 2p\lambda + p^2 + q^2 = 0 \implies \lambda = p - \frac{q^2}{2} \pm \sqrt{\frac{1}{4} - p} \cdot q.
+    """)
+    st.markdown("""
+    Для первой пары $$(p, q)$$:
+    """)
+    st.latex(r"""
+    \lambda = -0,68 \pm 0,6 \sqrt{0,75},
+    """)
+    st.markdown("""
+    условие $$|\\lambda| < 1$$ не выполняется. Для второй пары:
+    """)
+    st.latex(r"""
+    \lambda = \pm 0,5i; \quad |\lambda| = 0,5 < 1.
     """)
