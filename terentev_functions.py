@@ -685,86 +685,76 @@ def metod_sekushchih():
     затем они продолжаются до тех пор, пока $$ |x_{n+1} - x_n| $$ убывает; первое возрастание свидетельствует о начале потери точности, и вычисления прекращают.
     """)
 
-    def secant_method(f, x0, x1, tol=1e-6, max_iter=100):
-        """
-        Метод секущих для нахождения корня уравнения f(x) = 0.
+    # Функция, для которой ищем корень
+    def f(x):
+        return x ** 3 - x - 2
 
-        Параметры:
-        f         — функция, задающая уравнение f(x) = 0.
-        x0, x1    — начальные приближения для корня.
-        tol       — требуемая точность (по умолчанию 1e-6).
-        max_iter  — максимальное количество итераций (по умолчанию 100).
+    # Интерфейс Streamlit
+    st.title("Интерактивная визуализация метода секущих")
+    st.write("Используйте ползунок ниже, чтобы пошагово наблюдать, как метод секущих приближается к корню функции.")
 
-        Возвращает:
-        Приближенное значение корня и список итераций с соответствующими значениями.
-        """
-        x_values = [x0, x1]  # Список для хранения значений x на каждой итерации
+    # Начальные параметры
+    x0 = st.number_input("Начальное приближение x0", value=1.0, format="%.2f")
+    x1 = st.number_input("Начальное приближение x1", value=2.0, format="%.2f")
+    tolerance = st.number_input("Точность (ε)", value=0.001, format="%.6f")
+    max_steps = st.number_input("Максимальное количество шагов", value=10, step=1)
 
-        for i in range(max_iter):
-            f_x0 = f(x0)
-            f_x1 = f(x1)
+    # Итерации метода секущих
+    steps = []
+    for step in range(max_steps):
+        f_x0 = f(x0)
+        f_x1 = f(x1)
 
-            # Проверка, что значения f(x0) и f(x1) не совпадают, чтобы избежать деления на ноль
-            if f_x1 == f_x0:
-                raise ValueError("Деление на ноль в методе секущих. Проверьте начальные приближения или функцию.")
+        # Проверка деления на ноль
+        if f_x1 - f_x0 == 0:
+            st.error("Деление на ноль, метод не может продолжить работу.")
+            break
 
-            # Формула секущих для вычисления следующего значения x
-            x_next = x1 - f_x1 * (x1 - x0) / (f_x1 - f_x0)
-            x_values.append(x_next)
+        # Вычисляем следующую точку
+        x_next = x1 - f_x1 * (x1 - x0) / (f_x1 - f_x0)
+        steps.append((x0, x1, x_next))
 
-            # Проверка на достижение требуемой точности
-            if abs(x_next - x1) < tol:
-                return x_next, x_values
+        # Проверяем достижение заданной точности
+        if abs(x_next - x1) < tolerance:
+            break
 
-            # Обновляем значения для следующей итерации
-            x0, x1 = x1, x_next
+        # Обновляем значения для следующей итерации
+        x0, x1 = x1, x_next
 
-        raise ValueError("Метод не сошелся за заданное число итераций")
+    # Ползунок для управления шагами
+    step = st.slider("Шаг итерации", 0, len(steps) - 1, 0)
 
-    # Интерфейс для задания параметров
-    st.title("Метод секущих для нахождения корня уравнения")
+    # Данные текущего шага
+    x0, x1, x2 = steps[step]
 
-    # Ввод функции
-    equation_input = st.text_input("Введите функцию f(x):", value="x**2 - 2")
-    try:
-        f = lambda x: eval(equation_input)
-    except:
-        st.error("Ошибка: Некорректное уравнение. Проверьте синтаксис.")
+    # Построение графика
+    x_vals = [i / 100 for i in range(-300, 300)]  # Интервал для графика от -3 до 3
+    y_vals = [f(x) for x in x_vals]
 
-    # Ввод начальных условий и параметров с дефолтными значениями
-    x0 = st.number_input("Первое начальное приближение x0:", value=1.0, step=0.1)
-    x1 = st.number_input("Второе начальное приближение x1:", value=2.0, step=0.1)
-    tol = st.number_input("Точность:", value=1e-6, format="%.1e")
-    max_iter = st.number_input("Максимальное количество итераций:", value=100, step=1)
+    fig, ax = plt.subplots()
+    ax.plot(x_vals, y_vals, label="f(x)", color="blue")
+    ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
 
-    # Кнопка для выполнения расчета
-    if st.button("Рассчитать"):
-        try:
-            # Расчет методом секущих
-            root, x_vals = secant_method(f, x0, x1, tol, max_iter)
+    # Секущая
+    f_x0 = f(x0)
+    f_x1 = f(x1)
+    secant_x = [x0, x1]
+    secant_y = [f_x0, f_x1]
 
-            # Подготовка данных для таблицы
-            df_results = pd.DataFrame(
-                {'Итерация': list(range(len(x_vals))), 'Значение x': [round(val, 6) for val in x_vals]})
-            st.write("Таблица значений x по итерациям:")
-            st.dataframe(df_results)
+    ax.plot(secant_x, secant_y, color="red", label="Секущая")
+    ax.plot([x2], [0], 'go', label=f"x_{step + 1} = {x2:.6f}")
+    ax.plot([x0, x1], [f_x0, f_x1], 'ro', label="Точки секущей")
 
-            # Построение графика
-            fig, ax = plt.subplots()
-            ax.plot(x_vals, marker='o', label='Значение x на итерациях')
-            ax.set_xlabel('Номер итерации')
-            ax.set_ylabel('Значение x')
-            ax.set_title('Сходимость метода секущих')
-            ax.grid(True)
-            ax.legend()
+    # Настройки графика
+    ax.set_xlim(min(x_vals), max(x_vals))
+    ax.set_ylim(min(y_vals) - 1, max(y_vals) + 1)
+    ax.set_xlabel("x")
+    ax.set_ylabel("f(x)")
+    ax.legend()
+    ax.set_title(f"Итерация {step + 1}")
 
-            # Отображение графика
-            st.pyplot(fig)
-
-            # Вывод приближенного корня
-            st.write(f"Приближенное значение корня: {root}")
-        except Exception as e:
-            st.error(f"Ошибка: {e}")
+    # Отображение графика в Streamlit
+    st.pyplot(fig)
 
 
 def metod_rybakova():
