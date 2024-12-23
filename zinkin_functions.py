@@ -232,6 +232,114 @@ def vector_matrix_norm():
     st.latex(r"""
             ||A||_m = \max_{1 \leq i \leq n} \sum_{j=1}^{n} |a_{ij}|.
         """)
+    
+    st.markdown("""
+        ### Вычисление норм вектора на Python:
+    """)
+
+    st.code("""
+            import math
+
+            import numpy as np
+
+            x = np.random.randint(0, 30, size=3)
+
+            # L1-норма = сумма абсолютных значений компонентов.
+            def l1_norm_vector(x):
+                return np.sum(np.abs(x))
+            
+            # L2-норма = квадратный корень из суммы квадратов компонентов.
+            def l2_norm_vector(x):
+                return math.sqrt(np.sum(x**2))
+
+            # Linf-норма = максимальное абсолютное значение компонента.
+            def linf_norm_vector(x):
+                return np.max(np.abs(x))
+            
+            print('L1-норма: ', l1_norm_vector(x))
+            print('L2-норма: ', l2_norm_vector(x))
+            print('Linf-норма: ', linf_norm_vector(x))
+    """)
+
+    import math
+    import numpy as np
+
+    def l1_norm_vector(x):
+        return np.sum(np.abs(x))
+
+    def l2_norm_vector(x):
+        return math.sqrt(np.sum(x**2))
+
+    def linf_norm_vector(x):
+        return np.max(np.abs(x))
+
+    x = np.random.randint(0, 30, size=3)
+
+    l1 = l1_norm_vector(x)
+    l2 = l2_norm_vector(x)
+    linf = linf_norm_vector(x)
+
+    st.write("**Вектор x:**")
+    st.write(x)
+
+    st.write("**Нормы вектора x:**")
+    st.write(f"L1-норма: {l1}")
+    st.write(f"L2-норма: {l2}")
+    st.write(f"Linf-норма: {linf}")
+
+
+    st.markdown("""
+        ### Вычисление норм матриц на Python:
+    """)
+
+    st.code("""
+            import math
+            
+            import numpy as np
+
+            A = np.random.randint(0, 30, size=(4, 4))
+
+            # L1-норма = максимальная сумма абсолютных значений по столбцам.
+            def l1_norm_matrix(A):
+                return np.max(np.sum(np.abs(A), axis=0))
+            
+            # Spherical(L2)-норма = квадратный корень из суммы квадратов всех элементов.
+            def spherical_norm_marix(A):
+                return math.sqrt(np.sum(A**2))
+            
+            # Linf-норма = максимальная сумма абсолютных значений по строкам.
+            def linf_norm_matrix(A):
+                return np.max(np.sum(np.abs(A), axis=1))
+            
+            print('L1-норма: ', l1_norm_matrix(A))
+            print('L2-норма: ', spherical_norm_marix(A))
+            print('Linf-норма: ', linf_norm_matrix(A))
+
+    """)
+
+    def l1_norm_matrix(A):
+        return np.max(np.sum(np.abs(A), axis=0))
+
+    def spherical_norm_matrix(A):
+        return math.sqrt(np.sum(A**2))
+
+    def linf_norm_matrix(A):
+        return np.max(np.sum(np.abs(A), axis=1))
+
+    A = np.random.randint(0, 30, size=(4, 4))
+
+    l1_A = l1_norm_matrix(A)
+    l2_A = spherical_norm_matrix(A)
+    linf_A = linf_norm_matrix(A)
+
+    st.write("**Матрица A:**")
+    st.write(A)
+
+    st.write("**Нормы матрицы A:**")
+    st.write(f"L1-норма: {l1_A}")
+    st.write(f"L2-норма (Сферическая норма): {l2_A}")
+    st.write(f"Linf-норма: {linf_A}")
+
 
 
 def conditionality_liner_system():
