@@ -126,6 +126,56 @@ print(f"Корень: {root}")
             Для точного нахождения всех корней необходимо исключать уже найденные корни, чтобы избежать возможности замены нескольких близко лежащих корней уравнения $$ f(x) = 0 $$ на один приближённый корень. 
             После нахождения одного корня, нужно исключить его область локализации из исходного отрезка $$ [a, b] $$ для поиска остальных корней.
         """)
+    st.markdown("### Графическая демонстрация сходимости")
+
+    def dichotomy_method_visual(f, a, b, tol=1e-6):
+        iterations = []
+        if f(a) * f(b) >= 0:
+            raise ValueError("На концах интервала значения функции должны иметь разные знаки.")
+
+        while (b - a) / 2 > tol:
+            midpoint = (a + b) / 2
+            iterations.append(midpoint)
+            if f(midpoint) == 0:
+                return midpoint, iterations
+            elif f(a) * f(midpoint) < 0:
+                b = midpoint
+            else:
+                a = midpoint
+
+        iterations.append((a + b) / 2)
+        return (a + b) / 2, iterations
+
+    # Пример функции
+    f = lambda x: x ** 3 - x - 2
+    a = st.slider("Начало интервала (a)", -5.0, 5.0, 1.0)
+    b = st.slider("Конец интервала (b)", -5.0, 5.0, 2.0)
+    tol = st.slider("Точность (tol)", 1e-8, 1e-3, 1e-6, format="%.1e")
+
+    if f(a) * f(b) >= 0:
+        st.error("На концах интервала значения функции должны иметь разные знаки.")
+        return
+
+    root, iterations = dichotomy_method_visual(f, a, b, tol)
+
+    # График сходимости
+    x = np.linspace(a - 1, b + 1, 500)
+    y = f(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y, label="f(x)", color="blue")
+    ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
+    ax.scatter(iterations, [f(x) for x in iterations], color="red", label="Итерации x_n")
+    ax.set_title("Процесс сходимости методом дихотомии")
+    ax.set_xlabel("x")
+    ax.set_ylabel("f(x)")
+    ax.legend()
+    st.pyplot(fig)
+
+    st.markdown(f"**Найденный корень:** {root:.6f}")
+    st.markdown("**Итерации сходимости:**")
+    for i, x_n in enumerate(iterations):
+        st.markdown(f"**x_{i + 1}:** {x_n:.6f}")
 
 
 def metod_hord():
@@ -933,7 +983,8 @@ def simple_iteracia_method():
     st.markdown(r"""
     Отображение (20) называется сжимающим в области $$ G $$, если существует $$ 0 \leq q < 1 $$, такое, что для любых $$ x_1, x_2 \in G $$ их образы $$ \bar{y}_1 = \varphi(x_1), \bar{y}_2 = \varphi(x_2) $$ удовлетворяют условию:
     """)
-    st.latex(r"||\bar{y}_1 - \bar{y}_2|| = ||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||. \tag{21}")
+    st.latex(
+        r"||\bar{y}_1 - \bar{y}_2|| = ||\varphi(\bar{x}_1) - \varphi(\bar{x}_2)|| \leq q ||\bar{x}_1 - \bar{x}_2||. \tag{21}")
 
     st.markdown(r"""
     Вернемся теперь к итерационному процессу (19).
@@ -960,11 +1011,13 @@ def simple_iteracia_method():
     st.markdown(r"""
     Для каждого слагаемого в правой части имеем
     """)
-    st.latex(r"||\bar{x}_{s+1} - \bar{x}_s|| = ||\varphi(\bar{x}_s) - \varphi(\bar{x}_{s-1})|| \leq q ||\bar{x}_s - \bar{x}_{s-1}||.")
+    st.latex(
+        r"||\bar{x}_{s+1} - \bar{x}_s|| = ||\varphi(\bar{x}_s) - \varphi(\bar{x}_{s-1})|| \leq q ||\bar{x}_s - \bar{x}_{s-1}||.")
     st.markdown(r"""
     Поэтому
     """)
-    st.latex(r"||\bar{x}_{k+p} - \bar{x}^*|| \leq ||\bar{x}_1 - \bar{x}_0|| \cdot \left( q^k + q^{k+1} + \dots + q^{k+p-1} \right) = \frac{q^k(1 - q^p)}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{24}")
+    st.latex(
+        r"||\bar{x}_{k+p} - \bar{x}^*|| \leq ||\bar{x}_1 - \bar{x}_0|| \cdot \left( q^k + q^{k+1} + \dots + q^{k+p-1} \right) = \frac{q^k(1 - q^p)}{1 - q} ||\bar{x}_1 - \bar{x}_0||. \tag{24}")
     st.markdown(r"""
     Так как $$ q < 1 $$, то для любого $$ \varepsilon > 0 $$ существует $$ N(\varepsilon) > 0 $$, что при $$ k > N $$ и любом $$ p > 0 $$ будет
     """)
@@ -989,7 +1042,8 @@ def simple_iteracia_method():
     #### Замечание.
     Из (23) имеем:
     """)
-    st.latex(r"||\bar{x}_{k+p} - \bar{x}_k|| \leq (q + q^2 + \dots + q^p) ||\bar{x}_k - \bar{x}_{k-1}|| \leq \frac{q}{1-q} ||\bar{x}_k - \bar{x}_{k-1}||.")
+    st.latex(
+        r"||\bar{x}_{k+p} - \bar{x}_k|| \leq (q + q^2 + \dots + q^p) ||\bar{x}_k - \bar{x}_{k-1}|| \leq \frac{q}{1-q} ||\bar{x}_k - \bar{x}_{k-1}||.")
     st.markdown(r"""
     При $$ p \to \infty $$ получим
     """)
@@ -998,6 +1052,7 @@ def simple_iteracia_method():
     Этим условием надо пользоваться для окончания итераций:
     """)
     st.latex(r"||\bar{x}_k - \bar{x}_{k-1}|| \leq \varepsilon (1-q)/q.")
+
 
 def metod_newtona():
     st.markdown(r"""
