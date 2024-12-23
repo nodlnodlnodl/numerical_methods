@@ -303,6 +303,68 @@ root = secant_method(f, 1, 2)
 print(f"Корень: {root}")
         """)
 
+    # Функция, для которой ищем корень
+    def f(x):
+        return x ** 3 - x - 2
+
+    # Настройки интерфейса Streamlit
+    st.title("Визуализация метода хорд")
+    st.write("Данный пример иллюстрирует пошаговую работу метода хорд для нахождения корня функции.")
+
+    # Интервал и начальные точки
+    a = st.number_input("Начальная точка a", value=1.0)
+    b = st.number_input("Начальная точка b", value=2.0)
+    tolerance = st.number_input("Точность (ε)", value=0.001, format="%.6f")
+    max_steps = st.number_input("Максимальное количество шагов", value=10, step=1)
+
+    if a >= b:
+        st.error("Начальная точка a должна быть меньше b.")
+
+    if st.button("Запустить метод хорд"):
+        steps = []
+        x_prev, x_curr = a, b
+
+        for step in range(max_steps):
+            f_prev, f_curr = f(x_prev), f(x_curr)
+
+            # Проверка деления на ноль
+            if f_curr - f_prev == 0:
+                st.error("Деление на ноль, метод не может продолжить работу.")
+                break
+
+            # Вычисляем следующий x
+            x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev)
+            steps.append((x_prev, x_curr, x_next))
+
+            # Проверяем достижение заданной точности
+            if abs(x_next - x_curr) < tolerance:
+                st.success(f"Корень найден: x = {x_next:.6f}")
+                break
+
+            # Обновляем значения для следующей итерации
+            x_prev, x_curr = x_curr, x_next
+        else:
+            st.warning("Метод не сошелся за заданное число итераций.")
+
+        # Визуализация результата
+        st.write("### Пошаговая визуализация")
+        x_vals = [i / 100 for i in range(int(a * 100) - 50, int(b * 100) + 50)]  # Интервал для графика
+        y_vals = [f(x) for x in x_vals]
+
+        for i, (x1, x2, x3) in enumerate(steps):
+            fig, ax = plt.subplots()
+            ax.plot(x_vals, y_vals, label="f(x)", color="blue")
+            ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
+            ax.plot([x1, x2], [f(x1), f(x2)], color="red", label="Хорда")
+            ax.plot([x3], [0], 'ro', label=f"x_{i + 1} = {x3:.6f}")
+            ax.set_xlim(a - 0.5, b + 0.5)
+            ax.set_ylim(min(y_vals) - 1, max(y_vals) + 1)
+            ax.set_xlabel("x")
+            ax.set_ylabel("f(x)")
+            ax.legend()
+            ax.set_title(f"Шаг {i + 1}")
+
+            st.pyplot(fig)
 
 def newton_method():
     st.markdown(r"""
