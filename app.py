@@ -130,7 +130,6 @@ elif selected_theme == "3.1. Общие правила приближения":
 # 3.2.1. Метод Лагранжа для интерполяции
 elif selected_theme == "3.2.1. Метод Лагранжа":
     lagrange_for_interpolation()
-    code_editor()
 
 # 3.2.2. Метод Ньютона для интерполяции
 elif selected_theme == "3.2.2. Метод Ньютона":
