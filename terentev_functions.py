@@ -888,7 +888,6 @@ def metod_rybakova():
     else:
         st.warning("Корни не найдены на заданном интервале.")
 
-
 def korni_mnogochlenov():
     st.markdown(r"""
     ### 5.1.7. Вычисление корней многочленов
