@@ -519,87 +519,80 @@ def newton_method():
             что повышает скорость сходимости.
     """)
 
-    def newton_method(f, df, x0, tol=1e-6, max_iter=100):
-        """
-        Метод Ньютона для нахождения корня уравнения f(x) = 0.
+    # Функция для которой ищем корень
+    def f(x):
+        return x ** 3 - x - 2
 
-        Параметры:
-        f        — функция, задающая уравнение f(x) = 0.
-        df       — производная функции f(x).
-        x0       — начальное приближение для корня.
-        tol      — требуемая точность (по умолчанию 1e-6).
-        max_iter — максимальное количество итераций (по умолчанию 100).
+    # Производная функции
+    def f_prime(x):
+        return 3 * x ** 2 - 1
 
-        Возвращает:
-        Приближенное значение корня и список итераций с соответствующими значениями.
-        """
-        x_values = [x0]
-        x = x0
-        for i in range(max_iter):
-            fx = f(x)
-            dfx = df(x)
+    # Интерфейс Streamlit
+    st.title("Интерактивная визуализация метода Ньютона")
+    st.write("Используйте ползунок ниже, чтобы пошагово наблюдать, как метод Ньютона приближается к корню функции.")
 
-            # Проверка деления на ноль
-            if dfx == 0:
-                raise ValueError("Производная равна нулю, метод не может продолжать работу.")
+    # Начальные параметры
+    x0 = st.number_input("Начальное приближение x0", value=1.5, format="%.2f")
+    tolerance = st.number_input("Точность (ε)", value=0.001, format="%.6f")
+    max_steps = st.number_input("Максимальное количество шагов", value=10, step=1)
 
-            # Обновляем значение x по формуле Ньютона
-            x_next = x - fx / dfx
-            x_values.append(x_next)
+    # Итерации метода Ньютона
+    steps = []
+    x_current = x0
 
-            # Проверяем достижение заданной точности
-            if abs(x_next - x) < tol:
-                return x_next, x_values
+    for step in range(max_steps):
+        fx = f(x_current)
+        fx_prime = f_prime(x_current)
 
-            x = x_next
+        # Проверка деления на ноль
+        if fx_prime == 0:
+            st.error("Производная равна нулю, метод не может продолжить работу.")
+            break
 
-        raise ValueError("Метод не сошелся за заданное число итераций")
+        # Вычисляем следующую точку
+        x_next = x_current - fx / fx_prime
+        steps.append((x_current, x_next))
 
-    # Интерфейс для задания параметров
-    st.title("Метод Ньютона для нахождения корня уравнения")
+        # Проверяем достижение заданной точности
+        if abs(x_next - x_current) < tolerance:
+            break
 
-    # Ввод функции и ее производной
-    equation_input = st.text_input("Введите функцию f(x):", value="x**2 - 2")
-    derivative_input = st.text_input("Введите производную функции f'(x):", value="2*x")
-    try:
-        f = lambda x: eval(equation_input)
-        df = lambda x: eval(derivative_input)
-    except:
-        st.error("Ошибка: Некорректное уравнение или производная. Проверьте синтаксис.")
+        x_current = x_next
 
-    # Ввод начальных условий и параметров с дефолтными значениями
-    x0 = st.number_input("Начальное приближение x0:", value=1.0, step=0.1)
-    tol = st.number_input("Точность:", value=1e-6, format="%.1e")
-    max_iter = st.number_input("Максимальное количество итераций:", value=100, step=1)
+    # Ползунок для управления шагами
+    step = st.slider("Шаг итерации", 0, len(steps) - 1, 0)
 
-    # Кнопка для выполнения расчета
-    if st.button("Рассчитать"):
-        try:
-            # Расчет методом Ньютона
-            root, x_vals = newton_method(f, df, x0, tol, max_iter)
+    # Данные текущего шага
+    x1, x2 = steps[step]
 
-            # Подготовка данных для таблицы
-            df_results = pd.DataFrame(
-                {'Итерация': list(range(len(x_vals))), 'Значение x': [round(val, 6) for val in x_vals]})
-            st.write("Таблица значений x по итерациям:")
-            st.dataframe(df_results)
+    # Построение графика
+    x_vals = [i / 100 for i in range(-300, 300)]  # Интервал для графика от -3 до 3
+    y_vals = [f(x) for x in x_vals]
 
-            # Построение графика
-            fig, ax = plt.subplots()
-            ax.plot(x_vals, marker='o', label='Значение x на итерациях')
-            ax.set_xlabel('Номер итерации')
-            ax.set_ylabel('Значение x')
-            ax.set_title('Сходимость метода Ньютона')
-            ax.grid(True)
-            ax.legend()
+    fig, ax = plt.subplots()
+    ax.plot(x_vals, y_vals, label="f(x)", color="blue")
+    ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
 
-            # Отображение графика
-            st.pyplot(fig)
+    # Касательная
+    fx1 = f(x1)
+    fx1_prime = f_prime(x1)
+    tangent_x = [x1 - 1, x1 + 1]
+    tangent_y = [fx1 + fx1_prime * (x - x1) for x in tangent_x]
 
-            # Вывод приближенного корня
-            st.write(f"Приближенное значение корня: {root}")
-        except Exception as e:
-            st.error(f"Ошибка: {e}")
+    ax.plot(tangent_x, tangent_y, color="red", label="Касательная")
+    ax.plot([x1], [fx1], 'ro', label=f"x_{step} = {x1:.6f}")
+    ax.plot([x2], [0], 'go', label=f"x_{step + 1} = {x2:.6f}")
+
+    # Настройки графика
+    ax.set_xlim(min(x_vals), max(x_vals))
+    ax.set_ylim(min(y_vals) - 1, max(y_vals) + 1)
+    ax.set_xlabel("x")
+    ax.set_ylabel("f(x)")
+    ax.legend()
+    ax.set_title(f"Итерация {step + 1}")
+
+    # Отображение графика в Streamlit
+    st.pyplot(fig)
 
 
 def metod_sekushchih():
