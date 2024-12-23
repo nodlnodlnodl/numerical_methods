@@ -261,6 +261,33 @@ def vector_matrix_norm():
             print('Linf-норма: ', linf_norm_vector(x))
     """)
 
+    import math
+    import numpy as np
+
+    def l1_norm_vector(x):
+        return np.sum(np.abs(x))
+
+    def l2_norm_vector(x):
+        return math.sqrt(np.sum(x**2))
+
+    def linf_norm_vector(x):
+        return np.max(np.abs(x))
+
+    x = np.random.randint(0, 30, size=3)
+
+    l1 = l1_norm_vector(x)
+    l2 = l2_norm_vector(x)
+    linf = linf_norm_vector(x)
+
+    st.write("**Вектор x:**")
+    st.write(x)
+
+    st.write("**Нормы вектора x:**")
+    st.write(f"L1-норма: {l1}")
+    st.write(f"L2-норма: {l2}")
+    st.write(f"Linf-норма: {linf}")
+
+
     st.markdown("""
         ### Вычисление норм матриц на Python:
     """)
@@ -289,6 +316,30 @@ def vector_matrix_norm():
             print('Linf-норма: ', linf_norm_matrix(A))
 
     """)
+
+    def l1_norm_matrix(A):
+        return np.max(np.sum(np.abs(A), axis=0))
+
+    def spherical_norm_matrix(A):
+        return math.sqrt(np.sum(A**2))
+
+    def linf_norm_matrix(A):
+        return np.max(np.sum(np.abs(A), axis=1))
+
+    A = np.random.randint(0, 30, size=(4, 4))
+
+    l1_A = l1_norm_matrix(A)
+    l2_A = spherical_norm_matrix(A)
+    linf_A = linf_norm_matrix(A)
+
+    st.write("**Матрица A:**")
+    st.write(A)
+
+    st.write("**Нормы матрицы A:**")
+    st.write(f"L1-норма: {l1_A}")
+    st.write(f"L2-норма (Сферическая норма): {l2_A}")
+    st.write(f"Linf-норма: {linf_A}")
+
 
 
 def conditionality_liner_system():
@@ -500,7 +551,3 @@ def conditionality_liner_system():
 
         т. е. мы нашли почти наихудший случай (так как $cond \ A$ также $\approx 4 \cdot 10^{4})$.
     """)
-
-
-
-
