@@ -211,7 +211,9 @@ def lagrange_for_interpolation():
     st.header("3.2.1. Метод Лагранжа для интерполяции")
 
     st.markdown("""
-        Метод Лагранжа — это форма полиномиальной интерполяции, используемая для аппроксимации функций. Полином Лагранжа представляет собой линейную комбинацию базисных полиномов Лагранжа, что позволяет точно проходить через заданные точки.
+        Метод Лагранжа — это форма полиномиальной интерполяции, используемая для аппроксимации функций. Полином Лагранжа
+         представляет собой линейную комбинацию базисных полиномов Лагранжа, что позволяет точно проходить через 
+         заданные точки.
         """)
 
     st.latex(r"""
@@ -226,7 +228,21 @@ def lagrange_for_interpolation():
 
     st.markdown("**Реализация на чистом Python:**")
     st.code("""
+        def lagrange_interpolation(x, x_points, y_points):
+        '''Метод Лагранжа для интерполяци'''
+        total = 0
+        n = len(x_points)
+        for i in range(n):
+            term = y_points[i]
+            for j in range(n):
+                if i != j:
+                    term *= (x - x_points[j]) / (x_points[i] - x_points[j])
+            total += term
+        return total
+        """)
+
     def lagrange_interpolation(x, x_points, y_points):
+        """Метод Лагранжа для интерполяции"""
         total = 0
         n = len(x_points)
         for i in range(n):
@@ -237,66 +253,60 @@ def lagrange_for_interpolation():
             total += term
         return total
 
-    # Пример узлов и значений
-    x_points = [1, 2, 3, 4, 5]  # Узлы x
-    y_points = [1, 4, 9, 16, 25]  # Значения y в этих узлах (x^2)
+    # Функция для демонстрации полиномов Лагранжа
+    def plot_lagrange_interpolations():
+        # Определяем узлы интерполяции и значения функции (например, f(x) = 1 / (1 + x^2))
+        x_points_2 = np.linspace(-1, 1, 3)  # Узлы для полинома степени 2
+        y_points_2 = 1 / (1 + x_points_2 ** 2)  # Значения функции для степени 2
 
-    # Тестирование интерполяции в точке x = 2.5
-    interpolated_value = lagrange_interpolation(2.5, x_points, y_points)
-    print("Интерполированное значение в x = 2.5:", interpolated_value)
-        """)
+        x_points_4 = np.linspace(-1, 1, 5)  # Узлы для полинома степени 4
+        y_points_4 = 1 / (1 + x_points_4 ** 2)  # Значения функции для степени 4
+
+        x_points_8 = np.linspace(-1, 1, 9)  # Узлы для полинома степени 8
+        y_points_8 = 1 / (1 + x_points_8 ** 2)  # Значения функции для степени 8
+
+        # Создаём значения для x на интервале [-1.5, 1.5]
+        x_values = np.linspace(-1.5, 1.5, 500)
+        y_values = 1 / (1 + x_values ** 2)  # Истинная функция f(x) = 1 / (1 + x^2)
+
+        # Строим график
+        plt.figure(figsize=(10, 6))
+        plt.plot(x_values, y_values, label="f(x) = 1 / (1 + x^2)", color="blue", linewidth=2)  # Истинная функция
+
+        # Строим полиномы Лагранжа для каждой степени
+        y_interp_2 = [lagrange_interpolation(x, x_points_2, y_points_2) for x in x_values]
+        y_interp_4 = [lagrange_interpolation(x, x_points_4, y_points_4) for x in x_values]
+        y_interp_8 = [lagrange_interpolation(x, x_points_8, y_points_8) for x in x_values]
+
+        plt.plot(x_values, y_interp_2, label="P2(x) (Lagrange degree 2)", linestyle="--", color="orange", linewidth=2)
+        plt.plot(x_values, y_interp_4, label="P4(x) (Lagrange degree 4)", linestyle="--", color="green", linewidth=2)
+        plt.plot(x_values, y_interp_8, label="P8(x) (Lagrange degree 8)", linestyle="--", color="red", linewidth=2)
+
+        # Добавляем узлы интерполяции на график
+        plt.scatter(x_points_2, y_points_2, color='orange', zorder=5, label="Nodes for P2(x)")
+        plt.scatter(x_points_4, y_points_4, color='green', zorder=5, label="Nodes for P4(x)")
+        plt.scatter(x_points_8, y_points_8, color='red', zorder=5, label="Nodes for P8(x)")
+
+        # Настройка графика
+        plt.title("Интерполяция с помощью полиномов Лагранжа")
+        plt.xlabel("x")
+        plt.ylabel("f(x)")
+        plt.legend()
+        plt.grid(True)
+        st.pyplot(plt)
+
+    # Streamlit UI
+    st.header("Метод Лагранжа для интерполяции")
 
     st.markdown("""
-        Этот код демонстрирует базовую реализацию метода Лагранжа для интерполяции на языке Python. 
-        Пользователь может изменить узлы интерполяции и точки, чтобы исследовать, как метод справляется с различными наборами данных.
-        """)
+    Метод Лагранжа — это форма полиномиальной интерполяции, используемая для аппроксимации функций.
+    Мы будем использовать более сложную функцию $$f(x) = \\frac{1}{1 + x^2}$$ для интерполяции.
 
-    st.markdown("**Преимущества:**")
-    st.markdown("""
-        - Простота реализации.
-        - Точное совпадение с интерполируемыми данными.
-        """)
+    Здесь вы можете увидеть, как полиномы Лагранжа для степеней 2, 4 и 8 приближают эту функцию.
+    """)
 
-    st.markdown("**Недостатки:**")
-    st.markdown("""
-        - Не устойчив при большом количестве узлов из-за феномена Рунге.
-        - Высокая вычислительная стоимость при увеличении числа узлов.
-        """)
-
-    st.markdown("**Алгоритм:**")
-    st.latex(r"""
-        1. \, Выбрать \, узлы \, интерполяции \, x_i \, и \, соответствующие \, значения \, y_i. \\
-        2. \, Для \, каждого \, x \, в \, области \, определения \, вычислить \, L(x) \, с \, помощью \, базисных \, полиномов. \\
-        3. \, Использовать \, L(x) \, для \, аппроксимации \, или \, интерполяции \, между \, узлами.
-        """)
-
-    # Демонстрация работы метода Лагранжа
-    def f(x):
-        return np.sin(x)
-
-    def lagrange_interpolation(x, x_points, y_points):
-        total = 0
-        n = len(x_points)
-        for i in range(n):
-            term = y_points[i]
-            for j in range(n):
-                if i != j:
-                    term = term * (x - x_points[j]) / (x_points[i] - x_points[j])
-            total += term
-        return total
-
-    num_points = st.slider("Выберите количество узлов интерполяции", 1, 20, 4)
-    x_points = np.linspace(0, 2 * np.pi, num_points)
-    y_points = f(x_points)
-    x_range = np.linspace(0, 2 * np.pi, 100)
-    y_approx = [lagrange_interpolation(x, x_points, y_points) for x in x_range]
-
-    fig, ax = plt.subplots()
-    ax.plot(x_range, f(x_range), label='Исходная функция')
-    ax.plot(x_range, y_approx, label='Приближение Лагранжа')
-    ax.scatter(x_points, y_points, color='red', label='Узлы интерполяции')
-    ax.legend()
-    st.pyplot(fig)
+    # Визуализация интерполяции для выбранных полиномов
+    plot_lagrange_interpolations()
 
 
 # 3.2.2. Метод Ньютона
