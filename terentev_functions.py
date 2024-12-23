@@ -128,54 +128,71 @@ print(f"Корень: {root}")
         """)
     st.markdown("### Графическая демонстрация сходимости")
 
-    def dichotomy_method_visual(f, a, b, tol=1e-6):
-        iterations = []
-        if f(a) * f(b) >= 0:
-            raise ValueError("На концах интервала значения функции должны иметь разные знаки.")
+    # Функция, для которой ищем корень
+    def f(x):
+        return x ** 3 - x - 2
 
-        while (b - a) / 2 > tol:
+    # Интерфейс Streamlit
+    st.title("Интерактивная визуализация метода дихотомии")
+    st.write(
+        "Метод дихотомии (половинного деления) применяется для нахождения корня функции \( f(x) \) на заданном интервале.")
+
+    # Начальные параметры
+    a = st.number_input("Начало интервала a", value=1.0, format="%.2f")
+    b = st.number_input("Конец интервала b", value=2.0, format="%.2f")
+    tolerance = st.number_input("Точность (ε)", value=0.001, format="%.6f")
+    max_steps = st.number_input("Максимальное количество шагов", value=20, step=1)
+
+    # Проверка начальных условий
+    if f(a) * f(b) >= 0:
+        st.error("Функция должна иметь разные знаки на концах интервала [a, b].")
+    else:
+        # Итерации метода дихотомии
+        steps = []
+        for _ in range(max_steps):
             midpoint = (a + b) / 2
-            iterations.append(midpoint)
-            if f(midpoint) == 0:
-                return midpoint, iterations
+            steps.append((a, b, midpoint))
+
+            if f(midpoint) == 0 or (b - a) / 2 < tolerance:
+                break
             elif f(a) * f(midpoint) < 0:
                 b = midpoint
             else:
                 a = midpoint
 
-        iterations.append((a + b) / 2)
-        return (a + b) / 2, iterations
+        # Ползунок для управления шагами
+        step = st.slider("Шаг итерации", 0, len(steps) - 1, 0)
 
-    # Пример функции
-    f = lambda x: x ** 3 - x - 2
-    a = st.slider("Начало интервала (a)", -5.0, 5.0, 1.0)
-    b = st.slider("Конец интервала (b)", -5.0, 5.0, 2.0)
-    tol = st.slider("Точность (tol)", 1e-8, 1e-3, 1e-6, format="%.1e")
+        # Данные текущего шага
+        a_current, b_current, midpoint = steps[step]
 
-    if f(a) * f(b) >= 0:
-        st.error("На концах интервала значения функции должны иметь разные знаки.")
-        return
+        # Построение графика
+        x_vals = [i / 100 for i in range(int((a - 1) * 100), int((b + 1) * 100))]
+        y_vals = [f(x) for x in x_vals]
 
-    root, iterations = dichotomy_method_visual(f, a, b, tol)
+        fig, ax = plt.subplots()
+        ax.plot(x_vals, y_vals, label="f(x)", color="blue")
+        ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
 
-    # График сходимости
-    x = np.linspace(a - 1, b + 1, 500)
-    y = f(x)
+        # Текущий отрезок
+        ax.plot([a_current, b_current], [f(a_current), f(b_current)], 'ro-', label="Текущий отрезок")
+        ax.plot([midpoint], [f(midpoint)], 'go', label=f"Середина: x = {midpoint:.6f}")
 
-    fig, ax = plt.subplots()
-    ax.plot(x, y, label="f(x)", color="blue")
-    ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
-    ax.scatter(iterations, [f(x) for x in iterations], color="red", label="Итерации x_n")
-    ax.set_title("Процесс сходимости методом дихотомии")
-    ax.set_xlabel("x")
-    ax.set_ylabel("f(x)")
-    ax.legend()
-    st.pyplot(fig)
+        # Настройки графика
+        ax.set_xlim(a - 0.5, b + 0.5)
+        ax.set_ylim(min(y_vals) - 1, max(y_vals) + 1)
+        ax.set_xlabel("x")
+        ax.set_ylabel("f(x)")
+        ax.legend()
+        ax.set_title(f"Итерация {step + 1}")
 
-    st.markdown(f"**Найденный корень:** {root:.6f}")
-    st.markdown("**Итерации сходимости:**")
-    for i, x_n in enumerate(iterations):
-        st.markdown(f"**x_{i + 1}:** {x_n:.6f}")
+        # Отображение графика в Streamlit
+        st.pyplot(fig)
+
+        # Итоговый результат
+        st.write(f"После {step + 1} итераций:")
+        st.write(f"Текущий отрезок: [{a_current:.6f}, {b_current:.6f}]")
+        st.write(f"Приближённый корень: x ≈ {midpoint:.6f}")
 
 
 def metod_hord():
