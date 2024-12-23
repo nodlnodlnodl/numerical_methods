@@ -808,90 +808,85 @@ def metod_rybakova():
     Описание усовершенствованного метода Рыбакова можно найти в книге В. Л. Загускина "Численные методы решения плохо обусловленных задач". Изд-во Ростовского университета, 1976 г.
     """)
 
-    def rybakov_method(f, x0, x1, tol=1e-6, max_iter=100):
-        """
-        Метод Рыбакова Л.М. для нахождения корня уравнения f(x) = 0.
+    # Функция, для которой ищем корни
+    def f(x):
+        return x ** 3 - 6 * x ** 2 + 11 * x - 6  # Пример функции с несколькими корнями
 
-        Параметры:
-        f         — функция, задающая уравнение f(x) = 0.
-        x0, x1    — начальные приближения для корня.
-        tol       — требуемая точность (по умолчанию 1e-6).
-        max_iter  — максимальное количество итераций (по умолчанию 100).
+    # Оценка максимума производной (M)
+    def max_f_prime():
+        return 15  # Примерное значение M, можно скорректировать для конкретной функции
 
-        Возвращает:
-        Приближенное значение корня и список итераций с соответствующими значениями.
-        """
-        x_values = [x0, x1]  # Список для хранения значений x на каждой итерации
+    # Интерфейс Streamlit
+    st.title("Интерактивная визуализация метода Рыбакова")
+    st.write("Метод позволяет находить все корни уравнения на заданном интервале \( [a, b] \).")
 
-        for i in range(max_iter):
-            f_x0 = f(x0)
-            f_x1 = f(x1)
+    # Начальные параметры
+    a = st.number_input("Начало интервала a", value=0.0, format="%.2f")
+    b = st.number_input("Конец интервала b", value=4.0, format="%.2f")
+    tolerance = st.number_input("Точность (ε)", value=0.001, format="%.6f")
+    max_steps = st.number_input("Максимальное количество шагов", value=50, step=1)
 
-            # Проверка, что значения f(x0) и f(x1) не совпадают, чтобы избежать деления на ноль
-            if f_x1 == f_x0:
-                raise ValueError("Деление на ноль в методе Рыбакова. Проверьте начальные приближения или функцию.")
+    # Значение M
+    M = max_f_prime()
+    st.write(f"Оценка максимального значения производной (M): {M}")
 
-            # Формула метода Рыбакова
-            denominator = f_x1 - f_x0 + f_x0 * (f_x1 - f_x0) / (x1 - x0)
-            if denominator == 0:
-                raise ValueError("Деление на ноль в знаменателе метода Рыбакова.")
+    # Итерации метода Рыбакова
+    roots = []
+    current_x = a
+    steps = []
 
-            x_next = x1 - f_x1 * (x1 - x0) / denominator
-            x_values.append(x_next)
+    while current_x < b:
+        for step in range(max_steps):
+            fx = abs(f(current_x))
+            x_next = current_x + fx / M
+            steps.append((current_x, x_next))
 
-            # Проверка на достижение требуемой точности
-            if abs(x_next - x1) < tol:
-                return x_next, x_values
+            # Проверяем достижение точности
+            if abs(x_next - current_x) < tolerance:
+                roots.append(x_next)
+                current_x = x_next + tolerance  # Обновляем x и переходим к следующему корню
+                break
 
-            # Обновляем значения для следующей итерации
-            x0, x1 = x1, x_next
+            current_x = x_next
+        else:
+            break
 
-        raise ValueError("Метод не сошелся за заданное число итераций")
+    # Ползунок для управления шагами
+    step = st.slider("Шаг итерации", 0, len(steps) - 1, 0)
 
-    # Интерфейс для задания параметров
-    st.title("Метод Рыбакова Л.М. для нахождения корня уравнения")
+    # Данные текущего шага
+    x1, x2 = steps[step]
 
-    # Ввод функции
-    equation_input = st.text_input("Введите функцию f(x):", value="x**2 - 2")
-    try:
-        f = lambda x: eval(equation_input)
-    except:
-        st.error("Ошибка: Некорректное уравнение. Проверьте синтаксис.")
+    # Построение графика
+    x_vals = [i / 100 for i in range(int(a * 100), int(b * 100))]
+    y_vals = [f(x) for x in x_vals]
 
-    # Ввод начальных условий и параметров с дефолтными значениями
-    x0 = st.number_input("Первое начальное приближение x0:", value=1.4, step=0.1)
-    x1 = st.number_input("Второе начальное приближение x1:", value=1.5, step=0.1)
-    tol = st.number_input("Точность:", value=1e-6, format="%.1e")
-    max_iter = st.number_input("Максимальное количество итераций:", value=100, step=1)
+    fig, ax = plt.subplots()
+    ax.plot(x_vals, y_vals, label="f(x)", color="blue")
+    ax.axhline(0, color="black", linewidth=0.8, linestyle="--")
 
-    # Кнопка для выполнения расчета
-    if st.button("Рассчитать"):
-        try:
-            # Расчет методом Рыбакова
-            root, x_vals = rybakov_method(f, x0, x1, tol, max_iter)
+    # Текущий шаг
+    ax.plot([x1], [f(x1)], 'ro', label=f"Текущая точка x = {x1:.6f}")
+    ax.plot([x2], [f(x2)], 'go', label=f"Следующая точка x = {x2:.6f}")
 
-            # Подготовка данных для таблицы
-            df_results = pd.DataFrame(
-                {'Итерация': list(range(len(x_vals))), 'Значение x': [round(val, 6) for val in x_vals]})
-            st.write("Таблица значений x по итерациям:")
-            st.dataframe(df_results)
+    # Настройки графика
+    ax.set_xlim(a, b)
+    ax.set_ylim(min(y_vals) - 1, max(y_vals) + 1)
+    ax.set_xlabel("x")
+    ax.set_ylabel("f(x)")
+    ax.legend()
+    ax.set_title(f"Итерация {step + 1}")
 
-            # Построение графика
-            fig, ax = plt.subplots()
-            ax.plot(x_vals, marker='o', label='Значение x на итерациях')
-            ax.set_xlabel('Номер итерации')
-            ax.set_ylabel('Значение x')
-            ax.set_title('Сходимость метода Рыбакова')
-            ax.grid(True)
-            ax.legend()
+    # Отображение графика в Streamlit
+    st.pyplot(fig)
 
-            # Отображение графика
-            st.pyplot(fig)
-
-            # Вывод приближенного корня
-            st.write(f"Приближенное значение корня: {root}")
-        except Exception as e:
-            st.error(f"Ошибка: {e}")
+    # Список найденных корней
+    if roots:
+        st.write("Найденные корни:")
+        for i, root in enumerate(roots):
+            st.write(f"Корень {i + 1}: x = {root:.6f}")
+    else:
+        st.warning("Корни не найдены на заданном интервале.")
 
 
 def korni_mnogochlenov():
